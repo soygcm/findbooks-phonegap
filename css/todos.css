@@ -268,7 +268,7 @@ label[for='toggle-all'] {
     text-decoration: line-through;
 }
 
-#book-list li .todo-destroy {
+#book-list li .destroy {
     display: none;
     position: absolute;
     top: 0;
@@ -286,7 +286,7 @@ label[for='toggle-all'] {
     transition: all 0.2s;
 }
 
-#book-list li .todo-destroy:hover {
+#book-list li .destroy:hover {
     text-shadow: 0 0 1px #000,
     0 0 10px rgba(199, 107, 107, 0.8);
     -webkit-transform: scale(1.3);
@@ -296,11 +296,11 @@ label[for='toggle-all'] {
     transform: scale(1.3);
 }
 
-#book-list li .todo-destroy:after {
+#book-list li .destroy:after {
     content: '✖';
 }
 
-#book-list li:hover .todo-destroy {
+#book-list li:hover .destroy {
     display: block;
 }
 

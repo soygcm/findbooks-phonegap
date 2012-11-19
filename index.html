@@ -51,6 +51,10 @@
     </script>
 
     <script type="text/template" id="manage-books-template">
+      <div id="toolbar">
+        buscar
+        agregar
+      </div>
       <div id="user-info">
         Signed in as <%= Parse.User.current().get("username") %> (<a href="#" class="log-out">Log out</a>)
       </div>

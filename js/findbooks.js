@@ -71,7 +71,15 @@ $(function() {
 
     // Close the `"editing"` mode, saving changes to the todo.
     close: function() {
-      this.model.save({title: this.inputTitle.val(), author: this.inputAuthor.val()});
+      this.model.save({title: this.inputTitle.val(), author: this.inputAuthor.val()},
+      {
+        success: function(){
+
+        },
+        error: function(error){
+          console.log(error.code);
+        }
+      });
       $(this.el).removeClass("editing");
     },
 
@@ -82,7 +90,22 @@ $(function() {
 
     // Remove the item, destroy the model.
     clear: function() {
-      this.model.destroy();
+      // this.model.destroy();
+/*      var query = new Parse.Query(Book);
+      query.get(this.model.id,{
+        success: function(book){
+          var bookUsers = book.relation("users");
+          bookUsers.remove(Parse.User.current());
+        },
+        error: function(object, error){
+          console.log(error.message);
+        }
+      });*/
+      
+      var bookUsers = this.model.relation("users");
+      bookUsers.remove(Parse.User.current());
+      this.model.save();
+      this.remove();
     }
 
   });
@@ -118,10 +141,11 @@ $(function() {
 
       // Create our collection of Todos
       this.books = new BookList;
+      
 
       // Setup the query for the collection to look for todos from the current user
       this.books.query = new Parse.Query(Book);
-      this.books.query.equalTo("user", Parse.User.current());
+      this.books.query.equalTo("users", Parse.User.current());
       
       this.books.bind('add',     this.addOne);
       this.books.bind('reset',   this.addAll);
@@ -175,25 +199,41 @@ $(function() {
       var self = this;
       if (e.keyCode != 13) return;
       // alert('key != 13 and field val = '+this.inputTitle.val());
-      var logcreate = this.books.create({
-        title:   this.inputTitle.val(),
-        author:  this.inputAuthor.val(),
-        // order:   this.todos.nextOrder(),
-        // done:    false,
-        user:    Parse.User.current(),
-        ACL:     new Parse.ACL(Parse.User.current())
+      
+      var inputTitle = this.inputTitle.val();
+      var inputAuthor = this.inputAuthor.val();
+
+      var query = new Parse.Query(Book);
+      query.equalTo('title', inputTitle);
+      query.equalTo('author', inputAuthor);
+      query.find({
+        success: function (results){
+          console.log("results");
+          if(results.length==0){
+            var book = new Book;
+            var bookUsers = book.relation('users');
+            book.set('title', inputTitle);
+            book.set('author', inputAuthor);
+            bookUsers.add(Parse.User.current());
+            self.books.add(book);
+            book.save();
+            self.inputTitle.val('');
+            self.inputAuthor.val('');
+          }else{
+            var book = results[0];
+            var bookUsers = book.relation('users');
+            bookUsers.add(Parse.User.current());
+            self.books.add(book);
+            book.save();
+            self.inputTitle.val('');
+            self.inputAuthor.val(''); 
+          }
+        },
+        error: function(error){
+          console.log("error");
+          
+        }
       });
-      // alert(logcreate);
-
-      this.inputTitle.val('');
-      this.inputAuthor.val('');
-
-      /*if (e.keyCode != 13) {
-        alert('you press enter input.field');
-      }*/  
-
-
-      // this.resetFilters();
     }
   });
 
