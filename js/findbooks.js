@@ -10,18 +10,12 @@ $(function() {
 
   var Book = Parse.Object.extend("Book");
 
-  // This is the transient application state, not persisted on Parse
-  /*var AppState = Parse.Object.extend("AppState", {
-    defaults: {
-      filter: "all"
-    }
-  });*/
+  var AppState = Parse.Object.extend("AppState");
 
   // Book Collection
   // ---------------
 
   var BookList = Parse.Collection.extend({
-    // Reference to this collection's model.
     model: Book
   });
 
@@ -91,7 +85,7 @@ $(function() {
     // Remove the item, destroy the model.
     clear: function() {
       // this.model.destroy();
-/*      var query = new Parse.Query(Book);
+      /*var query = new Parse.Query(Book);
       query.get(this.model.id,{
         success: function(book){
           var bookUsers = book.relation("users");
@@ -118,8 +112,9 @@ $(function() {
 
     // Delegated events for creating new items, and clearing completed ones.
     events: {
-      "keypress input.field":  "createOnEnter",
-      "click .log-out": "logOut"
+      "keypress #add>.field":  "createOnEnter",
+      "click .log-out": "logOut",
+      "keypress #search-query": "search"
     },
 
     el: ".content",
@@ -130,13 +125,14 @@ $(function() {
     initialize: function() {
       var self = this;
 
-      _.bindAll(this, 'addOne', 'addAll', 'addSome', 'render', 'logOut', 'createOnEnter');
+      _.bindAll(this, 'addOne', 'addAll', 'addSome', 'render', 'logOut', 'createOnEnter', 'search', 'searchQuery');
 
       // Main books management template
       this.$el.html(_.template($("#manage-books-template").html()));
       
       this.inputTitle = this.$("#book-title");
       this.inputAuthor = this.$("#book-author");
+      this.inputSearchQuery = this.$("#search-query");
       // this.allCheckbox = this.$("#toggle-all")[0];
 
       // Create our collection of Todos
@@ -154,7 +150,12 @@ $(function() {
       // Fetch all the todo items for this user
       this.books.fetch();
 
-      // state.on("change", this.filter, this);
+      
+      /*appRouter.on("route:search", function (query) {
+        self.searchQuery(query);
+      });
+      */
+      // state.on("change", this.searchQuery, this);
     },
 
     // Logs out the user and shows the login view
@@ -178,22 +179,64 @@ $(function() {
     // appending its element to the `<ul>`.
     addOne: function(book) {
       var view = new BookView({model: book});
-      this.$("#book-list").append(view.render().el);
+      this.$(".add #book-list").append(view.render().el);
     },
 
     // Add all items in the Todos collection at once.
     addAll: function(collection, filter) {
-      this.$("#book-list").html("");
+      this.$(".add #book-list").html("");
       this.books.each(this.addOne);
     },
 
     // Only adds some todos, based on a filtering function that is passed in
     addSome: function(filter) {
       var self = this;
-      this.$("#book-list").html("");
+      this.$(".add #book-list").html("");
       this.books.chain().filter(filter).each(function(item) { self.addOne(item) });
     },
+    search: function (e) {
+      if (e.keyCode != 13) return;
+      if(this.inputSearchQuery.val()!=''){
+        appRouter.navigate('search/'+this.inputSearchQuery.val());
+        this.searchQuery(this.inputSearchQuery.val());
+      }
+      this.$(".search .spinner").hide();
+      /*
+      var query = new Parse.Query(BarbecueSauce);
+      query.contains("name", "Extra Spicy!");
+      */
+    },
 
+    searchQuery: function(query){
+      if(query!=undefined && query!=''){
+        this.$(".search .spinner").show();
+        this.$(".search #book-list").html("");
+        var self = this;
+        this.inputSearchQuery.val(query);
+        console.log('buscando esto: '+query);
+
+        var queryResults = new Parse.Query(Book);
+        queryResults.matches("title", query, 'im');
+        // queryResults.matches("author", query, 'im');
+        // query.contains("author", query);
+
+        queryResults.find({
+          success: function(books) {
+            this.$(".search .spinner").hide();
+            $.each(books, function(i, book) {
+              // console.log(book);
+              var view = new BookView({model: book});
+              self.$(".search #book-list").append(view.render().el);
+            });
+          }
+        });  
+      }else{
+        this.$(".search .spinner").hide();
+      }
+
+      
+
+    },
     // If you hit return in the main input field, create new Todo model
     createOnEnter: function(e) {
       var self = this;
@@ -302,6 +345,10 @@ $(function() {
     }
   });
 
+  var searchBooks = Parse.View.extend({
+
+  });
+
   // The main view for the app
   var AppView = Parse.View.extend({
     // Instead of generating a new element, bind to the existing skeleton of
@@ -314,14 +361,43 @@ $(function() {
 
     render: function() {
       if (Parse.User.current()) {
-        new ManageBooksView();
+        this.manageBooksView = new ManageBooksView();
       } else {
         new LogInView();
       }
     }
   });
 
-  // var state = new AppState;
+  var AppRouter = Parse.Router.extend({
+    routes: {
+      "search/:query": "search",
+      "search":"search",
+      "add": "add"
+    },
+    add: function () {
+      state.set({route:'add'});
+      $('section.add').show();
+      $('section.search').hide();
+    },
+    search: function (query) {
+      // var manageBookView = new ManageBooksView();
+      appView.manageBooksView.searchQuery(query);
 
-  new AppView;
+      state.set({route:'search', query:query});
+      $('section.add').hide();
+      $('section.search').show();
+      // new ManageBooksView.searchQuery(query);
+    }
+  });
+
+  var state = new AppState;
+  var appRouter = new AppRouter;
+  var appView = new AppView;
+  Parse.history.start();
+
+  /*appRouter.on('route:search', function (query) {
+    appView.manageBooksView.searchQuery(query);
+  });*/
+
+  // var state = new AppState; new AppView;
 });

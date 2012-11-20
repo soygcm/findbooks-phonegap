@@ -110,7 +110,7 @@ body {
     border-top-right-radius: 1px;
 }
 
-#new-todo,
+.field,
 .edit {
     position: relative;
     margin: 0;
@@ -136,7 +136,7 @@ body {
     font-smoothing: antialiased;
 }
 
-#new-todo {
+.field {
     padding: 16px 16px 16px 60px;
     border: none;
     background: rgba(0, 0, 0, 0.02);
@@ -451,8 +451,17 @@ label[for='toggle-all'] {
     border-top: 1px solid #ededed;
     margin-bottom: 0px;
     text-align: right;
+    display: block;
+    float: right;
 }
-
+#todoapp .content #toolbar{
+    padding: 5px 2px 5px 50px;
+    border-top: 1px solid #ededed;
+    margin-bottom: 0px;
+    display: block;
+    /*float: left;*/
+    background-color: white;
+}
 
 #todoapp .content .mark-all-done {
     margin-left: 8px;
@@ -467,4 +476,9 @@ label[for='toggle-all'] {
 #credits a {
     color: #888;
 }
-
+section.add{
+    
+}
+section.search{
+    display: none;
+}

@@ -52,29 +52,38 @@
 
     <script type="text/template" id="manage-books-template">
       <div id="toolbar">
-        buscar
-        agregar
+        <a href="#search" class="search"> buscar</a>
+        <a href="#add" class="add">agregar</a>
       </div>
       <div id="user-info">
         Signed in as <%= Parse.User.current().get("username") %> (<a href="#" class="log-out">Log out</a>)
       </div>
 
-      <div class="section">
+      <section class="section add">
 
-        <header id="header">
+        <header id="add">
           <input id="book-title" class="field" placeholder="¿Cual es el titulo del libro?" type="text" />
           <input id="book-author" class="field" placeholder="¿Quien lo escribio?" type="text" />
-
         </header>
-
         <div id="main">
-          
           <ul id="book-list">
             <img src='images/spinner.gif' class='spinner' />
           </ul>
         </div>
 
-      </div>
+      </section>
+      <section class="section search">
+
+        <header id="search">
+          <input id="search-query" class="field" placeholder="Buscar" type="text" />
+        </header>
+        <div id="main">
+          <ul id="book-list">
+            <img src='images/spinner.gif' class='spinner' />
+          </ul>
+        </div>
+
+      </section>
     </script>
 
     <script type="text/template" id="book-template">
