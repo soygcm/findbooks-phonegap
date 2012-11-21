@@ -9,6 +9,7 @@ $(function() {
   // ----------
 
   var Book = Parse.Object.extend("Book");
+  var User = Parse.Object.extend("User");
 
   var AppState = Parse.Object.extend("AppState");
 
@@ -34,6 +35,7 @@ $(function() {
     // The DOM events specific to an item.
     events: {
       "dblclick label"      : "edit",
+      "click label"         : "viewOwners",
       "click .destroy"      : "clear",
       "keypress .edit"      : "updateOnEnter"
       // "blur .edit"          : "close"
@@ -46,13 +48,16 @@ $(function() {
       _.bindAll(this, 'render', 'close', 'remove');
       this.model.bind('change', this.render);
       this.model.bind('destroy', this.remove);
+      this.bookUsers = this.model.relation("users");
     },
 
     // Re-render the contents of the todo item.
     render: function() {
       $(this.el).html(this.template(this.model.toJSON()));
+      $(this.el).attr('id', this.model.id);
       this.inputTitle = this.$('.edit.title');
       this.inputAuthor = this.$('.edit.author');
+
       return this;
     },
 
@@ -84,22 +89,21 @@ $(function() {
 
     // Remove the item, destroy the model.
     clear: function() {
-      // this.model.destroy();
-      /*var query = new Parse.Query(Book);
-      query.get(this.model.id,{
-        success: function(book){
-          var bookUsers = book.relation("users");
-          bookUsers.remove(Parse.User.current());
-        },
-        error: function(object, error){
-          console.log(error.message);
-        }
-      });*/
-      
-      var bookUsers = this.model.relation("users");
-      bookUsers.remove(Parse.User.current());
+      this.bookUsers.remove(Parse.User.current());
       this.model.save();
       this.remove();
+    },
+    viewOwners: function () {
+
+      console.log(this.model.id);
+      appRouter.navigate('book/'+this.model.id);
+      /*this.bookUsers.query().find({
+        success: function(users) {
+          $.each(users, function(i, user){
+            console.log(user.attributes.username);
+          });
+        }
+      });*/
     }
 
   });
@@ -208,17 +212,21 @@ $(function() {
     },
 
     searchQuery: function(query){
-      if(query!=undefined && query!=''){
+      if(query!=undefined && query!='' && query!=' '){
         this.$(".search .spinner").show();
         this.$(".search #book-list").html("");
         var self = this;
         this.inputSearchQuery.val(query);
+        this.$("#toolbar a.search").attr('href', '#search/'+query);
         console.log('buscando esto: '+query);
 
-        var queryResults = new Parse.Query(Book);
-        queryResults.matches("title", query, 'im');
-        // queryResults.matches("author", query, 'im');
-        // query.contains("author", query);
+        var queryMatchesTitle = new Parse.Query(Book);
+        queryMatchesTitle.matches("title", query, 'im');
+      
+        var queryMatchesAuthor = new Parse.Query(Book);
+        queryMatchesAuthor.matches("author", query, 'im');
+        
+        var queryResults = Parse.Query.or(queryMatchesTitle, queryMatchesAuthor);
 
         queryResults.find({
           success: function(books) {
