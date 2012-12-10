@@ -2,30 +2,92 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,height=device-height,user-scalable=no,initial-scale=1.0,maximum-scale=1,minimum-scale=1.0" />
     <title>Parse FindBooks app</title>
-    <link href="css/todos.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="css/reset.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="css/style.css" media="all" rel="stylesheet" type="text/css"/>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="js/underscore-1.1.6.js"></script>
     <script src="//www.parsecdn.com/js/parse-1.1.11.min.js"></script>
-    <script src="js/findbooks.js"></script>
   </head>
 
   <body>
 
-    <!-- Todo App Interface -->
+    <section class="toolbar">
+      <header>
+        
+        <h1>Find Books</h1>
+        <button class="add"></button>
+        <button class="find"></button>
+      </header>
+    </section>
 
-    <div id="todoapp">
+    <!-- Todo App Interface -->
+    <section id="home" class="doble-column">
+      <section id="highlight" class="column left">
+        <div class="row">
+          <article>
+            <div class="book-shadow small library"></div>
+            <img src="books/diary.jpg" alt="titulo" class="book small">
+          </article>
+          <article>
+            <div class="book-shadow small library"></div>
+            <img src="books/diary.jpg" alt="titulo" class="book small">
+          </article>
+          <article>
+            <div class="book-shadow small library"></div>
+            <img src="books/diary.jpg" alt="titulo" class="book small">
+          </article>
+        </div>
+        <div class="row">
+          <article>
+            <div class="book-shadow small library"></div>
+            <img src="books/diary.jpg" alt="titulo" class="book small">
+          </article>
+          <article>
+            <div class="book-shadow small library"></div>
+            <img src="books/diary.jpg" alt="titulo" class="book small">
+          </article>
+          <article>
+            <div class="book-shadow small library"></div>
+            <img src="books/diary.jpg" alt="titulo" class="book small">
+          </article>
+          <article>
+            <div class="book-shadow small library"></div>
+            <img src="books/diary.jpg" alt="titulo" class="book small">
+          </article>
+        </div>
+      </section>
+
+      <section id="personal" class="column right">
+        <div class="row">
+          <article>
+            <div class="book-shadow"></div>
+            <img src="books/diary.jpg" alt="" class="book small">
+          </article>
+        </div>
+        <div class="row">
+          <article>
+            <div class="book-shadow"></div>
+            <img src="books/diary.jpg" alt="" class="book small">
+          </article>
+        </div>
+      </section>
+    </section>
+
+
+    <!--<div id="todoapp">
       <div class="title">
         <h1>Parse FindBooks</h1>
       </div>
-
       <div class="content">
+
       </div>
     </div>
 
     <div id="credits">
       Powered by <a href="https://www.parse.com">Parse</a> using the <a href="https://www.parse.com/docs/js_guide">JavaScript SDK</a>
-    </div>
+    </div>-->
 
     <!-- Templates -->
 
@@ -98,7 +160,7 @@
       </li>
     </script>
 
-
+    <script src="js/findbooks.js"></script>
   </body>
 
 </html>
