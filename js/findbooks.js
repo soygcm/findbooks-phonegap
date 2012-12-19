@@ -1,15 +1,20 @@
+// http://chris-barr.com/index.php/entry/scrolling_a_overflowauto_element_on_a_touch_screen_device/
 function isTouchDevice(){
   try{
     document.createEvent("TouchEvent");
-    $("#highlight").prepend('isTouchDevice')
+    // $("#highlight").prepend('isTouchDevice')
     return true;
   }catch(e){
     return false;
   }
 }
-function touchScroll(id){
-  if(isTouchDevice()){ //if touch events exist...
-    var el=document.getElementById(id);
+function loaded(){
+  // if(isTouchDevice()){ //if touch events exist...
+
+    // scroll = new iScroll(id);
+    // scroll = new iScroll('highlight');         
+    // scroll2 = new iScroll('personal');
+    /*var el=document.getElementById(id);
     var scrollStartPos=0;
 
     document.getElementById(id).addEventListener("touchstart", function(event) {
@@ -20,30 +25,41 @@ function touchScroll(id){
     document.getElementById(id).addEventListener("touchmove", function(event) {
       this.scrollTop=scrollStartPos-event.touches[0].pageY;
       event.preventDefault();
-    },false);
-  }
+    },false);*/
+  // }
 }
-
-
+// document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+// document.addEventListener('DOMContentLoaded', function () { setTimeout(loaded, 2000); }, false);
 
 $(function() {
+  console.log('hola');
+  var librosArray = new Array('diary','hungergames', 'importa', 'logo', 'radical', 'startup', 'twilight');
 
-  touchScroll("highlight");
+  /*$(".toolbar h1").toggle(function () {
+    $(".doble-column .column.right").animate({"margin-right": '-61%'});
+    $(".doble-column .column.left").animate({"margin-left": 0});
+  },function () {
+    $(".doble-column .column.right").animate({"margin-right": 0});
+    $(".doble-column .column.left").animate({"margin-left": '-61%'});
+  });*/
+
+  var highlightScroll;
+  var personalScroll;
 
   Parse.$ = jQuery;
+
 
   // Initialize Parse with your Parse application javascript keys
   Parse.initialize("C4zgFUST9RGWSJ5scVpyB5G4co2gcMUpNPg0QpaI", "C7Qy33Kz3SbWwNOoodEg6RiuIE7a4MlvoYo99kTZ");
 
-  // Book Model
+  // App Models
   // ----------
 
   var Book = Parse.Object.extend("Book");
   var User = Parse.Object.extend("User");
-
   var AppState = Parse.Object.extend("AppState");
 
-  // Book Collection
+  // App Collections
   // ---------------
 
   var BookList = Parse.Collection.extend({
@@ -54,7 +70,7 @@ $(function() {
   // --------------
 
   // The DOM element for a book item...
-  var BookView = Parse.View.extend({
+  var BookView_old = Parse.View.extend({
 
     //... is a list tag.
     tagName:  "li",
@@ -127,13 +143,13 @@ $(function() {
 
       console.log(this.model.id);
       appRouter.navigate('book/'+this.model.id);
-      /*this.bookUsers.query().find({
+      this.bookUsers.query().find({
         success: function(users) {
           $.each(users, function(i, user){
             console.log(user.attributes.username);
           });
         }
-      });*/
+      });
     }
 
   });
@@ -318,6 +334,72 @@ $(function() {
     }
   });
 
+  var BookView = Parse.View.extend({
+    tagName:"li",
+    template:_.template($("#book-template").html()),
+    initialize: function() {
+      // _.bindAll(this, "logIn", "signUp");
+      // this.render();
+    },
+    render: function(image) {
+      imageJson = {"image":image};
+      this.$el.html(this.template(imageJson));
+      return this;
+      // this.delegateEvents();
+    }
+  });
+
+  var ToolbarView = Parse.View.extend({
+    el: "#all",
+    initialize: function() {
+      // _.bindAll(this, "logIn", "signUp");
+      this.render();
+    },
+    render: function() {
+
+      this.$el.append(_.template($("#toolbar-template").html()));
+      this.delegateEvents();
+    }
+  });
+
+  var HomeView = Parse.View.extend({
+    el: "#all",
+    initialize: function() {
+      // _.bindAll(this, "logIn", "signUp");
+      this.render();
+      this.addFalseBooks();
+    },
+    render: function() {
+      this.$el.append(_.template($("#home-template").html()));
+      this.delegateEvents();
+    },
+    addFalseBooks: function(){
+      veces = 0;
+      max = librosArray.length;
+      for (var i = 0; i < 20; i++) {
+        index = i-(max*veces);
+        if (i-(veces*max)>=max-1) {
+          veces++;
+        }
+        var view1 = new BookView();
+        this.$("#personal>div>ul").prepend(view1.render(librosArray[index]).el);
+      }
+      veces = 0;
+      for (var i = 0; i < 50; i++) {
+        index = i-(max*veces);
+        if (i-(veces*max)>=max-1) {
+          veces++;
+        }
+        var view2 = new BookView();
+        this.$("#highlight>div>ul").prepend(view2.render(librosArray[index]).el);
+      }
+      highlightScroll = new iScroll('highlight');
+      personalScroll = new iScroll('personal');
+    }
+  });
+
+
+
   var LogInView = Parse.View.extend({
     events: {
       "submit form.login-form": "logIn",
@@ -383,26 +465,27 @@ $(function() {
     }
   });
 
-  var searchBooks = Parse.View.extend({
-
-  });
-
   // The main view for the app
   var AppView = Parse.View.extend({
     // Instead of generating a new element, bind to the existing skeleton of
     // the App already present in the HTML.
-    el: $("#todoapp"),
+    el: $("#all"),
 
     initialize: function() {
       this.render();
     },
 
     render: function() {
-      if (Parse.User.current()) {
+      this.toolbarView = new ToolbarView();
+      this.homeView = new HomeView();
+      if (this.homeView.postRender) {
+        this.homeView.postRender();
+      }
+      /*if (Parse.User.current()) {
         this.manageBooksView = new ManageBooksView();
       } else {
         new LogInView();
-      }
+      }*/
     }
   });
 
@@ -432,6 +515,33 @@ $(function() {
   var appRouter = new AppRouter;
   var appView = new AppView;
   Parse.history.start();
+
+  $$(".toolbar h1").tap(function () {
+    $$(".doble-column").toggleClass('show-right');
+  });
+
+  $$(".doble-column").touch(function () {
+    highlightScroll.refresh();
+    personalScroll.refresh();
+  });
+
+  $$(".doble-column .column.right").tap(function () {
+    $$(".doble-column").addClass('show-right');
+  });
+
+  $$(".doble-column .column.left").tap(function () {
+    $$(".doble-column").removeClass('show-right');
+  });
+
+  $$(".doble-column").swipeRight(function () {
+    $$(".doble-column").removeClass('show-right');
+  });
+  $$(".doble-column").swipeLeft(function () {
+    $$(".doble-column").addClass('show-right');
+  });
+  $$(".book").tap(function () {
+    $$(this).toggleClass('rotate');
+  })
 
   /*appRouter.on('route:search', function (query) {
     appView.manageBooksView.searchQuery(query);

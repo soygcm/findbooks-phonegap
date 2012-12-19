@@ -3,93 +3,54 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,height=device-height,user-scalable=no,initial-scale=1.0,maximum-scale=1,minimum-scale=1.0" />
-    <title>Parse FindBooks app</title>
-    <link href="css/reset.css" media="all" rel="stylesheet" type="text/css"/>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>FindBooks app</title>
     <link href="css/style.css" media="all" rel="stylesheet" type="text/css"/>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/quo.js"></script>
     <script src="js/underscore-1.1.6.js"></script>
-    <script src="//www.parsecdn.com/js/parse-1.1.11.min.js"></script>
+    <script src="js/iscroll-lite.js"></script>
+    <script src="js/parse-1.1.15.min.js"></script>
   </head>
 
   <body>
 
-    <section class="toolbar">
-      <header>
-        
-        <h1>Find Books</h1>
-        <button class="add"></button>
-        <button class="find"></button>
-      </header>
-    </section>
-
-    <!-- Todo App Interface -->
-    <section id="home" class="doble-column">
-      <section id="highlight" class="column left">
-        <div class="row">
-          <article>
-            <div class="book-shadow small library"></div>
-            <img src="books/diary.jpg" alt="titulo" class="book small">
-          </article>
-          <article>
-            <div class="book-shadow small library"></div>
-            <img src="books/diary.jpg" alt="titulo" class="book small">
-          </article>
-          <article>
-            <div class="book-shadow small library"></div>
-            <img src="books/diary.jpg" alt="titulo" class="book small">
-          </article>
-        </div>
-        <div class="row">
-          <article>
-            <div class="book-shadow small library"></div>
-            <img src="books/diary.jpg" alt="titulo" class="book small">
-          </article>
-          <article>
-            <div class="book-shadow small library"></div>
-            <img src="books/diary.jpg" alt="titulo" class="book small">
-          </article>
-          <article>
-            <div class="book-shadow small library"></div>
-            <img src="books/diary.jpg" alt="titulo" class="book small">
-          </article>
-          <article>
-            <div class="book-shadow small library"></div>
-            <img src="books/diary.jpg" alt="titulo" class="book small">
-          </article>
-        </div>
-      </section>
-
-      <section id="personal" class="column right">
-        <div class="row">
-          <article>
-            <div class="book-shadow"></div>
-            <img src="books/diary.jpg" alt="" class="book small">
-          </article>
-        </div>
-        <div class="row">
-          <article>
-            <div class="book-shadow"></div>
-            <img src="books/diary.jpg" alt="" class="book small">
-          </article>
-        </div>
-      </section>
-    </section>
-
-
-    <!--<div id="todoapp">
-      <div class="title">
-        <h1>Parse FindBooks</h1>
-      </div>
-      <div class="content">
-
-      </div>
+    <div id="all">
+      
     </div>
 
-    <div id="credits">
-      Powered by <a href="https://www.parse.com">Parse</a> using the <a href="https://www.parse.com/docs/js_guide">JavaScript SDK</a>
-    </div>-->
-
     <!-- Templates -->
+
+    <script type="text/template" id="home-template"> 
+      <section id="home" class="doble-column show-right">
+        <section id="highlight" class="column left"><div>
+          <ul></ul>
+        </div></section>
+
+        <section id="personal" class="column right"><div>
+          <ul></ul>  
+        </div></section>
+      </section>
+    </script>
+
+    <script type="text/template" id="book-template">
+      <article class="book small">
+        <div class="shadow"></div>
+        <img src='books/<%= image %>.jpg' alt="">
+      </article>
+    </script>
+
+    <script type="text/template" id="toolbar-template" >
+      <section class="toolbar">
+        <header>
+          <!-- <input type="text"> -->
+          <h1>Find Books</h1>
+          
+          <button class="add left">Agregar</button>
+          <button class="find right">Buscar</button>
+        </header>
+      </section>
+    </script>
 
     <script type="text/template" id="login-template">
       <header id="header"></header>
@@ -148,7 +109,7 @@
       </section>
     </script>
 
-    <script type="text/template" id="book-template">
+    <script type="text/template" id="book-template-old">
       <li>
         <div class="view">
           <label class="title"><%= title %></label>
