@@ -8,31 +8,19 @@ function isTouchDevice(){
     return false;
   }
 }
-function loaded(){
-  // if(isTouchDevice()){ //if touch events exist...
 
-    // scroll = new iScroll(id);
-    // scroll = new iScroll('highlight');         
-    // scroll2 = new iScroll('personal');
-    /*var el=document.getElementById(id);
-    var scrollStartPos=0;
-
-    document.getElementById(id).addEventListener("touchstart", function(event) {
-      scrollStartPos=this.scrollTop+event.touches[0].pageY;
-      event.preventDefault();
-    },false);
-
-    document.getElementById(id).addEventListener("touchmove", function(event) {
-      this.scrollTop=scrollStartPos-event.touches[0].pageY;
-      event.preventDefault();
-    },false);*/
-  // }
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady() {
+  document.addEventListener("backbutton", onBackKeyDown, false);
 }
-// document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-// document.addEventListener('DOMContentLoaded', function () { setTimeout(loaded, 2000); }, false);
+function onBackKeyDown() 
+{
+  console.log('back to the future!!');
+}
 
 $(function() {
-  console.log('hola');
+
+  
   var librosArray = new Array('diary','hungergames', 'importa', 'logo', 'radical', 'startup', 'twilight');
 
   /*$(".toolbar h1").toggle(function () {
@@ -268,7 +256,7 @@ $(function() {
 
         var queryMatchesTitle = new Parse.Query(Book);
         queryMatchesTitle.matches("title", query, 'im');
-      
+        
         var queryMatchesAuthor = new Parse.Query(Book);
         queryMatchesAuthor.matches("author", query, 'im');
         
@@ -282,6 +270,8 @@ $(function() {
               var view = new BookView({model: book});
               self.$(".search #book-list").append(view.render().el);
             });
+
+
           }
         });  
       }else{
@@ -351,14 +341,87 @@ $(function() {
 
   var ToolbarView = Parse.View.extend({
     el: "#all",
+    events:{
+      "click button.search" : "search",
+      "click button.find": "searchQuery", 
+      "click button.back" : "back",
+      "keypress #search-query": "searchEnter"
+    },
     initialize: function() {
       // _.bindAll(this, "logIn", "signUp");
       this.render();
+      this.inputSearchQuery = this.$("#search-query");
     },
     render: function() {
-
       this.$el.append(_.template($("#toolbar-template").html()));
       this.delegateEvents();
+    },
+    search: function () {
+      appRouter.navigate('search');
+      appRouter.search();
+    },
+    isSearch: function () {
+      this.$('.search-input').show();
+      this.$('.title-app').hide();
+      this.$('.find').show();
+      this.$('.search').hide();
+      this.$('.add').hide();
+      this.$('.back').show();
+      this.inputSearchQuery.focus();
+    },
+    searchEnter: function (e) {
+      if (e.keyCode != 13) return;
+      this.searchQuery();
+    },
+    searchQuery: function () {
+      if(this.inputSearchQuery.val()!=''){
+        appRouter.navigate('search/'+this.inputSearchQuery.val());
+        appView.searchView.searchQuery(this.inputSearchQuery.val());
+      }
+      this.inputSearchQuery.val('');
+      this.$('.find').focus();
+      console.log('lose blur');
+    },
+    isHome: function () {
+      this.$('.search-input').hide();
+      this.$('.title-app').show();
+      this.$('.find').hide();
+      this.$('.search').show();      
+      this.$('.add').show();
+      this.$('.back').hide();      
+    },
+    back: function () {
+      appRouter.navigate('');
+      appRouter.home();
+    }
+  });
+
+  var SearchView = Parse.View.extend({
+    el: "#all",
+    initialize: function() {
+      this.render();
+      this.view = this.$('#search');
+    },
+    render: function() {
+      this.$el.append(_.template($("#search-template").html()));
+      this.delegateEvents();
+    },
+    show: function () {
+      console.log('search');
+      if(this.view.hasClass('show')){
+        return true;
+      }else{
+        this.view.addClass("show");
+        return false;
+      }
+      // this.$('#home').toggleClass("show-sidebar");
+    },
+    searchQuery: function (query) {
+      console.log('buscando: '+query);
+      this.view.find('div>ul').append('<li>'+query+'</li>');
+    },
+    hide: function () {
+      this.view.removeClass('show');
     }
   });
 
@@ -478,9 +541,7 @@ $(function() {
     render: function() {
       this.toolbarView = new ToolbarView();
       this.homeView = new HomeView();
-      if (this.homeView.postRender) {
-        this.homeView.postRender();
-      }
+      this.searchView = new SearchView();
       /*if (Parse.User.current()) {
         this.manageBooksView = new ManageBooksView();
       } else {
@@ -491,27 +552,40 @@ $(function() {
 
   var AppRouter = Parse.Router.extend({
     routes: {
-      "search/:query": "search",
+      "search/:query": "searchQuery",
       "search":"search",
+      // "home": 'home',
+      "" : "home",
       "add": "add"
     },
     add: function () {
-      state.set({route:'add'});
+      // state.set({route:'add'});
       $('section.add').show();
       $('section.search').hide();
     },
-    search: function (query) {
+    home: function (){
+      appView.searchView.hide();
+      appView.toolbarView.isHome();
+      // state.set({route:'search', query:query});
+    },
+    searchQuery: function (query) {
       // var manageBookView = new ManageBooksView();
-      appView.manageBooksView.searchQuery(query);
-
-      state.set({route:'search', query:query});
-      $('section.add').hide();
-      $('section.search').show();
+      appView.searchView.show();
+      appView.searchView.searchQuery(query);
+      appView.toolbarView.isSearch();
+      // state.set({route:'search', query:query});
+      // $('section.add').hide();
+      // $('section.search').show();
       // new ManageBooksView.searchQuery(query);
+    },
+    search: function () {
+      appView.searchView.show();
+      appView.toolbarView.isSearch();
+      // state.set({route:'search'});
     }
   });
 
-  var state = new AppState;
+  // var state = new AppState;
   var appRouter = new AppRouter;
   var appView = new AppView;
   Parse.history.start();
