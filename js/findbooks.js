@@ -9,13 +9,16 @@ function isTouchDevice(){
   }
 }
 
+// Wait for Cordova to load
+//
 document.addEventListener("deviceready", onDeviceReady, false);
+// Cordova is ready
+//
 function onDeviceReady() {
-  document.addEventListener("backbutton", onBackKeyDown, false);
-}
-function onBackKeyDown() 
-{
-  console.log('back to the future!!');
+  document.addEventListener("backbutton", function(e) {
+    console.log("Back button pressed!!!!");                 
+    window.history.back();
+  }, false);
 }
 
 $(function() {
@@ -357,8 +360,8 @@ $(function() {
       this.delegateEvents();
     },
     search: function () {
-      appRouter.navigate('search');
-      appRouter.search();
+      appRouter.navigate('search', {trigger: true});
+      // appRouter.search();
     },
     isSearch: function () {
       this.$('.search-input').show();
@@ -374,9 +377,11 @@ $(function() {
       this.searchQuery();
     },
     searchQuery: function () {
-      if(this.inputSearchQuery.val()!=''){
-        appRouter.navigate('search/'+this.inputSearchQuery.val());
-        appView.searchView.searchQuery(this.inputSearchQuery.val());
+      query = this.inputSearchQuery.val()
+      if(query!=''){
+        // query = query.replace(/\s+/g, '-')
+        appRouter.navigate('search/'+encodeURI(query), {trigger: true});
+        // appView.searchView.searchQuery(this.inputSearchQuery.val());
       }
       this.inputSearchQuery.val('');
       this.$('.find').focus();
@@ -391,8 +396,8 @@ $(function() {
       this.$('.back').hide();      
     },
     back: function () {
-      appRouter.navigate('');
-      appRouter.home();
+      appRouter.navigate('', {trigger: true});
+      // appRouter.home();
     }
   });
 
@@ -417,7 +422,8 @@ $(function() {
       // this.$('#home').toggleClass("show-sidebar");
     },
     searchQuery: function (query) {
-      console.log('buscando: '+query);
+      // query = query.replace(/-+/g, ' ');
+      console.log('buscando decodeURI: '+decodeURI(query));
       this.view.find('div>ul').append('<li>'+query+'</li>');
     },
     hide: function () {
@@ -427,6 +433,9 @@ $(function() {
 
   var HomeView = Parse.View.extend({
     el: "#all",
+    events:{
+      'click #home':'backToHome'
+    },
     initialize: function() {
       // _.bindAll(this, "logIn", "signUp");
       this.render();
@@ -435,6 +444,11 @@ $(function() {
     render: function() {
       this.$el.append(_.template($("#home-template").html()));
       this.delegateEvents();
+    },
+    backToHome: function () {
+      if (appRouter.routes[Parse.history.fragment] != ''){
+        appRouter.navigate('', {trigger: true});
+      }
     },
     addFalseBooks: function(){
       veces = 0;
@@ -571,7 +585,7 @@ $(function() {
     searchQuery: function (query) {
       // var manageBookView = new ManageBooksView();
       appView.searchView.show();
-      appView.searchView.searchQuery(query);
+      appView.searchView.searchQuery(decodeURI(query));
       appView.toolbarView.isSearch();
       // state.set({route:'search', query:query});
       // $('section.add').hide();
@@ -588,6 +602,7 @@ $(function() {
   // var state = new AppState;
   var appRouter = new AppRouter;
   var appView = new AppView;
+  // Parse.history.start({pushState: true});
   Parse.history.start();
 
   $$(".toolbar h1").tap(function () {
@@ -613,9 +628,9 @@ $(function() {
   $$(".doble-column").swipeLeft(function () {
     $$(".doble-column").addClass('show-right');
   });
-  $$(".book").tap(function () {
+  /*$$(".book").tap(function () {
     $$(this).toggleClass('rotate');
-  })
+  })*/
 
   /*appRouter.on('route:search', function (query) {
     appView.manageBooksView.searchQuery(query);
