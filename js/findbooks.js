@@ -21,6 +21,12 @@ function onDeviceReady() {
   }, false);
 }
 
+function updateForms(){
+  $("form .input").each(function() {
+    $(this).width($(this).parent().width()-$(this).prev(".label").width()-10);
+  });
+}
+
 $(function() {
 
   
@@ -36,6 +42,7 @@ $(function() {
 
   var highlightScroll;
   var personalScroll;
+  var searchScroll;
 
   Parse.$ = jQuery;
 
@@ -346,8 +353,10 @@ $(function() {
     el: "#all",
     events:{
       "click button.search" : "search",
-      "click button.find": "searchQuery", 
-      "click button.back" : "back",
+      "click button.find"   : "searchQuery", 
+      "click button.back"   : "back",
+      "click button.add"    : "add",
+      "click .title-app"    : "home",
       "keypress #search-query": "searchEnter"
     },
     initialize: function() {
@@ -361,7 +370,6 @@ $(function() {
     },
     search: function () {
       appRouter.navigate('search', {trigger: true});
-      // appRouter.search();
     },
     isSearch: function () {
       this.$('.search-input').show();
@@ -379,9 +387,7 @@ $(function() {
     searchQuery: function () {
       query = this.inputSearchQuery.val()
       if(query!=''){
-        // query = query.replace(/\s+/g, '-')
         appRouter.navigate('search/'+encodeURI(query), {trigger: true});
-        // appView.searchView.searchQuery(this.inputSearchQuery.val());
       }
       this.inputSearchQuery.val('');
       this.$('.find').focus();
@@ -397,7 +403,12 @@ $(function() {
     },
     back: function () {
       appRouter.navigate('', {trigger: true});
-      // appRouter.home();
+    },
+    add:function(){
+      appRouter.navigate('add', {trigger: true});
+    },
+    home:function(){
+      appRouter.navigate('', {trigger: true});
     }
   });
 
@@ -410,6 +421,7 @@ $(function() {
     render: function() {
       this.$el.append(_.template($("#search-template").html()));
       this.delegateEvents();
+      this.addFalseResults();
     },
     show: function () {
       console.log('search');
@@ -419,6 +431,7 @@ $(function() {
         this.view.addClass("show");
         return false;
       }
+
       // this.$('#home').toggleClass("show-sidebar");
     },
     searchQuery: function (query) {
@@ -428,6 +441,43 @@ $(function() {
     },
     hide: function () {
       this.view.removeClass('show');
+    },
+    addFalseResults: function(){
+      veces = 0;
+      max = librosArray.length;
+      for (var i = 0; i < 5; i++) {
+        index = i-(max*veces);
+        if (i-(veces*max)>=max-1) {
+          veces++;
+        }
+        var bookView = new BookView();
+        this.$("#search>div>ul").prepend(bookView.render(librosArray[index]).el);
+      }
+      searchScroll = new iScroll('search');
+      // searchScroll.refresh();
+    }
+  });
+
+  var AddBookView = Parse.View.extend({
+    el: "#all",
+    initialize: function() {
+      this.render();
+      this.view = this.$el.find('#add');
+    },
+    render: function() {
+      this.$el.append(_.template($("#add-template").html()));
+      this.delegateEvents();
+    },
+    show: function () {
+      if(!this.view.hasClass('show')){
+        this.view.addClass("show");
+      }
+    },
+    hide: function () {
+      this.view.removeClass('show');
+    },
+    toggle: function(){
+      this.view.toggleClass('show');
     }
   });
 
@@ -556,11 +606,18 @@ $(function() {
       this.toolbarView = new ToolbarView();
       this.homeView = new HomeView();
       this.searchView = new SearchView();
+      this.addBookView = new AddBookView();
       /*if (Parse.User.current()) {
         this.manageBooksView = new ManageBooksView();
       } else {
         new LogInView();
       }*/
+    },
+    addBook: function(){
+      window.scrollTo(0, 0);
+      /*wtf? para prevenir el scroll automatico al cambiar el hash, 
+      hmmm tambien podria no hacer coincidir el hash con el id del elemento*/
+      this.addBookView.show();
     }
   });
 
@@ -573,13 +630,12 @@ $(function() {
       "add": "add"
     },
     add: function () {
-      // state.set({route:'add'});
-      $('section.add').show();
-      $('section.search').hide();
+      appView.addBook();
     },
     home: function (){
       appView.searchView.hide();
       appView.toolbarView.isHome();
+      appView.addBookView.hide();
       // state.set({route:'search', query:query});
     },
     searchQuery: function (query) {
@@ -605,13 +661,21 @@ $(function() {
   // Parse.history.start({pushState: true});
   Parse.history.start();
 
+  updateForms();
+  $(window).resize(function() {
+    updateForms();
+  });
+
+  
+
   $$(".toolbar h1").tap(function () {
     $$(".doble-column").toggleClass('show-right');
   });
 
-  $$(".doble-column").touch(function () {
+  $$(".column").touch(function () {
     highlightScroll.refresh();
     personalScroll.refresh();
+    searchScroll.refresh();
   });
 
   $$(".doble-column .column.right").tap(function () {
