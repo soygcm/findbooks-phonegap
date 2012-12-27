@@ -1,0 +1,14 @@
+form .label{
+	color: #787464;
+}
+
+.popup{
+	color: black;
+}
+.popup>div{
+	background: #E6E3DA;
+}
+
+.toolbar{
+    background: #1C3D61;
+}
