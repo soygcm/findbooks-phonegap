@@ -6,6 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <title>FindBooks app</title>
     <link href="css/style.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="css/theme.css" media="all" rel="stylesheet" type="text/css"/>
     <script src="js/jquery.js"></script>
     <script src="js/quo.js"></script>
     <script src="js/underscore-1.1.6.js"></script>
@@ -21,20 +22,60 @@
     </div>
 
     <!-- Templates -->
+    <script type="text/template" id="add-template">
+      <section id="add" class="popup bottom animate"><div>
+        <form>
+
+          <label>
+            <span class="label">Título:</span>
+            <span class="input">      
+              <input type="text" name="book-title" id="book-title">
+            </span> 
+          </label>
+        
+          <label for="author-name">
+            <span class="label">Autor/es:</span>
+            <span class="input">
+              <input type="text" name="author-name" id="author-name">
+            </span>
+          </label>
+        
+          <label for="category-name">
+            <span class="label">Categoría:</span>
+            <span class="input">
+              <select name="category-name" id="category-name">
+                <option value=""></option>
+                <option value="volvo">Niños</option>
+                <option value="saab">Novela</option>
+                <option value="opel">Biografia</option>
+                <option value="audi">Ciencia Ficción</option>
+              </select>              
+            </span>
+          </label>
+
+          <button type="button" id="book-photo" class="photo ">Tomale una foto a tu libro</button>
+
+          <button type="button" id="book-more-info" class=" ">Agrega mas información</button>
+          
+          <div class="clearfix"></div>
+        </form>
+
+      </div></section>
+    </script>
 
     <script type="text/template" id="search-template"> 
-      <section id="search" class="sidebar left"><div>
+      <section id="search" class="column sidebar right animate"><div>
           <ul></ul>
       </div></section>
     </script>
 
     <script type="text/template" id="home-template"> 
-      <section id="home" class="doble-column show-right">
-        <section id="highlight" class="column left"><div>
+      <section id="home" class="doble-column show-right animate">
+        <section id="highlight" class="column  left"><div>
           <ul></ul>
         </div></section>
 
-        <section id="personal" class="column right"><div>
+        <section id="personal" class="column  right"><div>
           <ul></ul>  
         </div></section>
       </section>
