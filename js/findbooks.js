@@ -27,8 +27,11 @@ function updateForms(){
   });
 }
 
+
+
 $(function() {
 
+  window.scrollTo(0, 0);
   
   var librosArray = new Array('diary','hungergames', 'importa', 'logo', 'radical', 'startup', 'twilight');
 
@@ -408,7 +411,11 @@ $(function() {
       appRouter.navigate('add', {trigger: true});
     },
     home:function(){
-      appRouter.navigate('', {trigger: true});
+      if(appRouter.routes[Parse.history.fragment]=='home'){
+        appView.homeView.toggleColumn();
+      }else{
+        appRouter.navigate('', {trigger: true});
+      }
     }
   });
 
@@ -460,9 +467,14 @@ $(function() {
 
   var AddBookView = Parse.View.extend({
     el: "#all",
+    events:{
+      'click #add':'backToHome'
+    },
     initialize: function() {
       this.render();
       this.view = this.$el.find('#add');
+      updateForms();
+      this.view.hide();
     },
     render: function() {
       this.$el.append(_.template($("#add-template").html()));
@@ -470,14 +482,23 @@ $(function() {
     },
     show: function () {
       if(!this.view.hasClass('show')){
-        this.view.addClass("show");
+        this.view.show();
+        self = this;
+        window.setTimeout(function(){self.view.addClass("show");}, 1);
       }
     },
     hide: function () {
       this.view.removeClass('show');
+      self = this;
+      window.setTimeout(function(){self.view.hide();}, 410);
     },
     toggle: function(){
       this.view.toggleClass('show');
+    },
+    backToHome:function (e) {
+      if($(e.target).is('#add')){
+        appRouter.navigate('', {trigger: true});
+      }
     }
   });
 
@@ -499,6 +520,9 @@ $(function() {
       if (appRouter.routes[Parse.history.fragment] != ''){
         appRouter.navigate('', {trigger: true});
       }
+    },
+    toggleColumn: function(){
+      this.$("#home").toggleClass('show-right');
     },
     addFalseBooks: function(){
       veces = 0;
@@ -614,7 +638,7 @@ $(function() {
       }*/
     },
     addBook: function(){
-      window.scrollTo(0, 0);
+      // window.scrollTo(0, 0);
       /*wtf? para prevenir el scroll automatico al cambiar el hash, 
       hmmm tambien podria no hacer coincidir el hash con el id del elemento*/
       this.addBookView.show();
@@ -623,13 +647,14 @@ $(function() {
 
   var AppRouter = Parse.Router.extend({
     routes: {
-      "search/:query": "searchQuery",
-      "search":"search",
+      "search/:query" : "searchQuery",
+      "search" : "search",
       // "home": 'home',
       "" : "home",
       "add": "add"
     },
     add: function () {
+      window.scrollTo(0, 0);
       appView.addBook();
     },
     home: function (){
@@ -661,17 +686,20 @@ $(function() {
   // Parse.history.start({pushState: true});
   Parse.history.start();
 
-  updateForms();
+  
   $(window).resize(function() {
     updateForms();
   });
 
+  // console.log(appRouter.routes[Parse.history.fragment]);
   
-
-  $$(".toolbar h1").tap(function () {
-    $$(".doble-column").toggleClass('show-right');
-  });
-
+  /*$$(".toolbar .title-app").tap(function () {
+    if(appRouter.routes[Parse.history.fragment]=='home'){
+      $$(".doble-column").toggleClass('show-right');
+    }
+  });*/
+  
+  
   $$(".column").touch(function () {
     highlightScroll.refresh();
     personalScroll.refresh();
