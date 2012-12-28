@@ -108,7 +108,12 @@ button {
     width: 100%;
     height: 100%;
     position: absolute;
-    -webkit-transform-origin: 0px 0px;
+    background: rgba(0,0,0,0);
+/*    -webkit-transition: background-color .4s ease-out;
+       -moz-transition: background-color .4s ease-out;
+        -ms-transition: background-color .4s ease-out;
+         -o-transition: background-color .4s ease-out;
+            transition: background-color .4s ease-out;*/ 
 }
 .popup>div{
     position: absolute;
@@ -117,11 +122,17 @@ button {
     height: 100%;
     width: 100%;
     margin: 0 auto;
-}
-.popup.bottom{
-    -webkit-transform: translate3d(0px, 100%, 0px) scale(1);    
+     -webkit-transform-origin: 0px 0px;
 }
 .popup.show{
+    background: rgba(0,0,0,0.6);
+}
+.popup.bottom>div{
+    /*display: none;*/
+    -webkit-transform: translate3d(0px, 110%, 0px) scale(1);    
+}
+.popup.show>div{
+    /*display: block;*/
     -webkit-transform: translate3d(0, 0, 0) scale(1);
 }
 
@@ -270,4 +281,25 @@ form button{
 .book.rotate {
     -webkit-transform: rotateY(-180deg);
     -webkit-transition: -webkit-transform .4s ease-out;
+}
+
+@media screen and (min-width: 640px) { 
+
+.popup>div{
+    left: 10%;
+    top: 5%;
+    height: 80%;
+    width: 80%;
+}
+
+}
+
+@media screen and (min-width: 840px) { 
+
+.popup>div{
+    left: 20%;
+    height: 80%;
+    width: 60%;
+}
+
 }
