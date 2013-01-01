@@ -1,5 +1,13 @@
+/*Estructura*/
+#view .photo
+
+
+/*Color*/
 form .label{
 	color: #787464;
+}
+form input, form select{
+	/*background: gray;*/
 }
 
 .popup{
@@ -7,8 +15,10 @@ form .label{
 }
 .popup>div{
 	background: #E6E3DA;
+	border:1px solid #E6E3DA;
 }
 
 .toolbar{
     background: #1C3D61;
 }
+
