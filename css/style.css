@@ -39,6 +39,9 @@ button {
     -ms-appearance: none;
     -o-appearance: none;
     appearance: none;
+    border: 1px solid black;
+    height: 40px;
+    padding: 10px;
 }
 
 .animate{
@@ -117,11 +120,14 @@ button {
 }
 .popup>div{
     position: absolute;
-    left: 0%;
-    top: 0%;
-    height: 100%;
-    width: 100%;
+    left: 2.5%;
+    top: 1%;
+    height: 88%;
+    width: 95%;
     margin: 0 auto;
+    border-radius: 5px;
+    box-shadow: 1px 3px 50px #000;
+    overflow: auto;
      -webkit-transform-origin: 0px 0px;
 }
 .popup.show{
@@ -183,9 +189,9 @@ form input, form select{
     -o-appearance: none;
     appearance: none;
 }
-form button{
-    border: 1px solid black;
-    height: 40px;
+
+p.medium{
+    text-align: justify;
     padding: 10px;
 }
 
@@ -234,6 +240,7 @@ form button{
     border: 1px solid #0B1E33;
     border-radius: 5px;
     top: 0;
+    padding: 0;
     position: absolute;
     margin: 5px;
 }
@@ -267,11 +274,13 @@ form button{
     -webkit-perspective: 800;
     -webkit-perspective-origin: 60% 60%;
 }
+
 .book.small img{
     height: 150px;
-    
-    
     /*display: inline-block;*/
+}
+.book.medium img{
+    height: 250px;
 }
 .book{
     padding: 10px;
@@ -281,6 +290,9 @@ form button{
 .book.rotate {
     -webkit-transform: rotateY(-180deg);
     -webkit-transition: -webkit-transform .4s ease-out;
+}
+.image.left{
+    float: left;
 }
 
 @media screen and (min-width: 640px) { 
