@@ -23,29 +23,18 @@ function onDeviceReady() {
 
 function updateForms(){
   $("form .input").each(function() {
+    console.log($(this).parent().width()-$(this).prev(".label").width()-10);
     $(this).width($(this).parent().width()-$(this).prev(".label").width()-10);
   });
 }
 
-
+// document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
 
 $(function() {
 
   window.scrollTo(0, 0);
   
   var librosArray = new Array('diary','hungergames', 'importa', 'logo', 'radical', 'startup', 'twilight');
-
-  /*$(".toolbar h1").toggle(function () {
-    $(".doble-column .column.right").animate({"margin-right": '-61%'});
-    $(".doble-column .column.left").animate({"margin-left": 0});
-  },function () {
-    $(".doble-column .column.right").animate({"margin-right": 0});
-    $(".doble-column .column.left").animate({"margin-left": '-61%'});
-  });*/
-
-  var highlightScroll;
-  var personalScroll;
-  var searchScroll;
 
   Parse.$ = jQuery;
 
@@ -158,7 +147,6 @@ $(function() {
   // The Application
   // ---------------
 
-  // The main view that lets a user manage their todo items
   var ManageBooksView = Parse.View.extend({
 
     // Delegated events for creating new items, and clearing completed ones.
@@ -357,7 +345,6 @@ $(function() {
     viewBook: function () {
       image = this.$('img').attr('src');
       appRouter.navigate('book/'+image, {trigger: true});
-      // appView.bookDetailView.view("45", image);
     }
   });
 
@@ -428,18 +415,69 @@ $(function() {
     }
   });
 
-  var SearchView = Parse.View.extend({
+  var PopupView = Parse.View.extend({
     el: "#all",
+    events:{
+      'click .front':'backToHome'
+    },
+    initPopup: function (popupID) {
+      this.front = this.$el.find('.front');
+      this.view = this.$el.find(popupID);
+    },
+    show: function () {
+      if(!this.view.hasClass('show')){
+        this.view.show();
+        this.front.addClass("show");
+        this.front.show();
+        self = this;
+        window.setTimeout(function(){
+          self.view.addClass("show");
+        }, 1);
+      }
+    },
+    hide: function () {
+      if(this.view.hasClass('show') || this.view.is(":visible")){
+        this.view.removeClass('show');
+        front = this.front;
+        view = this.view;
+        // console.log(Hello.caller.toString());
+        window.setTimeout(function(){
+          // front.hide();
+          view.hide();
+          thereIsPopup = $('.view.show').length;
+          // thereIs
+          if (!thereIsPopup){
+            front.removeClass('show');
+            front.hide();
+          }
+
+        }, 410);
+
+      }
+    },
+    backToHome:function (e) {
+      // console.log('trying');
+      if($(e.target).is('.front')){
+        appRouter.navigate('', {trigger: true});
+      }
+    }
+  });
+
+  var SearchView = PopupView.extend({
+    // el: "#all",
     initialize: function() {
+      this.events = _.extend({},PopupView.prototype.events,this.events);
       this.render();
-      this.view = this.$('#search');
+      this.initPopup('#search');
+      /*this.render();
+      this.view = this.$('#search');*/
     },
     render: function() {
       this.$el.append(_.template($("#search-template").html()));
       this.delegateEvents();
       this.addFalseResults();
     },
-    show: function () {
+    /*show: function () {
       console.log('search');
       if(this.view.hasClass('show')){
         return true;
@@ -449,15 +487,15 @@ $(function() {
       }
 
       // this.$('#home').toggleClass("show-sidebar");
-    },
+    },*/
     searchQuery: function (query) {
       // query = query.replace(/-+/g, ' ');
       console.log('buscando decodeURI: '+decodeURI(query));
       this.view.find('div>ul').append('<li>'+query+'</li>');
     },
-    hide: function () {
+    /*hide: function () {
       this.view.removeClass('show');
-    },
+    },*/
     addFalseResults: function(){
       veces = 0;
       max = librosArray.length;
@@ -469,47 +507,21 @@ $(function() {
         var bookView = new BookView();
         this.$("#search>div>ul").prepend(bookView.render(librosArray[index]).el);
       }
-      searchScroll = new iScroll('search');
+      // searchScroll = new iScroll('search');
       // searchScroll.refresh();
     }
   });
 
-  var PopupView = Parse.View.extend({
-    el: "#all",
-    events:{
-      'click section.popup':'backToHome'
-    },
-    show: function () {
-      if(!this.view.hasClass('show')){
-        this.view.show();
-        self = this;
-        window.setTimeout(function(){self.view.addClass("show");}, 1);
-      }
-    },
-    hide: function () {
-      this.view.removeClass('show');
-      self = this;
-      window.setTimeout(function(){self.view.hide();}, 410);
-    },
-    backToHome:function (e) {
-      if($(e.target).is('section.popup')){
-        appRouter.navigate('', {trigger: true});
-      }
-    }
-  });
-
   var AddBookView = PopupView.extend({
-    el: "#all",
     events:{
-      'click #add':'backToHome'
+      // "touchstart form": "stopPropagation",
+      // "mousedown form": "stopPropagation"
     },
     initialize: function() {
+      // this.stopPropagationEvent  = ('ontouchstart' in window)?'touchstart':'mousedown';
       this.events = _.extend({},PopupView.prototype.events,this.events);
-
       this.render();
-      this.view = this.$el.find('#add');
-      updateForms();
-      this.view.hide();
+      this.initPopup('#add');
     },
     render: function() {
       this.$el.append(_.template($("#add-template").html()));
@@ -522,26 +534,31 @@ $(function() {
 
 
   var HomeView = Parse.View.extend({
-    el: "#all",
+    el: "#all .deep",
     events:{
-      // 'click #home':'backToHome'
+      'swipeRight .doble-column': "onSwipeRight",
+      'swipeLeft .doble-column': "onSwipeLeft",
+      'tap .column.right':'showRightColumn',
+      'tap .column.left':'showLeftColumn'
     },
     initialize: function() {
       // _.bindAll(this, "logIn", "signUp");
       this.render();
+      this.mainView = this.$('#home');
       this.addFalseBooks();
     },
     render: function() {
       this.$el.append(_.template($("#home-template").html()));
       this.delegateEvents();
     },
-    backToHome: function () {
-      if (appRouter.routes[Parse.history.fragment] != ''){
-        appRouter.navigate('', {trigger: true});
-      }
-    },
     toggleColumn: function(){
-      this.$("#home").toggleClass('show-right');
+      this.mainView.toggleClass('show-right');
+    },
+    showRightColumn: function(){
+      this.mainView.addClass('show-right'); 
+    },
+    showLeftColumn: function () {
+      this.mainView.removeClass('show-right'); 
     },
     addFalseBooks: function(){
       veces = 0;
@@ -563,12 +580,17 @@ $(function() {
         var view2 = new BookView();
         this.$("#highlight>div>ul").prepend(view2.render(librosArray[index]).el);
       }
-      highlightScroll = new iScroll('highlight');
-      personalScroll = new iScroll('personal');
     },
     hide: function () {
       
     }, 
+    onSwipeRight: function (e) {
+      // event.preventDefault();
+      this.showLeftColumn();
+    },
+    onSwipeLeft: function () {
+      this.showRightColumn();
+    }
   });
 
   var LogInView = Parse.View.extend({
@@ -649,54 +671,88 @@ $(function() {
     render: function() {
       // this.template(this.model.toJSON());
       this.$el.find('#book-detail').remove();
-      console.log(this.template);
+      // console.log(this.template);
       this.$el.append(this.template(this.model));
+      appView.createScroll('book-detail');
+      this.initPopup('#book-detail');
       // this.delegateEvents();
     },
     viewAndShow: function (bookID, bookPhoto) {
       // console.log(bookID+", "+bookPhoto);
       this.model = {"id": bookID, "photo":bookPhoto};
       this.render();
-      this.view = this.$el.find('#book-detail');
+      // this.view = this.$el.find('#book-detail');
       this.show();
     }
   });
 
-  // The main view for the app
+  /*$$('.scrollable').touch(function (e) {
+    appView.refreshScroll(e);
+  });*/
   var AppView = Parse.View.extend({
     // Instead of generating a new element, bind to the existing skeleton of
     // the App already present in the HTML.
     el: $("#all"),
-
+    events:{
+      "touchstart .scrollable": "refreshScroll",
+      "mousedown .scrollable": "refreshScroll"
+    },
+    scrollable : [],
     initialize: function() {
       this.render();
     },
 
     render: function() {
-      this.toolbarView = new ToolbarView();
       this.homeView = new HomeView();
-      this.searchView = new SearchView();
+      
       this.addBookView = new AddBookView();
+      this.searchView = new SearchView();
       this.bookDetailView = new BookDetailView();
+      this.toolbarView = new ToolbarView();
 
       this.currentView = this.homeView;
+
+      this.makeScrolls();
+
       /*if (Parse.User.current()) {
         this.manageBooksView = new ManageBooksView();
       } else {
         new LogInView();
       }*/
     },
-    /*addBook: function(){
-      // window.scrollTo(0, 0);
-      wtf? para prevenir el scroll automatico al cambiar el hash, 
-      hmmm tambien podria no hacer coincidir el hash con el id del elemento
-      
-    },*/
     hideCurrentView: function () {
       this.currentView.hide(); 
     },
     setCurrentView: function (view) {
       this.currentView = view;
+    },
+    makeScrolls: function () {
+      self = this;
+      this.$('.scrollable').each(function(){
+        id = $(this).attr('id');
+        console.log(id);
+        self.createScroll(id);
+      });
+    },
+    createScroll: function (id) {
+      this.scrollable.push({'id' : id, 'scroll' : new iScroll(id, {
+        onBeforeScrollStart:function (e) {
+          console.log('onBeforeScrollStart');
+          // e.stopPropagation();
+          var nodeType = e.explicitOriginalTarget ? e.explicitOriginalTarget.nodeName.toLowerCase():(e.target ? e.target.nodeName.toLowerCase():'');
+          if(nodeType !='select' && nodeType !='option' && nodeType !='input' && nodeType!='textarea'){
+            e.preventDefault();
+          }          
+        }
+      })});
+    },
+    refreshScroll: function (e) {
+      id = $(e.target).closest(".scrollable").attr('id');
+      scroll = this.scrollable.filter(function (scroll) {
+       return scroll.id == id;
+      });
+      scroll[0].scroll.refresh();
+      console.log('tratando de refrescar el scroll: '+ id);
     }
   });
 
@@ -710,34 +766,24 @@ $(function() {
       "book/*path":"viewBook",
     },
     add: function () {
-      // window.scrollTo(0, 0);
       appView.hideCurrentView();
-      // appView.searchView.hide();
-      // appView.addBook();
       appView.toolbarView.isHome();
       appView.addBookView.show();
+      updateForms();
       appView.currentView = appView.addBookView;
     },
     home: function (){
-      // appView.searchView.hide();
       appView.hideCurrentView();
+      appView.addBookView.hide();
       appView.toolbarView.isHome();
       appView.setCurrentView(appView.homeView);
-      // appView.addBookView.hide();
-      // appView.bookDetailView.hide();
-      // state.set({route:'search', query:query});
     },
     searchQuery: function (query) {
-      // var manageBookView = new ManageBooksView();
-      appView.hideCurrentView();
+      // appView.hideCurrentView();
       appView.searchView.show();
       appView.toolbarView.isSearch();
       appView.searchView.searchQuery(decodeURI(query));
       appView.setCurrentView(appView.searchView);
-      // state.set({route:'search', query:query});
-      // $('section.add').hide();
-      // $('section.search').show();
-      // new ManageBooksView.searchQuery(query);
     },
     search: function () {
       appView.hideCurrentView();
@@ -745,9 +791,7 @@ $(function() {
       appView.toolbarView.isSearch();
       appView.setCurrentView(appView.searchView);
 
-      /*appView.addBookView.hide();
-      appView.searchView.show();
-      appView.toolbarView.isSearch();*/
+      /*appView.toolbarView.isSearch();*/
       // state.set({route:'search'});
     },
     viewBook: function (id) {
@@ -758,10 +802,8 @@ $(function() {
     }
   });
 
-  // var state = new AppState;
   var appRouter = new AppRouter;
   var appView = new AppView;
-  // Parse.history.start({pushState: true});
   Parse.history.start();
 
   
@@ -770,41 +812,4 @@ $(function() {
   });
 
   // console.log(appRouter.routes[Parse.history.fragment]);
-  
-  /*$$(".toolbar .title-app").tap(function () {
-    if(appRouter.routes[Parse.history.fragment]=='home'){
-      $$(".doble-column").toggleClass('show-right');
-    }
-  });*/
-  
-  
-  $$(".column").touch(function () {
-    highlightScroll.refresh();
-    personalScroll.refresh();
-    searchScroll.refresh();
-  });
-
-  $$(".doble-column .column.right").tap(function () {
-    $$(".doble-column").addClass('show-right');
-  });
-
-  $$(".doble-column .column.left").tap(function () {
-    $$(".doble-column").removeClass('show-right');
-  });
-
-  $$(".doble-column").swipeRight(function () {
-    $$(".doble-column").removeClass('show-right');
-  });
-  $$(".doble-column").swipeLeft(function () {
-    $$(".doble-column").addClass('show-right');
-  });
-  /*$$(".book").tap(function () {
-    $$(this).toggleClass('rotate');
-  })*/
-
-  /*appRouter.on('route:search', function (query) {
-    appView.manageBooksView.searchQuery(query);
-  });*/
-
-  // var state = new AppState; new AppView;
 });
