@@ -12,17 +12,24 @@
     <script src="js/underscore-1.1.6.js"></script>
     <script src="js/iscroll-lite.js"></script>
     <script src="js/parse-1.1.15.min.js"></script>
-    <script type="text/javascript" src="cordova-2.1.0.js"></script>
+    <!--<script src="js/jquery.hammer.js"></script>
+    <script src="js/jquery.specialevent.hammer.js"></script> -->
+    <script src="cordova-2.1.0.js"></script>
   </head>
 
   <body>
 
-    <div id="all">
-      
+    <div id="all" class="application">
+      <div class="deep">
+      </div>
+      <div class="front">
+      </div>
+
     </div>
 
+
     <script type="text/template" id="book-detail-template">
-    <section id="book-detail" class="popup bottom"><div class="animate">
+    <section id="book-detail" class="popup view scrollable bottom animate"><div>
       <section id="photo" class="book image medium left">
         <div class="shadow"></div>
         <img src='<%= photo %>' alt="">
@@ -51,7 +58,8 @@
 
     <!-- Templates -->
     <script type="text/template" id="add-template">
-      <section id="add" class="popup bottom"><div class="animate">
+      <section id="add" class="popup view bottom scrollable animate"><div>
+        
         <form>
 
           <label>
@@ -61,14 +69,14 @@
             </span> 
           </label>
         
-          <label for="author-name">
+          <label>
             <span class="label">Autor/es:</span>
             <span class="input">
               <input type="text" name="author-name" id="author-name">
             </span>
           </label>
         
-          <label for="category-name">
+          <label>
             <span class="label">Categoría:</span>
             <span class="input">
               <select name="category-name" id="category-name">
@@ -92,18 +100,18 @@
     </script>
 
     <script type="text/template" id="search-template"> 
-      <section id="search" class="column sidebar right animate"><div>
+      <section id="search" class="column view scrollable sidebar right animate"><div>
           <ul></ul>
       </div></section>
     </script>
 
     <script type="text/template" id="home-template"> 
       <section id="home" class="doble-column show-right animate">
-        <section id="highlight" class="column  left"><div>
+        <section id="highlight" class="scrollable column  left"><div>
           <ul></ul>
         </div></section>
 
-        <section id="personal" class="column  right"><div>
+        <section id="personal" class="scrollable column  right"><div>
           <ul></ul>  
         </div></section>
       </section>
