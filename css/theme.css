@@ -7,13 +7,15 @@ form .label{
 	color: #787464;
 }
 form input, form select{
-	/*background: gray;*/
+	background: gray;
+}
+
+#search, #search>div{
+	background: url(../images/fondo.png);
 }
 
 .popup{
 	color: black;
-}
-.popup>div{
 	background: #E6E3DA;
 	border:1px solid #E6E3DA;
 }
