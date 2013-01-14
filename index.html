@@ -14,7 +14,7 @@
     <script src="js/parse-1.1.15.min.js"></script>
     <!--<script src="js/jquery.hammer.js"></script>
     <script src="js/jquery.specialevent.hammer.js"></script> -->
-    <script src="cordova-2.1.0.js"></script>
+    
   </head>
 
   <body>
@@ -211,7 +211,25 @@
       </li>
     </script>
 
+    <script type="text/javascript" src="cordova-2.3.0.js"></script>
     <script src="js/findbooks.js"></script>
+    <script>
+      // function onLoad() {
+    document.addEventListenter(
+      ‘deviceready’, onDeviceReady, false);
+    // }
+    function onDeviceReady() {
+      // do Something!
+      // example: display a Cordova Alert
+      // see docs.cordova.io for full details
+      navigator.notification.alert(
+        'Cordova is ready!',       // message
+        function() {//do something},  // callback
+        'Congratulations',            // title
+        'Done'                      // buttonName
+       );
+    }
+    </script>
   </body>
 
 </html>
