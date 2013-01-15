@@ -11,14 +11,21 @@ function isTouchDevice(){
 
 // Wait for Cordova to load
 //
-document.addEventListener("deviceready", onDeviceReady, false);
+$(document).ready(function() {
+  if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
+      document.addEventListener("deviceready", onDeviceReady, false);
+  } else {
+      // document.addEventListener("deviceready", onDeviceReady(false), false);
+      startApp(false);
+  }
+});
+
+
+// document.addEventListener("deviceready", onDeviceReady, false);
 // Cordova is ready
 //
 function onDeviceReady() {
-  document.addEventListener("backbutton", function(e) {
-    console.log("Back button pressed!!!!");                 
-    window.history.back();
-  }, false);
+  startApp(true);
 }
 
 function updateForms(){
@@ -30,7 +37,21 @@ function updateForms(){
 
 // document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
 
-$(function() {
+function startApp(isMobile) {
+
+  document.addEventListener("backbutton", function(e) {
+    console.log("Back button pressed!!!!");                 
+    window.history.back();
+  }, false);
+
+  if(isMobile){
+    navigator.notification.alert(
+      'Cordova is ready!',       // message
+      function() {$('body');},  // callback
+      'Congratulations',            // title
+      'Done'                      // buttonName
+    );
+  }
 
   window.scrollTo(0, 0);
   
@@ -356,7 +377,8 @@ $(function() {
       "click button.back"   : "back",
       "click button.add"    : "add",
       "click .title-app"    : "home",
-      "keypress #search-query": "searchEnter"
+      "keypress #search-query": "searchEnter",
+      "touchmove #toolbar-main": "preventDefault"
     },
     initialize: function() {
       // _.bindAll(this, "logIn", "signUp");
@@ -412,7 +434,10 @@ $(function() {
       }else{
         appRouter.navigate('', {trigger: true});
       }
-    }
+    },
+    preventDefault: function (e) {
+      e.preventDefault();
+    },
   });
 
   var PopupView = Parse.View.extend({
@@ -421,8 +446,8 @@ $(function() {
       'click .front':'backToHome'
     },
     initPopup: function (popupID) {
-      this.front = this.$el.find('.front');
-      this.view = this.$el.find(popupID);
+      this.front = this.$('.front');
+      this.view = this.$(popupID);
     },
     show: function () {
       if(!this.view.hasClass('show')){
@@ -468,7 +493,8 @@ $(function() {
     initialize: function() {
       this.events = _.extend({},PopupView.prototype.events,this.events);
       this.render();
-      this.initPopup('#search');
+      
+      
       /*this.render();
       this.view = this.$('#search');*/
     },
@@ -476,6 +502,8 @@ $(function() {
       this.$el.append(_.template($("#search-template").html()));
       this.delegateEvents();
       this.addFalseResults();
+      this.initPopup('#search');
+      this.hide();
     },
     /*show: function () {
       console.log('search');
@@ -514,14 +542,24 @@ $(function() {
 
   var AddBookView = PopupView.extend({
     events:{
-      // "touchstart form": "stopPropagation",
-      // "mousedown form": "stopPropagation"
+      // "click #add-book-done": "addNewBook",
+      "click #add-book-done": "addNewBook"
     },
+    consoleLog: function () {
+      console.log('click');
+    }, 
     initialize: function() {
       // this.stopPropagationEvent  = ('ontouchstart' in window)?'touchstart':'mousedown';
       this.events = _.extend({},PopupView.prototype.events,this.events);
       this.render();
       this.initPopup('#add');
+
+      this.inputTitle = this.$("#book-title");
+      this.inputAuthor = this.$("#author-name");
+      this.inputCategory = this.$("#category-name");
+
+
+
     },
     render: function() {
       this.$el.append(_.template($("#add-template").html()));
@@ -529,12 +567,63 @@ $(function() {
     },
     toggle: function(){
       this.view.toggleClass('show');
+    },
+    addNewBook: function(e) {
+      var self = this;
+
+      console.log('Agregando');
+
+      // if (e.keyCode != 13) return;
+      // alert('key != 13 and field val = '+this.inputTitle.val());
+      
+      
+
+      var inputTitle = this.inputTitle.val();
+      var inputAuthor = this.inputAuthor.val();
+      var inputCategory = this.inputCategory.val();
+
+      var query = new Parse.Query(Book);
+      query.equalTo('title', inputTitle);
+      query.equalTo('author', inputAuthor);
+      query.find({
+        success: function (results){
+          console.log("results");
+          if(results.length==0){
+            var book = new Book;
+            // var bookUsers = book.relation('users');
+            book.set('title', inputTitle);
+            book.set('author', inputAuthor);
+            book.set('category', inputCategory);
+            // bookUsers.add(Parse.User.current());
+            // self.books.add(book);
+            book.save();
+            self.inputTitle.val('');
+            self.inputAuthor.val('');
+            self.inputCategory.val('');
+            // self.hide();
+          }else{
+            var book = results[0];
+            // var bookUsers = book.relation('users');
+            // bookUsers.add(Parse.User.current());
+            // self.books.add(book);
+            // book.save();
+            self.inputTitle.val('');
+            self.inputAuthor.val('');
+            self.inputCategory.val('');
+
+          }
+        },
+        error: function(error){
+          console.log("error");
+          
+        }
+      });
     }
   });
 
 
   var HomeView = Parse.View.extend({
-    el: "#all .deep",
+    el: "#all",
     events:{
       'swipeRight .doble-column': "onSwipeRight",
       'swipeLeft .doble-column': "onSwipeLeft",
@@ -548,7 +637,7 @@ $(function() {
       this.addFalseBooks();
     },
     render: function() {
-      this.$el.append(_.template($("#home-template").html()));
+      this.$el.prepend(_.template($("#home-template").html()));
       this.delegateEvents();
     },
     toggleColumn: function(){
@@ -743,7 +832,9 @@ $(function() {
           if(nodeType !='select' && nodeType !='option' && nodeType !='input' && nodeType!='textarea'){
             e.preventDefault();
           }          
-        }
+        },
+        hScroll: false,
+        vScrollbar: true
       })});
     },
     refreshScroll: function (e) {
@@ -812,4 +903,5 @@ $(function() {
   });
 
   // console.log(appRouter.routes[Parse.history.fragment]);
-});
+}
+// );
