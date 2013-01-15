@@ -2,7 +2,7 @@
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     outline: none; 
 }
-.template{
+.display-none{
     display: none;
 }
 
@@ -42,6 +42,16 @@ button {
     border: 1px solid black;
     height: 40px;
     padding: 10px;
+}
+
+input, select{
+    border-radius: 0px;
+}
+
+.application{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
 .animate{
@@ -133,12 +143,20 @@ button {
     overflow: auto;
      -webkit-transform-origin: 0px 0px;
 }
-
 .popup.bottom{
     -webkit-transform: translate3d(0px, 110%, 0px) scale(1);    
 }
 .popup.show{
     -webkit-transform: translate3d(0, 0, 0) scale(1);
+}
+.popup > div, .popup > div > div{
+    height: 100%;
+}
+.popup.have-toolbar > div > div{
+    padding-top:44px;
+}
+.popup.have-toolbar{
+    overflow: hidden;
 }
 
 
@@ -201,25 +219,36 @@ p.medium{
     left: 0;
     width: 100%;
     z-index: 300000;
-    text-align: center;
+    /*text-align: center;*/
+}
+.toolbar.top{
+    top: 0;
+}
+.toolbar.fixed{
+    position: fixed;
 }
 .toolbar .center{
-    width: auto;
+    width: auto; 
     padding: 0 44px;
+    text-align: center;
+    padding-top: 5px;
+}
+.toolbar h1{
+    margin: 0;
+    padding: 0;  
+    font-weight: 200;
+}
+.toolbar .center h1{
+    font-size: 1.5em;
+}
+.toolbar .left h1{
+    padding: 0.5em;
+    font-size: 1em;
 }
 .toolbar .hide{
     display: none;
 }
-.toolbar h1{
-    font-weight: 200;
-    color: yellow;
-    margin: 0;
-    margin-top: 5px;
-    font-size: 2em;
-    text-align: center;
-    padding: 0;
-    height: 44px;
-}
+
 .toolbar input{
     margin: 4px 0;
     height: 20px;
@@ -242,6 +271,10 @@ p.medium{
     padding: 0;
     position: absolute;
     margin: 5px;
+}
+.toolbar button.text{
+    width: auto;
+    padding: 0 15px;
 }
 .toolbar button.left{
     left: 0px;
@@ -311,6 +344,15 @@ p.medium{
     left: 20%;
     height: 80%;
     width: 60%;
+}
+
+.book.small img{
+    height: 200px;
+    /*display: inline-block;*/
+}
+
+body{
+    font-size: 21px;
 }
 
 }
