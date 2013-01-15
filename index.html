@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,height=device-height,user-scalable=no,initial-scale=1.0,maximum-scale=1,minimum-scale=1.0" />
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1,minimum-scale=1.0" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <title>FindBooks app</title>
     <link href="css/style.css" media="all" rel="stylesheet" type="text/css"/>
@@ -20,8 +20,6 @@
   <body>
 
     <div id="all" class="application">
-      <div class="deep">
-      </div>
       <div class="front">
       </div>
 
@@ -58,8 +56,22 @@
 
     <!-- Templates -->
     <script type="text/template" id="add-template">
-      <section id="add" class="popup view bottom scrollable animate"><div>
+
+
+      <section id="add" class="popup view bottom animate have-toolbar">
         
+        <section id="toolbar-add-view" class="toolbar top fixed">
+          <header>
+            <div class="left">
+              <h1>Agregar un libro que tengo</h1>
+            </div>
+            
+            <button id="add-book-done" class="done right text">Listo</button>
+          </header>
+        </section>
+
+        <div id="add-content" class="scrollable"><div>
+
         <form>
 
           <label>
@@ -81,10 +93,10 @@
             <span class="input">
               <select name="category-name" id="category-name">
                 <option value=""></option>
-                <option value="volvo">Niños</option>
-                <option value="saab">Novela</option>
-                <option value="opel">Biografia</option>
-                <option value="audi">Ciencia Ficción</option>
+                <option value="Niños">Niños</option>
+                <option value="Novela">Novela</option>
+                <option value="Biografia">Biografia</option>
+                <option value="Ciencia Ficción">Ciencia Ficción</option>
               </select>              
             </span>
           </label>
@@ -92,15 +104,20 @@
           <button type="button" id="book-photo" class="photo ">Tomale una foto a tu libro</button>
 
           <button type="button" id="book-more-info" class=" ">Agrega mas información</button>
+
+          <section id="photo" class="book image medium left">
+            <div class="shadow"></div>
+            <img src='' alt="">
+          </section>
           
           <div class="clearfix"></div>
         </form>
 
-      </div></section>
+      </div></div></section>
     </script>
 
     <script type="text/template" id="search-template"> 
-      <section id="search" class="column view scrollable sidebar right animate"><div>
+      <section id="search" class="column display-none view scrollable sidebar right animate"><div>
           <ul></ul>
       </div></section>
     </script>
@@ -125,7 +142,7 @@
     </script>
 
     <script type="text/template" id="toolbar-template" >
-      <section class="toolbar">
+      <section id="toolbar-main" class="toolbar">
         <header>
           <div class="center search-input hide">
             <input id="search-query" type="text" >
@@ -163,73 +180,8 @@
       </div>
     </script>
 
-    <script type="text/template" id="manage-books-template">
-      <div id="toolbar">
-        <a href="#search" class="search"> buscar</a>
-        <a href="#add" class="add">agregar</a>
-      </div>
-      <div id="user-info">
-        Signed in as <%= Parse.User.current().get("username") %> (<a href="#" class="log-out">Log out</a>)
-      </div>
-
-      <section class="section add">
-
-        <header id="add">
-          <input id="book-title" class="field" placeholder="¿Cual es el titulo del libro?" type="text" />
-          <input id="book-author" class="field" placeholder="¿Quien lo escribio?" type="text" />
-        </header>
-        <div id="main">
-          <ul id="book-list">
-            <img src='images/spinner.gif' class='spinner' />
-          </ul>
-        </div>
-
-      </section>
-      <section class="section search">
-
-        <header id="search">
-          <input id="search-query" class="field" placeholder="Buscar" type="text" />
-        </header>
-        <div id="main">
-          <ul id="book-list">
-            <img src='images/spinner.gif' class='spinner' />
-          </ul>
-        </div>
-
-      </section>
-    </script>
-
-    <script type="text/template" id="book-template-old">
-      <li>
-        <div class="view">
-          <label class="title"><%= title %></label>
-          <label class="author"><%= author %></label>
-          <button class="destroy"></button>
-        </div>
-        <input class="edit title" value="<%= title %>">
-        <input class="edit author" value="<%= author %>">
-      </li>
-    </script>
-
     <script type="text/javascript" src="cordova-2.3.0.js"></script>
     <script src="js/findbooks.js"></script>
-    <script>
-      // function onLoad() {
-    document.addEventListenter(
-      ‘deviceready’, onDeviceReady, false);
-    // }
-    function onDeviceReady() {
-      // do Something!
-      // example: display a Cordova Alert
-      // see docs.cordova.io for full details
-      navigator.notification.alert(
-        'Cordova is ready!',       // message
-        function() {//do something},  // callback
-        'Congratulations',            // title
-        'Done'                      // buttonName
-       );
-    }
-    </script>
   </body>
 
 </html>
