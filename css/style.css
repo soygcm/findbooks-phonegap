@@ -15,7 +15,7 @@ body,html{
 body {
     font: 18px 'Helvetica Neue', Helvetica, Arial, sans-serif;
     /*line-height: 1.4em;*/
-    background: #5C291A;
+    background: #1A5C29;
     color: white;
     /*width: 550px;*/
     /*margin: 0 auto;*/
@@ -141,15 +141,16 @@ input, select{
     border-radius: 5px;
     box-shadow: 1px 3px 50px #000;
     overflow: auto;
-     -webkit-transform-origin: 0px 0px;
+    -webkit-transform-origin: 0px 0px;
 }
 .popup.bottom{
-    -webkit-transform: translate3d(0px, 110%, 0px) scale(1);    
+    -webkit-transform: translate3d(0px, 120%, 0px) scale(1);    
 }
 .popup.show{
     -webkit-transform: translate3d(0, 0, 0) scale(1);
 }
-.popup > div, .popup > div > div{
+.popup > div{
+    /*, .popup > div > div{*/
     height: 100%;
 }
 .popup.have-toolbar > div > div{
@@ -315,7 +316,7 @@ p.medium{
     height: 250px;
 }
 .book{
-    padding: 10px;
+    margin: 10px;
     /*float: left;*/
     -webkit-transition: -webkit-transform .4s ease-out;
 }
@@ -327,7 +328,7 @@ p.medium{
     float: left;
 }
 
-@media screen and (min-width: 640px) { 
+@media screen and (min-width: 640px) {
 
 .popup{
     left: 10%;
