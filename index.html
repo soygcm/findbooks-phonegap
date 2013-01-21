@@ -7,11 +7,13 @@
     <title>FindBooks app</title>
     <link href="css/style.css" media="all" rel="stylesheet" type="text/css"/>
     <link href="css/theme.css" media="all" rel="stylesheet" type="text/css"/>
+    <!--<script src="cordova-2.3.0.js"></script>-->
     <script src="js/jquery.js"></script>
     <script src="js/quo.js"></script>
     <script src="js/underscore-1.1.6.js"></script>
     <script src="js/iscroll-lite.js"></script>
     <script src="js/parse-1.1.15.min.js"></script>
+    
     <!--<script src="js/jquery.hammer.js"></script>
     <script src="js/jquery.specialevent.hammer.js"></script> -->
     
@@ -60,7 +62,7 @@
 
       <section id="add" class="popup view bottom animate have-toolbar">
         
-        <section id="toolbar-add-view" class="toolbar top fixed">
+        <section id="toolbar-add-view" class="toolbar top">
           <header>
             <div class="left">
               <h1>Agregar un libro que tengo</h1>
@@ -105,7 +107,7 @@
 
           <button type="button" id="book-more-info" class=" ">Agrega mas información</button>
 
-          <section id="photo" class="book image medium left">
+          <section id="image-input-photo" class="book medium">
             <div class="shadow"></div>
             <img src='' alt="">
           </section>
@@ -180,8 +182,11 @@
       </div>
     </script>
 
-    <script type="text/javascript" src="cordova-2.3.0.js"></script>
-    <script src="js/findbooks.js"></script>
+    <script type="text/javascript" src="../cordova-2.3.0.js"></script>
+    <script type="text/javascript" src="js/findbooks.js"></script> 
+    <script type="text/javascript">
+      // app.initialize();
+    </script>
   </body>
 
 </html>
