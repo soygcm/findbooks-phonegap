@@ -1,57 +1,4 @@
-// http://chris-barr.com/index.php/entry/scrolling_a_overflowauto_element_on_a_touch_screen_device/
-function isTouchDevice(){
-  try{
-    document.createEvent("TouchEvent");
-    // $("#highlight").prepend('isTouchDevice')
-    return true;
-  }catch(e){
-    return false;
-  }
-}
 
-// Wait for Cordova to load
-//
-$(document).ready(function() {
-  if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
-      document.addEventListener("deviceready", onDeviceReady, false);
-  } else {
-      // document.addEventListener("deviceready", onDeviceReady(false), false);
-      startApp(false);
-  }
-});
-
-
-// document.addEventListener("deviceready", onDeviceReady, false);
-// Cordova is ready
-//
-function onDeviceReady() {
-  startApp(true);
-}
-
-function updateForms(){
-  $("form .input").each(function() {
-    console.log($(this).parent().width()-$(this).prev(".label").width()-10);
-    $(this).width($(this).parent().width()-$(this).prev(".label").width()-10);
-  });
-}
-
-// document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-
-function startApp(isMobile) {
-
-  document.addEventListener("backbutton", function(e) {
-    console.log("Back button pressed!!!!");                 
-    window.history.back();
-  }, false);
-
-  if(isMobile){
-    navigator.notification.alert(
-      'Cordova is ready!',       // message
-      function() {$('body');},  // callback
-      'Congratulations',            // title
-      'Done'                      // buttonName
-    );
-  }
 
   window.scrollTo(0, 0);
   
@@ -59,26 +6,18 @@ function startApp(isMobile) {
 
   Parse.$ = jQuery;
 
-
   // Initialize Parse with your Parse application javascript keys
   Parse.initialize("C4zgFUST9RGWSJ5scVpyB5G4co2gcMUpNPg0QpaI", "C7Qy33Kz3SbWwNOoodEg6RiuIE7a4MlvoYo99kTZ");
 
   // App Models
   // ----------
-
   var Book = Parse.Object.extend("Book");
   var User = Parse.Object.extend("User");
   var AppState = Parse.Object.extend("AppState");
 
   // App Collections
   // ---------------
-
-  var BookList = Parse.Collection.extend({
-    model: Book
-  });
-
-  // Book Item View
-  // --------------
+  var BookList = Parse.Collection.extend({model: Book});
 
   // The DOM element for a book item...
   var BookView_old = Parse.View.extend({
@@ -133,7 +72,7 @@ function startApp(isMobile) {
 
         },
         error: function(error){
-          console.log(error.code);
+          ////console.log(error.code);
         }
       });
       $(this.el).removeClass("editing");
@@ -152,17 +91,16 @@ function startApp(isMobile) {
     },
     viewOwners: function () {
 
-      console.log(this.model.id);
+      //console.log(this.model.id);
       appRouter.navigate('book/'+this.model.id);
       this.bookUsers.query().find({
         success: function(users) {
           $.each(users, function(i, user){
-            console.log(user.attributes.username);
+            //console.log(user.attributes.username);
           });
         }
       });
     }
-
   });
 
   // The Application
@@ -274,7 +212,7 @@ function startApp(isMobile) {
         var self = this;
         this.inputSearchQuery.val(query);
         this.$("#toolbar a.search").attr('href', '#search/'+query);
-        console.log('buscando esto: '+query);
+        //console.log('buscando esto: '+query);
 
         var queryMatchesTitle = new Parse.Query(Book);
         queryMatchesTitle.matches("title", query, 'im');
@@ -288,7 +226,7 @@ function startApp(isMobile) {
           success: function(books) {
             this.$(".search .spinner").hide();
             $.each(books, function(i, book) {
-              // console.log(book);
+              // //console.log(book);
               var view = new BookView({model: book});
               self.$(".search #book-list").append(view.render().el);
             });
@@ -317,7 +255,7 @@ function startApp(isMobile) {
       query.equalTo('author', inputAuthor);
       query.find({
         success: function (results){
-          console.log("results");
+          //console.log("results");
           if(results.length==0){
             var book = new Book;
             var bookUsers = book.relation('users');
@@ -339,7 +277,7 @@ function startApp(isMobile) {
           }
         },
         error: function(error){
-          console.log("error");
+          //console.log("error");
           
         }
       });
@@ -378,7 +316,7 @@ function startApp(isMobile) {
       "click button.add"    : "add",
       "click .title-app"    : "home",
       "keypress #search-query": "searchEnter",
-      "touchmove #toolbar-main": "preventDefault"
+      // "touchmove #toolbar-main": "preventDefault"
     },
     initialize: function() {
       // _.bindAll(this, "logIn", "signUp");
@@ -412,7 +350,7 @@ function startApp(isMobile) {
       }
       this.inputSearchQuery.val('');
       this.$('.find').focus();
-      console.log('lose blur');
+      //console.log('lose blur');
     },
     isHome: function () {
       this.$('.search-input').hide();
@@ -465,7 +403,7 @@ function startApp(isMobile) {
         this.view.removeClass('show');
         front = this.front;
         view = this.view;
-        // console.log(Hello.caller.toString());
+        // //console.log(Hello.caller.toString());
         window.setTimeout(function(){
           // front.hide();
           view.hide();
@@ -481,7 +419,7 @@ function startApp(isMobile) {
       }
     },
     backToHome:function (e) {
-      // console.log('trying');
+      // //console.log('trying');
       if($(e.target).is('.front')){
         appRouter.navigate('', {trigger: true});
       }
@@ -506,7 +444,7 @@ function startApp(isMobile) {
       this.hide();
     },
     /*show: function () {
-      console.log('search');
+      //console.log('search');
       if(this.view.hasClass('show')){
         return true;
       }else{
@@ -518,7 +456,7 @@ function startApp(isMobile) {
     },*/
     searchQuery: function (query) {
       // query = query.replace(/-+/g, ' ');
-      console.log('buscando decodeURI: '+decodeURI(query));
+      //console.log('buscando decodeURI: '+decodeURI(query));
       this.view.find('div>ul').append('<li>'+query+'</li>');
     },
     /*hide: function () {
@@ -543,10 +481,11 @@ function startApp(isMobile) {
   var AddBookView = PopupView.extend({
     events:{
       // "click #add-book-done": "addNewBook",
-      "click #add-book-done": "addNewBook"
+      "click #add-book-done": "addNewBook",
+      "click #book-photo" : "capturePhoto"
     },
     consoleLog: function () {
-      console.log('click');
+      //console.log('click');
     }, 
     initialize: function() {
       // this.stopPropagationEvent  = ('ontouchstart' in window)?'touchstart':'mousedown';
@@ -558,7 +497,13 @@ function startApp(isMobile) {
       this.inputAuthor = this.$("#author-name");
       this.inputCategory = this.$("#category-name");
 
+      /*$.each(navigator, function(index, val) {
+        console.log(index+': '+val);
+      });*/
 
+
+      // this.pictureSource=navigator.camera.PictureSourceType;
+      // this.destinationType = navigator.camera.DestinationType;
 
     },
     render: function() {
@@ -568,10 +513,21 @@ function startApp(isMobile) {
     toggle: function(){
       this.view.toggleClass('show');
     },
+    capturePhoto: function () {
+      navigator.camera.getPicture(this.onPhotoDataSuccess, this.onFail, { quality: 50 });      
+    },
+    onPhotoDataSuccess: function(imageData) {
+      console.log ("data:image/jpeg;base64," + imageData);
+      this.imagePhoto = $("#image-input-photo>img");
+      this.imagePhoto.attr("src", imageData);
+    },
+    onFail: function (message) {
+      alert('Failed because: ' + message);
+    },
     addNewBook: function(e) {
       var self = this;
 
-      console.log('Agregando');
+      //console.log('Agregando');
 
       // if (e.keyCode != 13) return;
       // alert('key != 13 and field val = '+this.inputTitle.val());
@@ -587,7 +543,7 @@ function startApp(isMobile) {
       query.equalTo('author', inputAuthor);
       query.find({
         success: function (results){
-          console.log("results");
+          ////console.log("results");
           if(results.length==0){
             var book = new Book;
             // var bookUsers = book.relation('users');
@@ -614,13 +570,12 @@ function startApp(isMobile) {
           }
         },
         error: function(error){
-          console.log("error");
+          //console.log("error");
           
         }
       });
     }
   });
-
 
   var HomeView = Parse.View.extend({
     el: "#all",
@@ -760,14 +715,14 @@ function startApp(isMobile) {
     render: function() {
       // this.template(this.model.toJSON());
       this.$el.find('#book-detail').remove();
-      // console.log(this.template);
+      // //console.log(this.template);
       this.$el.append(this.template(this.model));
       appView.createScroll('book-detail');
       this.initPopup('#book-detail');
       // this.delegateEvents();
     },
     viewAndShow: function (bookID, bookPhoto) {
-      // console.log(bookID+", "+bookPhoto);
+      // //console.log(bookID+", "+bookPhoto);
       this.model = {"id": bookID, "photo":bookPhoto};
       this.render();
       // this.view = this.$el.find('#book-detail');
@@ -775,22 +730,19 @@ function startApp(isMobile) {
     }
   });
 
-  /*$$('.scrollable').touch(function (e) {
-    appView.refreshScroll(e);
-  });*/
   var AppView = Parse.View.extend({
     // Instead of generating a new element, bind to the existing skeleton of
     // the App already present in the HTML.
     el: $("#all"),
     events:{
       "touchstart .scrollable": "refreshScroll",
-      "mousedown .scrollable": "refreshScroll"
+      "mousedown .scrollable": "refreshScroll",
     },
     scrollable : [],
     initialize: function() {
-      this.render();
+      // console.log('--------- AppView initialize --------');
+      // this.bindGlobalEvents();
     },
-
     render: function() {
       this.homeView = new HomeView();
       
@@ -800,7 +752,7 @@ function startApp(isMobile) {
       this.toolbarView = new ToolbarView();
 
       this.currentView = this.homeView;
-
+      
       this.makeScrolls();
 
       /*if (Parse.User.current()) {
@@ -808,6 +760,12 @@ function startApp(isMobile) {
       } else {
         new LogInView();
       }*/
+    },
+    updateForms: function(){
+      $("form .input").each(function() {
+        ////console.log($(this).parent().width()-$(this).prev(".label").width()-10);
+        $(this).width($(this).parent().width()-$(this).prev(".label").width()-10);
+      });
     },
     hideCurrentView: function () {
       this.currentView.hide(); 
@@ -819,14 +777,14 @@ function startApp(isMobile) {
       self = this;
       this.$('.scrollable').each(function(){
         id = $(this).attr('id');
-        console.log(id);
+        ////console.log(id);
         self.createScroll(id);
       });
     },
     createScroll: function (id) {
       this.scrollable.push({'id' : id, 'scroll' : new iScroll(id, {
         onBeforeScrollStart:function (e) {
-          console.log('onBeforeScrollStart');
+          ////console.log('onBeforeScrollStart');
           // e.stopPropagation();
           var nodeType = e.explicitOriginalTarget ? e.explicitOriginalTarget.nodeName.toLowerCase():(e.target ? e.target.nodeName.toLowerCase():'');
           if(nodeType !='select' && nodeType !='option' && nodeType !='input' && nodeType!='textarea'){
@@ -843,7 +801,10 @@ function startApp(isMobile) {
        return scroll.id == id;
       });
       scroll[0].scroll.refresh();
-      console.log('tratando de refrescar el scroll: '+ id);
+      console.log('touchstart mousedown -------- appView refreshScroll: '+ id+' --------');
+    },
+    preventDefault: function (e) {
+      e.preventDefault();
     }
   });
 
@@ -860,7 +821,7 @@ function startApp(isMobile) {
       appView.hideCurrentView();
       appView.toolbarView.isHome();
       appView.addBookView.show();
-      updateForms();
+      appView.updateForms();
       appView.currentView = appView.addBookView;
     },
     home: function (){
@@ -893,15 +854,68 @@ function startApp(isMobile) {
     }
   });
 
-  var appRouter = new AppRouter;
-  var appView = new AppView;
-  Parse.history.start();
-
   
-  $(window).resize(function() {
-    updateForms();
-  });
 
-  // console.log(appRouter.routes[Parse.history.fragment]);
-}
-// );
+  var appView = new AppView;
+  var appRouter;
+
+  var app = {
+    initialize: function() {
+        this.bindGlobalEvents();
+    },
+    bindGlobalEvents: function () {
+      // self = this;
+      $(window).resize(appView.updateForms());
+      alert(navigator.userAgent);
+      if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
+          ////console.log('iPhone|iPod|iPad|Android|BlackBerry');
+          document.addEventListener("deviceready", this.onDeviceReady, false);
+          if (navigator.userAgent.match(/(Android)/)){
+            document.addEventListener("backbutton", function(e) {
+              ////console.log("Back button pressed!!!!");                 
+              window.history.back();
+            }, false);
+          }
+          if (navigator.userAgent.match(/(iPhone|iPod|iPad)/)){
+            document.addEventListener('touchmove', function (e) {
+              e.preventDefault();
+              //// console.log('document.touchmove -> preventDefault');
+            }, false);
+          }
+      } else {
+          this.isMobile = false;
+          this.startAppView();
+      }
+
+    },
+    onDeviceReady: function () {
+      alert('Device is Ready');
+      app.receivedEvent('deviceready');
+    },
+    receivedEvent: function (id) {
+
+      this.isMobile = true;
+      
+
+      this.pictureSource=navigator.camera.PictureSourceType;
+      this.destinationType=navigator.camera.DestinationType;
+
+      /*$.each(navigator.camera, function(index, val) {
+        console.log(index+': '+val+' <br>');
+      });*/
+      console.log('Received Event: ' + id);
+      this.startAppView();
+    },
+    startAppView: function () {
+      appView.render();
+      appRouter = new AppRouter;
+      Parse.history.start();
+    }
+  };
+
+$(document).ready(function() {
+
+  app.initialize();
+
+  // ////console.log(appRouter.routes[Parse.history.fragment]);
+});
