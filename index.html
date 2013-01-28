@@ -7,15 +7,11 @@
     <title>FindBooks app</title>
     <link href="css/style.css" media="all" rel="stylesheet" type="text/css"/>
     <link href="css/theme.css" media="all" rel="stylesheet" type="text/css"/>
-    <!--<script src="cordova-2.3.0.js"></script>-->
     <script src="js/jquery.js"></script>
     <script src="js/quo.js"></script>
     <script src="js/underscore-1.1.6.js"></script>
     <script src="js/iscroll-lite.js"></script>
     <script src="js/parse-1.1.15.min.js"></script>
-    
-    <!--<script src="js/jquery.hammer.js"></script>
-    <script src="js/jquery.specialevent.hammer.js"></script> -->
     
   </head>
 
@@ -29,34 +25,33 @@
 
 
     <script type="text/template" id="book-detail-template">
-    <section id="book-detail" class="popup view scrollable bottom animate"><div>
-      <section id="photo" class="book image medium left">
-        <div class="shadow"></div>
-        <img src='<%= photo %>' alt="">
-      </section>
-      <section id="detail">
-        <h1> The Lean Startup</h1>
-        <button type="button" id="book-author" class="">Eric Ries</button>
-        <p class="paragraph medium">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et elit felis, non sollicitudin enim. Curabitur at scelerisque purus. In sagittis imperdiet turpis, quis laoreet arcu mattis nec.
-        </p>
-      </section>
-      <section id="ownerslist">
-        <ul>
-          <li>Gabriel</li>
-          <li>Andres</li>
-          <li>Daniel</li>
-          <li>Rodrigo</li>
-          <li>Simon</li>
-          <li>Marta</li>
-          <li>Maria</li>
-          <li>Rosa</li>
-        </ul>
-      </section>
-    </div></section>
+      <section id="book-detail" class="popup view scrollable bottom animate"><div>
+        <section id="photo" class="book image medium left">
+          <div class="shadow"></div>
+          <img src='<%= photo %>' alt="">
+        </section>
+        <section id="detail">
+          <h1> The Lean Startup</h1>
+          <button type="button" id="book-author" class="">Eric Ries</button>
+          <p class="paragraph medium">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et elit felis, non sollicitudin enim. Curabitur at scelerisque purus. In sagittis imperdiet turpis, quis laoreet arcu mattis nec.
+          </p>
+        </section>
+        <section id="ownerslist">
+          <ul>
+            <li>Gabriel</li>
+            <li>Andres</li>
+            <li>Daniel</li>
+            <li>Rodrigo</li>
+            <li>Simon</li>
+            <li>Marta</li>
+            <li>Maria</li>
+            <li>Rosa</li>
+          </ul>
+        </section>
+      </div></section>
     </script>
 
-    <!-- Templates -->
     <script type="text/template" id="add-template">
 
 
@@ -107,9 +102,18 @@
 
           <button type="button" id="book-more-info" class=" ">Agrega mas información</button>
 
+          <input type="file" id="postedFile" name="postedFile" />
+
           <section id="image-input-photo" class="book medium">
             <div class="shadow"></div>
+            <button type="button" id="book-upload-image" class="">Subir imagen</button>
+            <div class="loading-bar hover">
+              <div class="complete"></div>
+              <div class="cancel"></div>
+            </div>
             <img src='' alt="">
+            
+
           </section>
           
           <div class="clearfix"></div>
@@ -184,9 +188,6 @@
 
     <script type="text/javascript" src="../cordova-2.3.0.js"></script>
     <script type="text/javascript" src="js/findbooks.js"></script> 
-    <script type="text/javascript">
-      // app.initialize();
-    </script>
   </body>
 
 </html>
