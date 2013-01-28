@@ -318,6 +318,7 @@ p.medium{
 .book{
     margin: 10px;
     /*float: left;*/
+    position: relative;
     -webkit-transition: -webkit-transform .4s ease-out;
 }
 .book.rotate {
@@ -326,6 +327,27 @@ p.medium{
 }
 .image.left{
     float: left;
+}
+
+
+.loading-bar.hover{
+    position: absolute;
+    width: 80%;
+    height: 20px;
+    top: 50%;
+    left: 10%;
+    background: green;
+    display: none;
+}
+.loading-bar .complete{
+    height: 100%;
+    width: 0%;
+    background-color: blue;
+    /*-webkit-transition: width .25s linear;
+       -moz-transition: width .25s linear;
+        -ms-transition: width .25s linear;
+         -o-transition: width .25s linear;
+            transition: width .25s linear;*/
 }
 
 @media screen and (min-width: 640px) {
