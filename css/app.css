@@ -168,7 +168,7 @@ form{
 form label{
     display: block;
     margin-bottom: 10px;
-    height: 30px;
+    height: 2em;
     border-bottom: 1px solid white;
     position: relative;
 }
@@ -177,21 +177,22 @@ form span.label{
     position: absolute;
     /*width: 70px;*/
     bottom: 0px;
-    height: 1.5em;
+    height: 2em;
     text-align: right;
     /*float: left;*/
     /*background: blue;*/
 }
 form span.input{
-    height: 30px;
+    height: 2em;
     display: block;
     float: right;
     /*background: red;*/
     /*border: 1px solid black;*/
 }
 form input, form select{
-    height: 30px;
-    display: block; 
+    height:  2em;
+    /*display: inline-block; */
+    float: left;
     background: transparent;
     padding: 0;
     margin: 0;
@@ -214,7 +215,7 @@ p.medium{
 }
 
 .toolbar{
-    height: 44px;
+    height: 2.2em;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -252,7 +253,7 @@ p.medium{
 
 .toolbar input{
     margin: 4px 0;
-    height: 20px;
+    height: 1.2em;
     /*display: block;*/
     width: 100%;
     font-family: inherit;
@@ -265,7 +266,7 @@ p.medium{
 }
 .toolbar button {
     width: 32px;
-    height: 32px;
+    height: 1.5em;
     border: 1px solid #0B1E33;
     border-radius: 5px;
     top: 0;

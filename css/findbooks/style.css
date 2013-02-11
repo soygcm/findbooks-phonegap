@@ -1,17 +1,22 @@
 /*Estructura*/
-#view .photo
+/*#view .photo*/
 
 
-/*Color*/
 form .label{
 	color: #787464;
 }
 form input, form select{
-	background: #eee;
+	background-color: #eee;
+}
+form select{
+	background-image: url(images/select.png);
+	background-size:auto 45%;
+	background-repeat: no-repeat;
+	background-position: center right;
 }
 
 #search, #search>div{
-	background: url(../images/fondo.png);
+	background: url(../../images/fondo.png);
 }
 
 #add .toolbar{ 
