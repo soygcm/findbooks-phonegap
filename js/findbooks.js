@@ -572,7 +572,10 @@ var AppView = Parse.View.extend({
         var nodeType = e.explicitOriginalTarget ? e.explicitOriginalTarget.nodeName.toLowerCase():(e.target ? e.target.nodeName.toLowerCase():'');
         if(nodeType !='select' && nodeType !='option' && nodeType !='input' && nodeType!='textarea'){
           e.preventDefault();
-        }          
+        }else{
+          window.scrollTo(0, 0);
+          console.log('scrollTo 0,0');
+        }     
       },
       hScroll: false,
       vScrollbar: true
