@@ -12,270 +12,9 @@ Parse.initialize(parseApplicationId, parseJSKey);
 
 var Book = Parse.Object.extend("Book");
 var User = Parse.Object.extend("User");
+var Offer = Parse.Object.extend("Offer");
 var AppState = Parse.Object.extend("AppState");
 var BookList = Parse.Collection.extend({model: Book});
-
-
-var BookView_old = Parse.View.extend({
-
-  //... is a list tag.
-  tagName:  "li",
-
-  // Cache the template function for a single item.
-  template: _.template($('#book-template').html()),
-
-  // The DOM events specific to an item.
-  events: {
-    "dblclick label"      : "edit",
-    "click label"         : "viewOwners",
-    "click .destroy"      : "clear",
-    "keypress .edit"      : "updateOnEnter"
-    // "blur .edit"          : "close"
-  },
-
-  // The TodoView listens for changes to its model, re-rendering. Since there's
-  // a one-to-one correspondence between a Todo and a TodoView in this
-  // app, we set a direct reference on the model for convenience.
-  initialize: function() {
-    _.bindAll(this, 'render', 'close', 'remove');
-    this.model.bind('change', this.render);
-    this.model.bind('destroy', this.remove);
-    this.bookUsers = this.model.relation("users");
-  },
-
-  // Re-render the contents of the todo item.
-  render: function() {
-    $(this.el).html(this.template(this.model.toJSON()));
-    $(this.el).attr('id', this.model.id);
-    this.inputTitle = this.$('.edit.title');
-    this.inputAuthor = this.$('.edit.author');
-
-    return this;
-  },
-
-  // Switch this view into `"editing"` mode, displaying the input field.
-  edit: function() {
-    $(this.el).addClass("editing");
-    this.inputTitle.focus();
-    this.inputAuthor.focus();
-  },
-
-  // Close the `"editing"` mode, saving changes to the todo.
-  close: function() {
-    this.model.save({title: this.inputTitle.val(), author: this.inputAuthor.val()},
-    {
-      success: function(){
-
-      },
-      error: function(error){
-        ////console.log(error.code);
-      }
-    });
-    $(this.el).removeClass("editing");
-  },
-
-  // If you hit `enter`, we're through editing the item.
-  updateOnEnter: function(e) {
-    if (e.keyCode == 13) this.close();
-  },
-
-  // Remove the item, destroy the model.
-  clear: function() {
-    this.bookUsers.remove(Parse.User.current());
-    this.model.save();
-    this.remove();
-  },
-  viewOwners: function () {
-
-    //console.log(this.model.id);
-    appRouter.navigate('book/'+this.model.id);
-    this.bookUsers.query().find({
-      success: function(users) {
-        $.each(users, function(i, user){
-          //console.log(user.attributes.username);
-        });
-      }
-    });
-  }
-});
-
-var ManageBooksView = Parse.View.extend({
-
-  // Delegated events for creating new items, and clearing completed ones.
-  events: {
-    "keypress #add>.field":  "createOnEnter",
-    "click .log-out": "logOut",
-    "keypress #search-query": "search"
-  },
-
-  el: ".content",
-
-  // At initialization we bind to the relevant events on the `Todos`
-  // collection, when items are added or changed. Kick things off by
-  // loading any preexisting todos that might be saved to Parse.
-  initialize: function() {
-    var self = this;
-
-    _.bindAll(this, 'addOne', 'addAll', 'addSome', 'render', 'logOut', 'createOnEnter', 'search', 'searchQuery');
-
-    // Main books management template
-    this.$el.html(_.template($("#manage-books-template").html()));
-    
-    this.inputTitle = this.$("#book-title");
-    this.inputAuthor = this.$("#book-author");
-    this.inputSearchQuery = this.$("#search-query");
-    // this.allCheckbox = this.$("#toggle-all")[0];
-
-    // Create our collection of Todos
-    this.books = new BookList;
-    
-
-    // Setup the query for the collection to look for todos from the current user
-    this.books.query = new Parse.Query(Book);
-    this.books.query.equalTo("users", Parse.User.current());
-    
-    this.books.bind('add',     this.addOne);
-    this.books.bind('reset',   this.addAll);
-    this.books.bind('all',     this.render);
-
-    // Fetch all the todo items for this user
-    this.books.fetch();
-
-    
-    /*appRouter.on("route:search", function (query) {
-      self.searchQuery(query);
-    });
-    */
-    // state.on("change", this.searchQuery, this);
-  },
-
-  // Logs out the user and shows the login view
-  logOut: function(e) {
-    Parse.User.logOut();
-    new LogInView();
-    this.undelegateEvents();
-    delete this;
-  },
-
-  // Re-rendering the App just means refreshing the statistics -- the rest
-  // of the app doesn't change.
-  render: function() {
-
-    this.delegateEvents();
-
-    // this.allCheckbox.checked = !remaining;
-  },
-
-  // Add a single todo item to the list by creating a view for it, and
-  // appending its element to the `<ul>`.
-  addOne: function(book) {
-    var view = new BookView({model: book});
-    this.$(".add #book-list").append(view.render().el);
-  },
-
-  // Add all items in the Todos collection at once.
-  addAll: function(collection, filter) {
-    this.$(".add #book-list").html("");
-    this.books.each(this.addOne);
-  },
-
-  // Only adds some todos, based on a filtering function that is passed in
-  addSome: function(filter) {
-    var self = this;
-    this.$(".add #book-list").html("");
-    this.books.chain().filter(filter).each(function(item) { self.addOne(item) });
-  },
-  search: function (e) {
-    if (e.keyCode != 13) return;
-    if(this.inputSearchQuery.val()!=''){
-      appRouter.navigate('search/'+this.inputSearchQuery.val());
-      this.searchQuery(this.inputSearchQuery.val());
-    }
-    this.$(".search .spinner").hide();
-    /*
-    var query = new Parse.Query(BarbecueSauce);
-    query.contains("name", "Extra Spicy!");
-    */
-  },
-
-  searchQuery: function(query){
-    if(query!=undefined && query!='' && query!=' '){
-      this.$(".search .spinner").show();
-      this.$(".search #book-list").html("");
-      var self = this;
-      this.inputSearchQuery.val(query);
-      this.$("#toolbar a.search").attr('href', '#search/'+query);
-      //console.log('buscando esto: '+query);
-
-      var queryMatchesTitle = new Parse.Query(Book);
-      queryMatchesTitle.matches("title", query, 'im');
-      
-      var queryMatchesAuthor = new Parse.Query(Book);
-      queryMatchesAuthor.matches("author", query, 'im');
-      
-      var queryResults = Parse.Query.or(queryMatchesTitle, queryMatchesAuthor);
-
-      queryResults.find({
-        success: function(books) {
-          this.$(".search .spinner").hide();
-          $.each(books, function(i, book) {
-            // //console.log(book);
-            var view = new BookView({model: book});
-            self.$(".search #book-list").append(view.render().el);
-          });
-
-
-        }
-      });  
-    }else{
-      this.$(".search .spinner").hide();
-    }
-
-    
-
-  },
-  // If you hit return in the main input field, create new Todo model
-  createOnEnter: function(e) {
-    var self = this;
-    if (e.keyCode != 13) return;
-    // alert('key != 13 and field val = '+this.inputTitle.val());
-    
-    var inputTitle = this.inputTitle.val();
-    var inputAuthor = this.inputAuthor.val();
-
-    var query = new Parse.Query(Book);
-    query.equalTo('title', inputTitle);
-    query.equalTo('author', inputAuthor);
-    query.find({
-      success: function (results){
-        //console.log("results");
-        if(results.length==0){
-          var book = new Book;
-          var bookUsers = book.relation('users');
-          book.set('title', inputTitle);
-          book.set('author', inputAuthor);
-          bookUsers.add(Parse.User.current());
-          self.books.add(book);
-          book.save();
-          self.inputTitle.val('');
-          self.inputAuthor.val('');
-        }else{
-          var book = results[0];
-          var bookUsers = book.relation('users');
-          bookUsers.add(Parse.User.current());
-          self.books.add(book);
-          book.save();
-          self.inputTitle.val('');
-          self.inputAuthor.val(''); 
-        }
-      },
-      error: function(error){
-        //console.log("error");
-        
-      }
-    });
-  }
-});
 
 // Icono de un libro en el estante
 var BookView = Parse.View.extend({
@@ -449,7 +188,8 @@ var AddBookView = PopupView.extend({
     // "click #add-book-done": "addNewBook",
     "click #add-book-done": "addNewBook",
     "click #book-photo" : "capturePhoto",
-    "click #book-upload-image" : "uploadPhoto"
+    "click #book-upload-image" : "uploadPhoto",
+    "change #offer-type" : "selectOfferType"
   },
   // ? consoleLOg? para que es?
   consoleLog: function () {
@@ -464,28 +204,43 @@ var AddBookView = PopupView.extend({
     this.inputAuthor = this.$("#author-name");
     this.inputCategory = this.$("#category-name");
 
+    this.inputOfferType = this.$("#offer-type");
+    this.inputSellPrice = this.$("#sell-price");
+    this.inputLendTime = this.$("#lend-time");
+    this.inputLendTimeType = this.$("#lend-time-type");
+    this.inputRentPrice = this.$("#rent-price");
+    this.inputRentTime = this.$("#rent-time");
+    this.inputRentTimeType = this.$("#rent-time-type");
+
     this.imagePhoto = this.$("#image-input-photo>img");
-    this.buttonUploadImage =  this.$("#book-upload-image");
-    
-    this.imageData = this.$("#image-input-photo>img").attr("src");
+    // this.buttonUploadImage =  this.$("#book-upload-image");
+    // this.imageData = this.$("#image-input-photo>img").attr("src");
     
     this.loadingBar = this.$(".loading-bar");
     this.loadingBarComplete = this.$(".loading-bar .complete");
+    this.selectOfferType();
 
-    this.file;
+    /*this.file;
 
     $('#postedFile').bind("change", function(e) {
       var files = e.target.files || e.dataTransfer.files;
       // Our file var now holds the selected file
       file = files[0];
-    });
+    });*/
   },
   render: function() {
     this.$el.append(_.template($("#add-template").html()));
     this.delegateEvents();
   },
+  /// Alguna vez es llamado??
   toggle: function(){
     this.view.toggleClass('show');
+  },
+  selectOfferType: function(){
+    this.$(".toggle-section").hide();
+    this.$("#"+$("#offer-type").find("option:selected").val()).show();
+    appView.updateForms();
+    // console.log("#"+$(e.target).find("option:selected").val());
   },
   capturePhoto: function () {
     navigator.camera.getPicture(this.onPhotoDataSuccess, this.onFail,
@@ -497,8 +252,8 @@ var AddBookView = PopupView.extend({
   },
   onPhotoDataSuccess: function(imageData) {
     // this no existe!!!! 
+    appView.addBookView.imagePhoto.show();
     appView.addBookView.imagePhoto.attr("src", imageData);
-    appView.addBookView.buttonUploadImage.show();
     appView.addBookView.imageData = imageData;
   },
   onFail: function (message) {
@@ -507,10 +262,8 @@ var AddBookView = PopupView.extend({
   uploadPhoto: function () {
     var imageURI = this.imageData;
     var options = new FileUploadOptions();
-    // options.fileKey= "";
     var fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
     options.fileName=fileName;
-    // options.mimeType="";
     options.chunkedMode = false;
     options.params = {'front':true};
     self = this;
@@ -528,10 +281,15 @@ var AddBookView = PopupView.extend({
     this.loadingBarComplete.width(percentage*100 + "%");
   },
   win: function (r) {
-    this.loadingBar.hide();
+    //no existe this
+    appView.addBookView.loadingBar.hide();
     console.log("Code = " + r.responseCode);
     console.log("Response = " + r.response);
-    console.log("Sent = " + r.bytesSent);
+    // console.log("Sent = " + r.bytesSent);
+    appView.addBookView.imageUploadedResponse = jQuery.parseJSON(r.response.slice(0,-1));
+    console.log("URL: "+ appView.addBookView.imageUploadedResponse.url);
+    appView.addBookView.addNewBookToParse();
+    // this.imageurl =  r.response
   },
   fail: function (error) {
     alert("An error has occurred: Code = " + error.code);
@@ -539,7 +297,15 @@ var AddBookView = PopupView.extend({
       console.log(index+': '+val);
     });
   },
-  addNewBook: function(e) {
+  addNewBook: function () {
+    if(this.imagePhoto.attr("src")==""){
+      alert("Tomale una Foto a tu libro antes de publicar tu oferta");
+    }else{
+      this.uploadPhoto();
+    }
+    // this.addNewBookToParse();
+  },
+  addNewBookToParse: function(e) {
     var self = this;    
     
     var inputTitle = this.inputTitle.val();
@@ -552,30 +318,51 @@ var AddBookView = PopupView.extend({
     query.find({
       success: function (results){
         ////console.log("results");
+        var offer = new Offer;
+        offer.set('type', self.inputOfferType.val());
+
+        switch(self.inputOfferType.val()){
+          case 'sell':
+            offer.set('price', self.inputSellPrice.val());
+            break;
+          case 'lend':
+            offer.set('time', self.inputLendTime.val());
+            offer.set('timeType', self.inputLendTimeType.val());
+            break;
+          case 'rent':
+            offer.set('price', self.inputRentPrice.val());
+            offer.set('time', self.inputRentTime.val());
+            offer.set('timeType', self.inputRentTimeType.val());
+            break;
+        }
+        offer.set({picture: {"name": self.imageUploadedResponse.name,"__type": "File"}});
         if(results.length==0){
           var book = new Book;
-          // var bookUsers = book.relation('users');
           book.set('title', inputTitle);
           book.set('author', inputAuthor);
           book.set('category', inputCategory);
-          // bookUsers.add(Parse.User.current());
-          // self.books.add(book);
-          book.save();
-          self.inputTitle.val('');
-          self.inputAuthor.val('');
-          self.inputCategory.val('');
-          appRouter.navigate('', {trigger: true});
         }else{
           var book = results[0];
-          // var bookUsers = book.relation('users');
-          // bookUsers.add(Parse.User.current());
-          // self.books.add(book);
-          // book.save();
-          self.inputTitle.val('');
-          self.inputAuthor.val('');
-          self.inputCategory.val('');
-          appRouter.navigate('', {trigger: true});
         }
+        offer.set('book', book);
+        offer.save(null, {
+          success: function (offer) {
+            var bookOffers = book.relation('offers');
+            bookOffers.add(offer);
+            book.save(null, {
+              success: function(book) {
+                self.$('input').val('');
+                self.imagePhoto.attr('src','');
+                appRouter.navigate('', {trigger: true});
+                // The object was saved successfully.
+              },
+              error: function(gameScore, error) {
+                // The save failed.
+                // error is a Parse.Error with an error code and description.
+              }
+            });
+          }
+        });
       },
       error: function(error){
         console.log("error");
@@ -851,7 +638,7 @@ var appRouter;
 
 var app = {
   initialize: function() {
-      $(window).resize(appView.updateForms());
+      $(window).resize(appView.updateForms);
       this.bindGlobalEvents();
   },
   bindGlobalEvents: function () {
