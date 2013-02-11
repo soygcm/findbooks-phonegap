@@ -1,33 +1,40 @@
 var AppView = Parse.View.extend({
   // Instead of generating a new element, bind to the existing skeleton of
   // the App already present in the HTML.
-  el: $("#all"),
+  el: "#all",
   events:{
     "touchstart .scrollable": "refreshScroll",
     "mousedown .scrollable": "refreshScroll",
   },
   scrollable : [],
   initialize: function() {
-    // console.log('--------- AppView initialize --------');
-    // this.bindGlobalEvents();
+
   },
   render: function() {
     this.homeView = new HomeView();
-    
     this.addBookView = new AddBookView();
     this.searchView = new SearchView();
     this.bookDetailView = new BookDetailView();
     this.toolbarView = new ToolbarView();
-
-    this.currentView = this.homeView;
-    
     this.makeScrolls();
-
-    /*if (Parse.User.current()) {
-      this.manageBooksView = new ManageBooksView();
+    this.logInView = new LogInView();
+      
+    if (Parse.User.current()) {
+      this.show();
+      this.logInView.hide();
+      this.currentView = this.homeView;
     } else {
-      new LogInView();
-    }*/
+      console.log(this.logInView);
+      this.hide();
+      this.logInView.show();
+      // this.currentView = this.logInView;
+    }
+  },
+  hide:function  () {
+    this.$(".view").hide();
+  },
+  show:function  () {
+    this.$(".view").show();
   },
   updateForms: function(){
     $("form .input").each(function() {
@@ -69,6 +76,7 @@ var AppView = Parse.View.extend({
     });
     scroll[0].scroll.refresh();
   },
+  //que es esto?
   preventDefault: function (e) {
     e.preventDefault();
   }

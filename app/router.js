@@ -16,9 +16,13 @@ var AppRouter = Parse.Router.extend({
   },
   home: function (){
     appView.hideCurrentView();
-    appView.addBookView.hide();
-    appView.toolbarView.isHome();
-    appView.setCurrentView(appView.homeView);
+    if (Parse.User.current()) {
+      appView.addBookView.hide();//? porque se necesita?
+      appView.toolbarView.isHome();
+      appView.setCurrentView(appView.homeView);
+    } else {
+      
+    }
   },
   searchQuery: function (query) {
     appView.searchView.show();

@@ -6,6 +6,7 @@ var ToolbarView = Parse.View.extend({
     "click button.back"   : "back",
     "click button.add"    : "add",
     "click .title-app"    : "home",
+    "click button.log-out": "logOut",
     "keypress #search-query": "searchEnter",
     // "touchmove #toolbar-main": "preventDefault"
   },
@@ -63,6 +64,13 @@ var ToolbarView = Parse.View.extend({
       appRouter.navigate('', {trigger: true});
     }
   },
+  logOut:function  () {
+    Parse.User.logOut();
+    appView.undelegateEvents();
+    appView.hide();
+    appView.logInView.show();
+  },
+  //sirve esta funcion?
   preventDefault: function (e) {
     e.preventDefault();
   },
