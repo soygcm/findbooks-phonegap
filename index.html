@@ -2,11 +2,12 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1,minimum-scale=1.0" />
+    <meta name="viewport" content="width=device-width,user-scalable=yes,initial-scale=1.0,maximum-scale=1,minimum-scale=1.0" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <title>FindBooks app</title>
-    <link href="css/style.css" media="all" rel="stylesheet" type="text/css"/>
-    <link href="css/theme.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="css/normalize.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="css/app.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="css/findbooks/style.css" media="all" rel="stylesheet" type="text/css"/>
     <script src="js/jquery.js"></script>
     <script src="js/quo.js"></script>
     <script src="js/underscore-1.1.6.js"></script>
@@ -100,21 +101,82 @@
 
           <button type="button" id="book-photo" class="photo ">Tomale una foto a tu libro</button>
 
-          <button type="button" id="book-more-info" class=" ">Agrega mas información</button>
-
-          <input type="file" id="postedFile" name="postedFile" />
+          <button type="button" id="book-more-info" class=" ">Agrega mas información</button> 
 
           <section id="image-input-photo" class="book medium">
             <div class="shadow"></div>
-            <button type="button" id="book-upload-image" class="">Subir imagen</button>
             <div class="loading-bar hover">
               <div class="complete"></div>
               <div class="cancel"></div>
             </div>
-            <img src='' alt="">
-            
-
+            <img class="display-none" src='' alt="">
           </section>
+
+          <label>
+            <span class="label">Quiero: </span>
+            <span class="input">
+              <select id="offer-type">
+                <option value="sell">Venderlo</option>
+                <option value="lend">Prestarlo</option>
+                <option value="rent">Alquilarlo</option>
+                <option value="donate">Donarlo</option>
+              </select>              
+            </span>
+          </label>
+
+          <section id="sell" class="toggle-section">
+            <label>
+              <span class="label">Precio: ¢</span>
+              <span class="input">
+                <input type="number" id="sell-price">
+              </span>
+            </label>
+          </section>
+
+          <section id="lend" class="toggle-section">
+            <label>
+              <span class="label">Tiempo:</span>
+              <span class="input">
+                <input style="width:50%" type="number" id="lend-time">
+                <select style="width:50%" id="lend-time-type">
+                  <option value="hour">Hora/s</option>
+                  <option value="day">Dia/s</option>
+                  <option value="week">Semana/s</option>
+                </select> 
+              </span>
+            </label>
+          </section>
+
+          <section id="rent" class="toggle-section">
+            <p>
+              ¿Cuanto deseas cobrar por una hora?
+            </p>
+            <label>
+              <span class="label">Precio: ¢</span>
+              <span class="input">
+                <input type="number" id="rent-price">
+              </span>
+            </label>
+            <p>
+              ¿Cuanto es el tiempo maximo que lo deseas alquilar?
+            </p>
+            <label>
+              <span class="label">Tiempo:</span>
+              <span class="input">
+                <input style="width:45%" type="number" id="rent-time">
+                <select style="width:50%" id="rent-time-type">
+                  <option value="hour">Hora/s</option>
+                  <option value="day">Dia/s</option>
+                  <option value="week">Semana/s</option>
+                </select> 
+              </span>
+            </label>
+          </section>
+
+          <section id="donate" class="toggle-section">
+            <p>¡Felicidades! por compartir el conocimiento y la verdad, con mas personas.</p>
+          </section>
+
           
           <div class="clearfix"></div>
         </form>
