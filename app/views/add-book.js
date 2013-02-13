@@ -71,8 +71,17 @@ var AddBookView = PopupView.extend({
     appView.addBookView.imagePhoto.attr("src", imageData);
     appView.addBookView.imageData = imageData;
   },
+  onFailLibrary: function (message){
+    alert('La libreria Fallo: ' + message);
+  },
   onFail: function (message) {
-    alert('Failed because: ' + message);
+    alert('La camara fallo: ' + message+'. Buscar en la libreria fotografica');
+    navigator.camera.getPicture(appView.addBookView.onPhotoDataSuccess, appView.addBookView.onFailLibrary, 
+    { 
+      quality: 50, 
+      destinationType: app.destinationType.FILE_URI,
+      sourceType: app.pictureSource.SAVEDPHOTOALBUM 
+    });
   },
   uploadPhoto: function () {
     var imageURI = this.imageData;
