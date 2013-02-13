@@ -18,6 +18,7 @@ var LogInView = Parse.View.extend({
         self.undelegateEvents();
         self.hide();
         appView.show();
+        appView.addBookView.hide();
       },
       error: function(user, error) {
         self.$(".login-form .error").html("Invalid username or password. Please try again.").show();
