@@ -24,6 +24,10 @@ form select{
 	color: white;
 }
 
+#login input{
+	color: black;
+}
+
 .popup{
 	color: black;
 	background: #E6E3DA;
