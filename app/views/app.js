@@ -16,13 +16,13 @@ var AppView = Parse.View.extend({
     this.searchView = new SearchView();
     this.bookDetailView = new BookDetailView();
     this.toolbarView = new ToolbarView();
-    this.makeScrolls();
     this.logInView = new LogInView();
+    this.makeScrolls();
+    this.currentView = this.homeView;
       
     if (Parse.User.current()) {
       this.show();
       this.logInView.hide();
-      this.currentView = this.homeView;
     } else {
       console.log(this.logInView);
       this.hide();
@@ -60,9 +60,6 @@ var AppView = Parse.View.extend({
         var nodeType = e.explicitOriginalTarget ? e.explicitOriginalTarget.nodeName.toLowerCase():(e.target ? e.target.nodeName.toLowerCase():'');
         if(nodeType !='select' && nodeType !='option' && nodeType !='input' && nodeType!='textarea'){
           e.preventDefault();
-        }else{
-          window.scrollTo(0, 0);
-          console.log('scrollTo 0,0');
         }     
       },
       hScroll: false,
