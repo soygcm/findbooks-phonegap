@@ -24,11 +24,13 @@ var app = {
     if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
         document.addEventListener("deviceready", this.onDeviceReady, false);
         if (navigator.userAgent.match(/(Android)/)){
+          this.OS = "android";
           document.addEventListener("backbutton", function(e) {                
             window.history.back();
           }, false);
         }
         if (navigator.userAgent.match(/(iPhone|iPod|iPad)/)){
+          this.OS = "ios";
           document.addEventListener('touchmove', function (e) {
             e.preventDefault();
           }, false);
@@ -53,6 +55,7 @@ var app = {
     this.startAppView();
   },
   startAppView: function () {
+    $("body").addClass(this.OS);
     appView.render();
     appRouter = new AppRouter;
     Parse.history.start();
