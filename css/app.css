@@ -25,6 +25,11 @@ body {
     -o-font-smoothing: antialiased;
     font-smoothing: antialiased;
 }
+body.ios{
+    top:0;
+    left: 0;
+    position: fixed;
+}
 
 button {
     margin: 0;
@@ -287,6 +292,9 @@ p.medium{
     float: right;
 }
 
+.full-view{
+    height: 100%;
+}
 
 .column{
     overflow: auto !important;
