@@ -8,9 +8,15 @@ var BookView = Parse.View.extend({
   initialize: function() {
 
   },
-  render: function(image) {
-    imageJson = {"image":image};
-    this.$el.html(this.template(imageJson));
+  render: function() {
+    var offerJson = this.model.toJSON();
+    offerJson.book = this.model.get('book').toJSON();
+    console.log(offerJson);
+    if (!offerJson.picture.url){
+      offerJson.picture = this.model.picture;
+    }
+    // console.log(offerJson);
+    this.$el.html(this.template(offerJson));
     return this;
     // this.delegateEvents();
   },
