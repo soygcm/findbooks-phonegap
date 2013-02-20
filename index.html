@@ -36,7 +36,7 @@
           <h1> The Lean Startup</h1>
           <button type="button" id="book-author" class="">Eric Ries</button>
           <p class="paragraph medium">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et elit felis, non sollicitudin enim. Curabitur at scelerisque purus. In sagittis imperdiet turpis, quis laoreet arcu mattis nec.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et elit felis, non sollicitudin enim.
           </p>
         </section>
         <section id="ownerslist">
@@ -206,7 +206,8 @@
     <script type="text/template" id="book-template">
       <article class="book small">
         <div class="shadow"></div>
-        <img src='books/<%= image %>.jpg' alt="">
+        <img src='<%= picture.url %>' alt="">
+        <p><%= book.title %></p>
       </article>
     </script>
 
@@ -264,6 +265,11 @@
     <script type="text/javascript" src="app/views/book-detail.js"></script> 
     <script type="text/javascript" src="app/views/app.js"></script> 
     <script type="text/javascript" src="app/router.js"></script> 
+    <script type="text/javascript" src="app/app.js"></script> 
+  </body>
+
+</html>
+/script> 
     <script type="text/javascript" src="app/app.js"></script> 
   </body>
 
