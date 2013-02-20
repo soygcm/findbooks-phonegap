@@ -16,7 +16,7 @@ var SearchView = PopupView.extend({
     this.view.find('div>ul').append('<li>'+query+'</li>');
   },
   addFalseResults: function(){
-    veces = 0;
+    /*veces = 0;
     max = librosArray.length;
     for (var i = 0; i < 5; i++) {
       index = i-(max*veces);
@@ -25,6 +25,6 @@ var SearchView = PopupView.extend({
       }
       var bookView = new BookView();
       this.$("#search>div>ul").prepend(bookView.render(librosArray[index]).el);
-    }
+    }*/
   }
 });
