@@ -28,20 +28,10 @@ var AddBookView = PopupView.extend({
     this.inputRentTimeType = this.$("#rent-time-type");
 
     this.imagePhoto = this.$("#image-input-photo>img");
-    // this.buttonUploadImage =  this.$("#book-upload-image");
-    // this.imageData = this.$("#image-input-photo>img").attr("src");
     
     this.loadingBar = this.$(".loading-bar");
     this.loadingBarComplete = this.$(".loading-bar .complete");
     this.selectOfferType();
-
-    /*this.file;
-
-    $('#postedFile').bind("change", function(e) {
-      var files = e.target.files || e.dataTransfer.files;
-      // Our file var now holds the selected file
-      file = files[0];
-    });*/
   },
   render: function() {
     this.$el.append(_.template($("#add-template").html()));
@@ -78,7 +68,7 @@ var AddBookView = PopupView.extend({
     alert('La camara fallo: ' + message+'. Buscar en la libreria fotografica');
     navigator.camera.getPicture(appView.addBookView.onPhotoDataSuccess, appView.addBookView.onFailLibrary, 
     { 
-      quality: 50, 
+      quality: 25, 
       destinationType: app.destinationType.FILE_URI,
       sourceType: app.pictureSource.SAVEDPHOTOALBUM 
     });
@@ -107,13 +97,10 @@ var AddBookView = PopupView.extend({
   win: function (r) {
     //no existe this
     appView.addBookView.loadingBar.hide();
-    console.log("Code = " + r.responseCode);
+    // console.log("Code = " + r.responseCode);
     console.log("Response = " + r.response);
-    // console.log("Sent = " + r.bytesSent);
     appView.addBookView.imageUploadedResponse = jQuery.parseJSON(r.response.slice(0,-1));
-    console.log("URL: "+ appView.addBookView.imageUploadedResponse.url);
     appView.addBookView.addNewBookToParse();
-    // this.imageurl =  r.response
   },
   fail: function (error) {
     alert("An error has occurred: Code = " + error.code);
@@ -130,7 +117,7 @@ var AddBookView = PopupView.extend({
     // this.addNewBookToParse();
   },
   addNewBookToParse: function(e) {
-    var self = this;    
+    var self = this;
     
     var inputTitle = this.inputTitle.val();
     var inputAuthor = this.inputAuthor.val();
@@ -160,6 +147,8 @@ var AddBookView = PopupView.extend({
             break;
         }
         offer.set({picture: {"name": self.imageUploadedResponse.name,"__type": "File"}});
+        offer.set('user', Parse.User.current());
+        offer.set('ACL', new Parse.ACL(Parse.User.current()));
         if(results.length==0){
           var book = new Book;
           book.set('title', inputTitle);
@@ -171,6 +160,11 @@ var AddBookView = PopupView.extend({
         offer.set('book', book);
         offer.save(null, {
           success: function (offer) {
+
+            offer.picture = new Object();
+            offer.picture.url = self.imageUploadedResponse.url;
+            appView.homeView.addOne(offer);
+
             var bookOffers = book.relation('offers');
             bookOffers.add(offer);
             book.save(null, {
@@ -178,12 +172,8 @@ var AddBookView = PopupView.extend({
                 self.$('input').val('');
                 self.imagePhoto.attr('src','');
                 appRouter.navigate('', {trigger: true});
-                // The object was saved successfully.
               },
-              error: function(gameScore, error) {
-                // The save failed.
-                // error is a Parse.Error with an error code and description.
-              }
+              error: function(book, error) {}
             });
           }
         });
