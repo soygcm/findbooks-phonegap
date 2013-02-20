@@ -10,7 +10,11 @@ var HomeView = Parse.View.extend({
     // _.bindAll(this, "logIn", "signUp");
     this.render();
     this.mainView = this.$('#home');
-    this.addFalseBooks();
+    this.personalOffers = new OfferList;
+    this.personalOffers.query = new Parse.Query(Offer);
+    this.personalOffers.query.equalTo("user", Parse.User.current());
+    this.personalOffers.bind('add', this.addOne);//? Alguna vez se usa?
+    this.getUserBooks();
   },
   render: function() {
     this.$el.prepend(_.template($("#home-template").html()));
@@ -25,26 +29,44 @@ var HomeView = Parse.View.extend({
   showLeftColumn: function () {
     this.mainView.removeClass('show-right'); 
   },
-  addFalseBooks: function(){
-    veces = 0;
-    max = librosArray.length;
-    for (var i = 0; i < 20; i++) {
-      index = i-(max*veces);
-      if (i-(veces*max)>=max-1) {
-        veces++;
+  getUserBooks: function(){
+    this.$("#personal>div>ul").empty();
+    // self = this;
+    this.personalOffers.fetch({
+      success: function(offers) {
+        appView.homeView.offerCount = offers.length;
+        offers.each(function(offer) {
+          appView.homeView.getBookOffer(offer);
+        });
+      },
+      error: function(collection, error) {
+        // The collection could not be retrieved.
       }
-      var view1 = new BookView();
-      this.$("#personal>div>ul").prepend(view1.render(librosArray[index]).el);
-    }
-    veces = 0;
-    for (var i = 0; i < 50; i++) {
-      index = i-(max*veces);
-      if (i-(veces*max)>=max-1) {
-        veces++;
+    });
+  },
+  getBookOffer: function (offer) {
+    self = this;
+    var book = offer.get("book");
+    book.fetch({
+      success: function(book) {
+        self.offerCount--;
+        if (self.offerCount == 0) {
+          self.addPersonalOffers(self.personalOffers);
+        };
       }
-      var view2 = new BookView();
-      this.$("#highlight>div>ul").prepend(view2.render(librosArray[index]).el);
-    }
+    });
+  },
+  addPersonalOffers: function (offers) {
+    self = this;
+    offers.each(function(offer) {
+      self.addOne(offer);
+    });
+  },
+  addOne: function (offer){
+    console.log(this.$);
+    var view = new BookView({model: offer});
+    this.$("#personal>div>ul").prepend(view.render().el);
+    // console.log(offer);
   },
   hide: function () {
     
