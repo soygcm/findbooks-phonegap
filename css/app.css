@@ -235,10 +235,30 @@ p.medium{
     position: fixed;
 }
 .toolbar .center{
-    width: auto; 
-    padding: 0 44px;
+    width: 100%;
     text-align: center;
-    padding-top: 5px;
+    position: absolute;
+    top: 0;
+    z-index: -20;
+}
+.toolbar .search-input{
+    padding: 0 2.1em 0 4.1em;
+}
+.toolbar .search-input input{
+    margin: 4px 0;
+    height: 1.2em;
+    width: 100%;
+    font-family: inherit;
+    font-size: 1em;
+    background: transparent;
+    border: none;
+    padding: 5px 0;
+    letter-spacing: 0.1em;
+    border-bottom: 2px solid yellow;
+    color: yellow;
+}
+.toolbar .left{
+    /*float: left;*/
 }
 .toolbar h1{
     margin: 0;
@@ -255,28 +275,14 @@ p.medium{
 .toolbar .hide{
     display: none;
 }
-
-.toolbar input{
-    margin: 4px 0;
-    height: 1.2em;
-    /*display: block;*/
-    width: 100%;
-    font-family: inherit;
-    font-size: 1.5em;
-    background: transparent;
-    border: none;
-    padding: 5px 0;
-    border-bottom: 2px solid yellow;
-    color: yellow;
-}
 .toolbar button {
-    width: 32px;
+    width: 1.5em;
     height: 1.5em;
     border: 1px solid #0B1E33;
     border-radius: 5px;
     top: 0;
     padding: 0;
-    position: absolute;
+    /*position: absolute;*/
     margin: 5px;
 }
 .toolbar button.text{
@@ -341,15 +347,18 @@ p.medium{
     display: block;
     height: 15%;
     /*width: 100%;*/
-    overflow: hidden;
-    text-overflow: ellipsis;
     margin: 0;
     text-align: center;
-    white-space: nowrap;
 }
 .book.rotate {
     -webkit-transform: rotateY(-180deg);
     -webkit-transition: -webkit-transform .4s ease-out;
+}
+
+.ellipsis{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .image.left{
