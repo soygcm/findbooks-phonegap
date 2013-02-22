@@ -61,11 +61,13 @@
         
         <section id="toolbar-add-view" class="toolbar top">
           <header>
+            <button id="close" class="close left text">Cancelar</button>
+            <button id="add-book-done" class="done right text">Listo</button>
             <div class="left">
-              <h1>Agregar un libro que tengo</h1>
+              <h1 class="ellipsis">Agregar un libro que tengo</h1>
             </div>
             
-            <button id="add-book-done" class="done right text">Listo</button>
+            
           </header>
         </section>
 
@@ -110,7 +112,7 @@
               <div class="complete"></div>
               <div class="cancel"></div>
             </div>
-            <img class="display-none" src='' alt="">
+            <img src='' alt="">
           </section>
 
           <label>
@@ -207,28 +209,35 @@
       <article class="book small">
         <div class="shadow"></div>
         <img src='<%= picture.url %>' alt="">
-        <p><%= book.title %></p>
+        <p class="ellipsis"><%= book.title %></p>
       </article>
     </script>
 
     <script type="text/template" id="toolbar-template">
       <section id="toolbar-main" class="toolbar view">
         <header>
+          <button class="add left">Agregar</button>
+          <button class="back hide left">Atras</button>
+          <button class="log-out " style="">Salir </button>
 
-          <div class="center search-input hide">
-            <input id="search-query" type="text" >
+          <button class="search right">Buscar</button>
+          <button class="find right">Encontrar</button>
+
+          <div class="center">
+            <div class="search-input hide">
+              <input id="search-query" type="text" >
+            </div>
           </div>
-
+          
           <div class="center title-app">
             <h1>Find Books</h1>
           </div>
           
-          <button class="add left">Agregar</button>
-          <button class="search right">Buscar</button>
-          <button class="find right">Encontrar</button>
-          <button class="back hide left">Atras</button>
+          
+          
+          
 
-          <button class="log-out " style="margin-left:40px;">Salir </button>
+          
         </header>
       </section>
     </script>
