@@ -1,7 +1,8 @@
 var PopupView = Parse.View.extend({
   el: "#all",
   events:{
-    'click .front':'backToHome'
+    'click .front':'backToHomeOutPopup',
+    "click button#close": "backToHome",
   },
   initPopup: function (popupID) {
     this.front = this.$('.front');
@@ -35,9 +36,12 @@ var PopupView = Parse.View.extend({
 
     }
   },
-  backToHome:function (e) {
+  backToHomeOutPopup:function (e) {
     if($(e.target).is('.front')){
       appRouter.navigate('', {trigger: true});
     }
+  },
+  backToHome:function () {
+    appRouter.navigate('', {trigger: true});
   }
 });
