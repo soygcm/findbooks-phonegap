@@ -11,7 +11,7 @@ var HomeView = Parse.View.extend({
     this.render();
     this.mainView = this.$('#home');
     this.personalOffers = new OfferList;
-    this.personalOffers.query = new Parse.Query(Offer);
+    this.personalOffers.query = new Parse.Query('Offer');
     this.personalOffers.query.equalTo("user", Parse.User.current());
     this.personalOffers.bind('add', this.addOne);//? Alguna vez se usa?
     this.getUserBooks();
@@ -31,34 +31,18 @@ var HomeView = Parse.View.extend({
   },
   getUserBooks: function(){
     this.$("#personal>div>ul").empty();
-    // self = this;
-    this.personalOffers.fetch({
-      success: function(offers) {
-        appView.homeView.offerCount = offers.length;
-        offers.each(function(offer) {
-          appView.homeView.getBookOffer(offer);
-        });
-      },
-      error: function(collection, error) {
-        // The collection could not be retrieved.
-      }
-    });
-  },
-  getBookOffer: function (offer) {
     self = this;
-    var book = offer.get("book");
-    book.fetch({
-      success: function(book) {
-        self.offerCount--;
-        if (self.offerCount == 0) {
-          self.addPersonalOffers(self.personalOffers);
-        };
+
+    Parse.Cloud.run('getUserBooks', {}, {
+      success: function (result){
+        appView.homeView.addPersonalOffers(result)
+        console.log(result);
       }
     });
   },
   addPersonalOffers: function (offers) {
     self = this;
-    offers.each(function(offer) {
+    jQuery.each(offers, function(index, offer) {
       self.addOne(offer);
     });
   },
