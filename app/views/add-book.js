@@ -27,7 +27,7 @@ var AddBookView = PopupView.extend({
     this.inputRentTime = this.$("#rent-time");
     this.inputRentTimeType = this.$("#rent-time-type");
 
-    this.imagePhoto = this.$("#image-input-photo>img");
+    this.imagePhoto = this.$("#image-input-photo>img").parent().hide();
     
     this.loadingBar = this.$(".loading-bar");
     this.loadingBarComplete = this.$(".loading-bar .complete");
@@ -57,7 +57,7 @@ var AddBookView = PopupView.extend({
   },
   onPhotoDataSuccess: function(imageData) {
     // this no existe!!!! 
-    appView.addBookView.imagePhoto.show();
+    appView.addBookView.imagePhoto.parent().show();
     appView.addBookView.imagePhoto.attr("src", imageData);
     appView.addBookView.imageData = imageData;
   },
