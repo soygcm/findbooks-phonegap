@@ -30,25 +30,18 @@
       <section id="book-detail" class="popup view scrollable bottom animate"><div>
         <section id="photo" class="book image medium left">
           <div class="shadow"></div>
-          <img src='<%= photo %>' alt="">
+          <img src='<%= picture.url %>' alt="">
         </section>
         <section id="detail">
-          <h1> The Lean Startup</h1>
-          <button type="button" id="book-author" class="">Eric Ries</button>
+          <h1><%= title %></h1>
+          <button type="button" id="book-author" class=""><%= author %></button>
           <p class="paragraph medium">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et elit felis, non sollicitudin enim.
           </p>
         </section>
-        <section id="ownerslist">
+        <section id="offer-list">
           <ul>
-            <li>Gabriel</li>
-            <li>Andres</li>
-            <li>Daniel</li>
-            <li>Rodrigo</li>
-            <li>Simon</li>
-            <li>Marta</li>
-            <li>Maria</li>
-            <li>Rosa</li>
+            
           </ul>
         </section>
       </div></section>
@@ -209,7 +202,7 @@
       <article class="book small">
         <div class="shadow"></div>
         <img src='<%= picture.url %>' alt="">
-        <p class="ellipsis"><%= book.title %></p>
+        <p class="ellipsis"><%= title %></p>
       </article>
     </script>
 
