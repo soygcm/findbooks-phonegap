@@ -27,7 +27,8 @@ var AddBookView = PopupView.extend({
     this.inputRentTime = this.$("#rent-time");
     this.inputRentTimeType = this.$("#rent-time-type");
 
-    this.imagePhoto = this.$("#image-input-photo>img").parent().hide();
+    this.imagePhoto = this.$("#image-input-photo>img");
+    this.imagePhoto.parent().hide();
     
     this.loadingBar = this.$(".loading-bar");
     this.loadingBarComplete = this.$(".loading-bar .complete");
@@ -122,13 +123,13 @@ var AddBookView = PopupView.extend({
     var inputTitle = this.inputTitle.val();
     var inputAuthor = this.inputAuthor.val();
     var inputCategory = this.inputCategory.val();
-
+    //Averigua si ya existe el libro
     var query = new Parse.Query(Book);
     query.equalTo('title', inputTitle);
     query.equalTo('author', inputAuthor);
     query.find({
       success: function (results){
-        ////console.log("results");
+        //crea la oferta
         var offer = new Offer;
         offer.set('type', self.inputOfferType.val());
 
@@ -149,32 +150,39 @@ var AddBookView = PopupView.extend({
         offer.set({picture: {"name": self.imageUploadedResponse.name,"__type": "File"}});
         offer.set('user', Parse.User.current());
         offer.set('ACL', new Parse.ACL(Parse.User.current()));
+
         if(results.length==0){
+          //Si el libro no existe, lo crea
           var book = new Book;
           book.set('title', inputTitle);
           book.set('author', inputAuthor);
           book.set('category', inputCategory);
         }else{
+          //Si el libro si existe, lo usa 
           var book = results[0];
         }
+        book.set({picture: {"name": self.imageUploadedResponse.name,"__type": "File"}});
+        
+
         offer.set('book', book);
         offer.save(null, {
           success: function (offer) {
 
-            offer.picture = new Object();
-            offer.picture.url = self.imageUploadedResponse.url;
-            appView.homeView.addOne(offer);
-
-            var bookOffers = book.relation('offers');
-            bookOffers.add(offer);
             book.save(null, {
-              success: function(book) {
+              success:function (book) {
+                var user = Parse.User.current();
+                var userBooks = user.relation('books');
+                userBooks.add(book);
+                user.save(null, {success:function () {console.log('Usuario actualizado!');}});
+                
+                book.get('picture').url = self.imageUploadedResponse.url;
+
+                console.log('Guardado Listo');
+                appView.homeView.addNewBook(book);
                 self.$('input').val('');
-                self.imagePhoto.attr('src','');
+                self.imagePhoto.parent().hide();
                 appRouter.navigate('', {trigger: true});
-              },
-              error: function(book, error) {}
-            });
+            }});
           }
         });
       },
