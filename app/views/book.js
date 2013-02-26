@@ -9,19 +9,12 @@ var BookView = Parse.View.extend({
 
   },
   render: function() {
-    var offerJson = this.model.toJSON();
-    offerJson.book = this.model.get('book').toJSON();
-    console.log(offerJson);
-    if (!offerJson.picture.url){
-      offerJson.picture = this.model.picture;
-    }
-    // console.log(offerJson);
-    this.$el.html(this.template(offerJson));
+    this.$el.html(this.template(this.model.toJSON()));
     return this;
-    // this.delegateEvents();
   },
   viewBook: function () {
-    image = this.$('img').attr('src');
-    appRouter.navigate('book/'+image, {trigger: true});
+    // image = this.$('img').attr('src');
+    appView.bookDetailView.model = this.model;
+    appRouter.navigate('book/'+this.model.id, {trigger: true});
   }
 });
