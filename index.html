@@ -206,6 +206,15 @@
       </article>
     </script>
 
+    <script type="text/template" id="offer-li-template">
+      <article class="offer-li <%= type %>">
+        <div class="shadow">
+        </div>
+        <img src='<%= picture.url %>' alt="">
+        <p class="ellipsis"><%= user.username %></p>
+      </article>
+    </script>
+
     <script type="text/template" id="toolbar-template">
       <section id="toolbar-main" class="toolbar view">
         <header>
@@ -226,18 +235,13 @@
             <h1>Find Books</h1>
           </div>
           
-          
-          
-          
-
-          
         </header>
       </section>
     </script>
 
     <script type="text/template" id="login-template">
-      <section id="login" class="scrollable full-view"><div>
-        <form class="login-form">
+      <section id="login" class="scrollable full view"><div>
+        <form class="centered login-form">
           <h2>Log In</h2>
           <div class="error" style="display:none"></div>
           <input type="text" id="login-username" placeholder="Username" />
@@ -245,7 +249,7 @@
           <button>Log In</button>
         </form>
 
-        <form class="signup-form">
+        <form class="centered signup-form">
           <h2>Sign Up</h2>
           <div class="error" style="display:none"></div>
           <input type="text" id="signup-username" placeholder="Username" />
@@ -264,6 +268,7 @@
     <script type="text/javascript" src="app/views/home.js"></script> 
     <script type="text/javascript" src="app/views/add-book.js"></script> 
     <script type="text/javascript" src="app/views/search.js"></script> 
+    <script type="text/javascript" src="app/views/offer-li.js"></script> 
     <script type="text/javascript" src="app/views/book-detail.js"></script> 
     <script type="text/javascript" src="app/views/app.js"></script> 
     <script type="text/javascript" src="app/router.js"></script> 
