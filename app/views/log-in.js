@@ -38,11 +38,12 @@ var LogInView = Parse.View.extend({
     var self = this;
     var username = this.$("#signup-username").val();
     var password = this.$("#signup-password").val();
-    Parse.User.signUp(username, password, { ACL: new Parse.ACL() }, {
+    Parse.User.signUp(username, password, null, {
       success: function(user) {
-        // new ManageBooksView();
         self.undelegateEvents();
-        delete self;
+        self.hide();
+        appView.show();
+        appView.addBookView.hide();
       },
       error: function(user, error) {
         self.$(".signup-form .error").html(error.message).show();

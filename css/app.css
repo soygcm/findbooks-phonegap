@@ -164,6 +164,9 @@ input, select{
 .popup.have-toolbar{
     overflow: hidden;
 }
+.popup h1 {
+    margin: 0;
+}
 
 
 
@@ -297,9 +300,16 @@ p.medium{
     right: 0px;
     float: right;
 }
+.toolbar .title-app h1 {
+padding-top: 0.1em;
+}
 
-.full-view{
+.view.full{
     height: 100%;
+}
+.view .centered{
+    max-width: 15em;
+    margin: 0 auto;
 }
 
 .column{
@@ -383,6 +393,18 @@ p.medium{
         -ms-transition: width .25s linear;
          -o-transition: width .25s linear;
             transition: width .25s linear;*/
+}
+
+.offer-li img {
+    height: 2.5em;
+    float: left;
+}
+.offer-li p {
+    margin: 0;
+    padding: 0 10px;
+}
+.offer-li {
+    height: 3em;
 }
 
 @media screen and (min-width: 640px) {

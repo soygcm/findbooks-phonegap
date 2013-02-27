@@ -28,16 +28,17 @@ var HomeView = Parse.View.extend({
   getUserBooks: function(){
     // this.$("#personal>div>ul").empty();
     self = this;
-    var user = Parse.User.current();
-    this.userBooks = user.relation('books');
-    this.userBooks = this.userBooks.query().collection();
-    this.userBooks.fetch({
-      success: function(books) {
-        // appView.homeView.userBooks = books;
-        appView.homeView.addUserBooks(books);
-        // list contains the posts that the current user likes.
-      }
-    });
+    if(user = Parse.User.current()){
+      this.userBooks = user.relation('books');
+      this.userBooks = this.userBooks.query().collection();
+      this.userBooks.fetch({
+        success: function(books) {
+          // appView.homeView.userBooks = books;
+          appView.homeView.addUserBooks(books);
+          // list contains the posts that the current user likes.
+        }
+      });
+    }
   },
   addUserBooks: function (books) {
     self = this;
@@ -49,7 +50,7 @@ var HomeView = Parse.View.extend({
     var isNew = 0;
     var isNewPhoto = 0;
     self = this;
-    jQuery.each(this.userBooks, function(index, book) {
+    jQuery.each(this.userBooks.models, function(index, book) {
       // console.log('bookNew:'+bookNew.get('title')+', book:'+book.get('title'));
       if(!(bookNew.get('title') == book.get('title') &&  bookNew.get('author') == bookNew.get('author'))){
         isNew++;

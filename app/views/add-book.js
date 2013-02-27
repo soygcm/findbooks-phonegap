@@ -149,7 +149,9 @@ var AddBookView = PopupView.extend({
         }
         offer.set({picture: {"name": self.imageUploadedResponse.name,"__type": "File"}});
         offer.set('user', Parse.User.current());
-        offer.set('ACL', new Parse.ACL(Parse.User.current()));
+        var offerACL = new Parse.ACL(Parse.User.current());
+        offerACL.setPublicReadAccess(true);
+        offer.setACL(offerACL);
 
         if(results.length==0){
           //Si el libro no existe, lo crea

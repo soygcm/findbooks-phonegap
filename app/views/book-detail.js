@@ -35,17 +35,25 @@ var BookDetailView = PopupView.extend({
     this.offerList = new OfferList;
     this.offerList.query = new Parse.Query(Offer).equalTo("book", this.model);
     this.offerList.fetch({
-      success: function(collection) {
-        collection.each(function(object) {
-          // console.log(object);
-          self.$("#offer-list>ul").prepend('<li data-user="'+object.get('user').id+'">'+object.get('type')+'</li>');
+      success: function(offers) {
+        self.offerListCount = 0;
+        // collection.length;
+        console.log(offers)
+        offers.each(function(offer) {
 
-          user = object.get('user');
+          // self.$("#offer-list>ul").prepend('<li data-user="'+object.get('user').id+'" data-offer-type="'+object.get('type')+'" ></li>');
+
+          user = offer.get('user');
           user.fetch({
             success: function(user) {
-              var username = user.get("username");
+              self.offerListCount++;
+              if (self.offerListCount == offers.length) {
+                self.addOfferList(offers);
+              }
+              /*var username = user.get("username");
               var id = user.id;
               self.$('#offer-list>ul>[data-user="'+id+'"]').html(username);
+              */
             }
           });
 
@@ -55,5 +63,16 @@ var BookDetailView = PopupView.extend({
         // The collection could not be retrieved.
       }
     });
+  },
+  addOfferList: function  (offers) {
+    self = this;
+    offers.each(function(offer) {
+      self.addOneOffer(offer);
+    });
+    // console.log(offers);
+  },
+  addOneOffer: function (offer) {
+    var view = new OfferLiView({model: offer});
+    this.$("#offer-list>ul").prepend(view.render().el);
   }
 });
