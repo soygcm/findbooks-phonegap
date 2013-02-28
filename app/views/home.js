@@ -10,7 +10,8 @@ var HomeView = Parse.View.extend({
     // _.bindAll(this, "logIn", "signUp");
     this.render();
     this.mainView = this.$('#home');
-    this.getUserBooks();
+    // this.getUserBooks();
+    // this.getPublicBooks();
   },
   render: function() {
     this.$el.prepend(_.template($("#home-template").html()));
@@ -25,25 +26,52 @@ var HomeView = Parse.View.extend({
   showLeftColumn: function () {
     this.mainView.removeClass('show-right'); 
   },
-  getUserBooks: function(){
-    // this.$("#personal>div>ul").empty();
+  clearBooks: function () {
+    this.$("ul.grid").empty();
+  },
+  getBooks: function(){
     self = this;
     if(user = Parse.User.current()){
       this.userBooks = user.relation('books');
       this.userBooks = this.userBooks.query().collection();
       this.userBooks.fetch({
         success: function(books) {
-          // appView.homeView.userBooks = books;
-          appView.homeView.addUserBooks(books);
-          // list contains the posts that the current user likes.
+          appView.homeView.addBooks(books, 'ul#personal');
+          self.getPublicBooks();
+        }
+      });
+    }else{
+      this.getPublicBooks();
+    }
+  },
+  getPublicBooks:function () {
+    self = this;
+    if(this.userBooks){
+      var booksIdArray = new Array();
+      this.userBooks.each(function (book) {
+        booksIdArray.push(book.id);
+      });
+      this.publicBooks = new BookList;
+      this.publicBooks.query = new Parse.Query(Book).notContainedIn("objectId", booksIdArray);
+      this.publicBooks.fetch({
+        success: function(books) {
+          appView.homeView.addBooks(books, 'ul#public');
+        }
+      });
+    }else{
+      this.publicBooks = new BookList;
+      this.publicBooks.query = new Parse.Query(Book).limit(10);
+      this.publicBooks.fetch({
+        success: function(books) {
+          appView.homeView.addBooks(books, 'ul#public');
         }
       });
     }
   },
-  addUserBooks: function (books) {
+  addBooks: function (books, select) {
     self = this;
     books.each(function(book) {
-      self.addOneBook(book);
+      self.addOneBook(book, select);
     });
   },
   addNewBook: function (bookNew) {
@@ -51,7 +79,6 @@ var HomeView = Parse.View.extend({
     var isNewPhoto = 0;
     self = this;
     jQuery.each(this.userBooks.models, function(index, book) {
-      // console.log('bookNew:'+bookNew.get('title')+', book:'+book.get('title'));
       if(!(bookNew.get('title') == book.get('title') &&  bookNew.get('author') == bookNew.get('author'))){
         isNew++;
       }
@@ -60,16 +87,15 @@ var HomeView = Parse.View.extend({
       }
     });
     if(isNew>0){
-      self.addOneBook(bookNew);
+      self.addOneBook(bookNew, 'ul#personal');
     }
     console.log('Es nuevo el libro? '+isNew+' Es nueva la foto? '+isNewPhoto);
 
   },
-  addOneBook: function (book){
+  addOneBook: function (book, select){
     // console.log(book);
     var view = new BookView({model: book});
-    this.$("#personal>div>ul").prepend(view.render().el);
-    // console.log(offer);
+    this.$(select).prepend(view.render().el);
   },
   hide: function () {
     

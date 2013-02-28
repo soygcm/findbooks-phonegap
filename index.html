@@ -18,9 +18,7 @@
 
   <body>
 
-    <!-- <div id="login">
-      
-    </div> -->
+
     <div id="all" class="application">
       <div class="front"></div>
     </div>
@@ -28,19 +26,19 @@
 
     <script type="text/template" id="book-detail-template">
       <section id="book-detail" class="popup view scrollable bottom animate"><div>
-        <section id="photo" class="book image medium left">
+        <section id="photo" class="display-none book image medium left">
           <div class="shadow"></div>
-          <img src='<%= picture.url %>' alt="">
+          <img src='' alt="">
         </section>
-        <section id="detail">
+        <section class="inner" id="detail">
           <h1><%= title %></h1>
-          <button type="button" id="book-author" class=""><%= author %></button>
-          <p class="paragraph medium">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et elit felis, non sollicitudin enim.
+          <h2 class=""><%= author %></h2>
+          <p class="display-none paragraph medium">
+            
           </p>
         </section>
-        <section id="offer-list">
-          <ul>
+        <section class="inner" id="offer-list">
+          <ul class="vertical">
             
           </ul>
         </section>
@@ -48,10 +46,7 @@
     </script>
 
     <script type="text/template" id="add-template">
-
-
       <section id="add" class="popup view bottom animate have-toolbar">
-        
         <section id="toolbar-add-view" class="toolbar top">
           <header>
             <button id="close" class="close left text">Cancelar</button>
@@ -181,19 +176,45 @@
     </script>
 
     <script type="text/template" id="search-template"> 
-      <section id="search" class="column display-none view scrollable sidebar right animate"><div>
-          <ul></ul>
+      <section id="search" class="display-none view scrollable sidebar right animate"><div>
+          <ul>
+          <li>
+      <article class="book small">
+        <div class="shadow"></div>
+        <img src="http://files.parse.com/ffa132f9-246d-4844-80d5-0e3323aad8ce/628de9b5-b13a-4cc7-8688-8453cbd1b0d1-1361999977126.jpg" alt="">
+        <p class="ellipsis">Luna</p>
+      </article>
+    </li>
+    <li>
+      <article class="book small">
+        <div class="shadow"></div>
+        <img src="http://files.parse.com/ffa132f9-246d-4844-80d5-0e3323aad8ce/628de9b5-b13a-4cc7-8688-8453cbd1b0d1-1361999977126.jpg" alt="">
+        <p class="ellipsis">Luna</p>
+      </article>
+    </li>
+    <li>
+      <article class="book small">
+        <div class="shadow"></div>
+        <img src="http://files.parse.com/ffa132f9-246d-4844-80d5-0e3323aad8ce/628de9b5-b13a-4cc7-8688-8453cbd1b0d1-1361999977126.jpg" alt="">
+        <p class="ellipsis">Luna</p>
+      </article>
+    </li>
+          </ul>
       </div></section>
     </script>
 
     <script type="text/template" id="home-template"> 
       <section id="home" class="doble-column view show-right animate">
         <section id="highlight" class="scrollable column  left"><div>
-          <ul></ul>
+
+          <ul id="public" class="grid"></ul>
+          
+
         </div></section>
 
-        <section id="personal" class="scrollable column  right"><div>
-          <ul></ul>  
+        <section id="belongings" class="scrollable column  right"><div>
+
+          <ul id="personal" class="grid"></ul> 
         </div></section>
       </section>
     </script>

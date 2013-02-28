@@ -18,6 +18,7 @@ var AppView = Parse.View.extend({
     this.toolbarView = new ToolbarView();
     this.logInView = new LogInView();
     this.makeScrolls();
+    this.addBookView.hide();
     this.currentView = this.homeView;
       
     if (Parse.User.current()) {
@@ -31,10 +32,12 @@ var AppView = Parse.View.extend({
     }
   },
   hide:function  () {
-    this.$(".view").hide();
+    this.$(".view").not('#login').hide();
+    this.homeView.clearBooks();
   },
   show:function  () {
-    this.$(".view").show();
+    this.$(".view").not('#login').show();
+    this.homeView.getBooks();
   },
   updateForms: function(){
     $("form .input").each(function() {

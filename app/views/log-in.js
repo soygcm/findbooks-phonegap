@@ -14,11 +14,9 @@ var LogInView = Parse.View.extend({
     var password = this.$("#login-password").val();
     Parse.User.logIn(username, password, {
       success: function(user) {
-        // new ManageBooksView();
-        self.undelegateEvents();
+        // self.undelegateEvents();
         self.hide();
         appView.show();
-        appView.addBookView.hide();
       },
       error: function(user, error) {
         self.$(".login-form .error").html("Invalid username or password. Please try again.").show();
@@ -32,6 +30,7 @@ var LogInView = Parse.View.extend({
     this.$('#login').hide();
   },
   show:function  () {
+    this.$(".login-form button").removeAttr('disabled');
     this.$('#login').show();
   },
   signUp: function(e) {
@@ -40,10 +39,9 @@ var LogInView = Parse.View.extend({
     var password = this.$("#signup-password").val();
     Parse.User.signUp(username, password, null, {
       success: function(user) {
-        self.undelegateEvents();
+        // self.undelegateEvents();
         self.hide();
         appView.show();
-        appView.addBookView.hide();
       },
       error: function(user, error) {
         self.$(".signup-form .error").html(error.message).show();
@@ -52,6 +50,12 @@ var LogInView = Parse.View.extend({
     });
     this.$(".signup-form button").attr("disabled", "disabled");
     return false;
+  },
+  logOut: function () {
+    Parse.User.logOut();
+    // appView.undelegateEvents();
+    appView.hide();
+    this.show();
   },
   render: function() {
     this.$el.prepend(_.template($("#login-template").html()));

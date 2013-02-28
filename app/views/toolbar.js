@@ -69,10 +69,7 @@ var ToolbarView = Parse.View.extend({
     }
   },
   logOut:function  () {
-    Parse.User.logOut();
-    appView.undelegateEvents();
-    appView.hide();
-    appView.logInView.show();
+    appView.logInView.logOut();
   },
   //sirve esta funcion?
   preventDefault: function (e) {

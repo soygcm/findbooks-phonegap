@@ -14,11 +14,8 @@ body,html{
 }
 body {
     font: 18px 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    /*line-height: 1.4em;*/
     background: #1A5C29;
     color: white;
-    /*width: 550px;*/
-    /*margin: 0 auto;*/
     -webkit-font-smoothing: antialiased;
     -moz-font-smoothing: antialiased;
     -ms-font-smoothing: antialiased;
@@ -58,6 +55,20 @@ input, select{
     height: 100%;
     overflow: hidden;
 }
+.application .front{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: rgba(0,0,0,0);
+}
+.application .front.show{
+    background: rgba(0,0,0,0.6);
+}
+.application .deep{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
 
 .animate{
     -webkit-transition: -webkit-transform .4s ease-out;
@@ -70,15 +81,14 @@ input, select{
 .doble-column{
     width: 100%;
     position: absolute;
-    /*width: 100%;*/
     height: 100%;
     top: 0;
     left: 0;
--webkit-transform-origin: 0px 0px;
--webkit-transform: translate3d(0px, 0px, 0px) scale(1);
+    -webkit-transform-origin: 0px 0px;
+    -webkit-transform: translate3d(0px, 0px, 0px) scale(1);
 }
 .doble-column.show-right{
--webkit-transform: translate3d(-60%, 0px, 0px) scale(1);
+    -webkit-transform: translate3d(-60%, 0px, 0px) scale(1);
 }
 .doble-column.show-right.show-sidebar{
     -webkit-transform: translate3d(40%, 0px, 0px) scale(1);
@@ -101,6 +111,17 @@ input, select{
     float: left;
     left: 0;
 }
+.doble-column .column>div{
+    padding-bottom: 44px;
+}
+
+.scrollable{
+    overflow: auto !important;
+}
+.scrollable>div{
+    position: absolute;
+    width: 100%;
+}
 
 .sidebar{
     position: absolute;
@@ -120,20 +141,8 @@ input, select{
 .sidebar.left.show{
     -webkit-transform: translate3d(0%, 0px, 0px) scale(1);
 }
-
-.application .front{
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    background: rgba(0,0,0,0);
-}
-.application .front.show{
-    background: rgba(0,0,0,0.6);
-}
-.application .deep{
-    width: 100%;
-    height: 100%;
-    position: absolute;
+.sidebar>div{
+    padding-bottom: 44px;
 }
 
 .popup{
@@ -155,7 +164,6 @@ input, select{
     -webkit-transform: translate3d(0, 0, 0) scale(1);
 }
 .popup > .scrollable{
-    /*, .popup > div > div{*/
     height: 100%;
 }
 .popup.have-toolbar > div > div{
@@ -167,8 +175,9 @@ input, select{
 .popup h1 {
     margin: 0;
 }
-
-
+.popup h2{
+    margin: 0;
+}
 
 form{
     padding: 10px;
@@ -181,30 +190,22 @@ form label{
     position: relative;
 }
 form span.label{
-    /*display: inline;*/
     position: absolute;
-    /*width: 70px;*/
     bottom: 0px;
     height: 2em;
     text-align: right;
-    /*float: left;*/
-    /*background: blue;*/
 }
 form span.input{
     height: 2em;
     display: block;
     float: right;
-    /*background: red;*/
-    /*border: 1px solid black;*/
 }
 form input, form select{
     height:  2em;
-    /*display: inline-block; */
     float: left;
     background: transparent;
     padding: 0;
     margin: 0;
-    /*text-indent: 75px;*/
     border:none;
     outline: none;
     width: 100%;
@@ -229,7 +230,6 @@ p.medium{
     left: 0;
     width: 100%;
     z-index: 300000;
-    /*text-align: center;*/
 }
 .toolbar.top{
     top: 0;
@@ -261,7 +261,6 @@ p.medium{
     color: yellow;
 }
 .toolbar .left{
-    /*float: left;*/
 }
 .toolbar h1{
     margin: 0;
@@ -285,7 +284,6 @@ p.medium{
     border-radius: 5px;
     top: 0;
     padding: 0;
-    /*position: absolute;*/
     margin: 5px;
 }
 .toolbar button.text{
@@ -301,7 +299,7 @@ p.medium{
     float: right;
 }
 .toolbar .title-app h1 {
-padding-top: 0.1em;
+    padding-top: 0.1em;
 }
 
 .view.full{
@@ -311,33 +309,35 @@ padding-top: 0.1em;
     max-width: 15em;
     margin: 0 auto;
 }
-
-.column{
-    overflow: auto !important;
+.view .inner{
+    padding: 10px;
 }
-.column ul{
+
+ul{
     margin: 0;
     padding: 0;
-    /*display: inline-block;*/
 }
-.column>div{
-    position: absolute;
-    width: 100%;
-    padding-bottom: 44px;
-}
-.column li{
+ul.grid li{
     list-style: none;
     display: block;
     float: left;
-    -webkit-perspective: 800;
-    -webkit-perspective-origin: 60% 60%;
+}
+ul.vertical li img {
+    height: 2.5em;
+    float: left;
+}
+ul.vertical li p {
+    margin: 0;
+    padding: 0 10px;
+}
+ul.vertical li {
+    height: 3em;
 }
 
-
+/*Es el unico que se le permite tener un nombre tan especifico*/
 .book{
     overflow: hidden;
     margin: 10px;
-    /*float: left;*/
     position: relative;
     -webkit-transition: -webkit-transform .4s ease-out;
 }
@@ -356,7 +356,6 @@ padding-top: 0.1em;
 .book p{
     display: block;
     height: 15%;
-    /*width: 100%;*/
     margin: 0;
     text-align: center;
 }
@@ -388,23 +387,6 @@ padding-top: 0.1em;
     height: 100%;
     width: 0%;
     background-color: blue;
-    /*-webkit-transition: width .25s linear;
-       -moz-transition: width .25s linear;
-        -ms-transition: width .25s linear;
-         -o-transition: width .25s linear;
-            transition: width .25s linear;*/
-}
-
-.offer-li img {
-    height: 2.5em;
-    float: left;
-}
-.offer-li p {
-    margin: 0;
-    padding: 0 10px;
-}
-.offer-li {
-    height: 3em;
 }
 
 @media screen and (min-width: 640px) {
@@ -429,7 +411,6 @@ padding-top: 0.1em;
 .book.small{
     height: 242px;
     width: 150px;
-    /*display: inline-block;*/
 }
 
 body{
