@@ -38,3 +38,9 @@ form select{
     background: #1C3D61;
 }
 
+.loading div.img{
+	background: url(images/loading.png) no-repeat center center;
+	background-size: 100% auto;
+	width:43px;
+    height:54px;
+}

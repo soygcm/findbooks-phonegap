@@ -59,10 +59,11 @@ input, select{
     width: 100%;
     height: 100%;
     position: absolute;
-    background: rgba(0,0,0,0);
+    background: rgba(0,0,0,0.6);
+    /*background: rgba(0,0,0,0);*/
 }
 .application .front.show{
-    background: rgba(0,0,0,0.6);
+    /*background: rgba(0,0,0,0.6);*/
 }
 .application .deep{
     width: 100%;
@@ -172,11 +173,9 @@ input, select{
 .popup.have-toolbar{
     overflow: hidden;
 }
-.popup h1 {
+.popup h1, .popup h2{
     margin: 0;
-}
-.popup h2{
-    margin: 0;
+    font-weight: normal;
 }
 
 form{
@@ -324,14 +323,29 @@ ul.grid li{
 }
 ul.vertical li img {
     height: 2.5em;
+    width: 2em;
     float: left;
+    margin: 5px;
 }
 ul.vertical li p {
     margin: 0;
     padding: 0 10px;
 }
+ul.vertical li a{
+    display: block;
+    height: 100%;
+}
 ul.vertical li {
+    list-style: none;
     height: 3em;
+    padding: 5px 0;
+    border-top: 1px solid #ccc;
+}
+ul .right{
+    float: right;
+}
+ul button{
+    margin: 5px;
 }
 
 /*Es el unico que se le permite tener un nombre tan especifico*/
@@ -372,6 +386,37 @@ ul.vertical li {
 
 .image.left{
     float: left;
+}
+
+.loading{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 500000;
+    background-color: rgba(0,0,0,0.25);
+}
+.loading div.center{
+    position:absolute;
+    top:45%;
+    width: 100%;
+}
+.loading div.img{
+    display: block;
+    margin: 0 auto;
+    -webkit-animation:rotate 1.1s infinite linear;
+            animation:rotate 1.1s infinite linear;
+}
+
+@-webkit-keyframes rotate{
+0%{-webkit-transform:rotate(0deg)}
+100%{-webkit-transform:rotate(360deg)}
+}
+
+@keyframes rotate{
+0%{transform:rotate(0deg)}
+100%{transform:rotate(360deg)}
 }
 
 .loading-bar.hover{
@@ -415,6 +460,16 @@ ul.vertical li {
 
 body{
     font-size: 21px;
+}
+
+.doble-column.show-right{
+    -webkit-transform: translate3d(-5%, 0px, 0px) scale(1);
+}
+.doble-column .column{
+    width: 55%;
+}
+.doble-column .column.right{
+    left: 55%;
 }
 
 }

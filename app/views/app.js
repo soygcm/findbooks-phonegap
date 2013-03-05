@@ -20,6 +20,8 @@ var AppView = Parse.View.extend({
     this.makeScrolls();
     this.addBookView.hide();
     this.currentView = this.homeView;
+    this.$loading = $('div.loading');
+    this.$loading.hide();
       
     if (Parse.User.current()) {
       this.show();
@@ -34,6 +36,12 @@ var AppView = Parse.View.extend({
   hide:function  () {
     this.$(".view").not('#login').hide();
     this.homeView.clearBooks();
+  },
+  loading: function () {
+    this.$loading.fadeIn(100);
+  },
+  notLoading:function () {
+    this.$loading.fadeOut(100);
   },
   show:function  () {
     this.$(".view").not('#login').show();

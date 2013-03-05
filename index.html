@@ -23,6 +23,12 @@
       <div class="front"></div>
     </div>
 
+    <div class="loading">
+      <div class="center">
+        <div class="img"></div>
+      </div>
+    </div>
+
 
     <script type="text/template" id="book-detail-template">
       <section id="book-detail" class="popup view scrollable bottom animate"><div>
@@ -228,12 +234,14 @@
     </script>
 
     <script type="text/template" id="offer-li-template">
-      <article class="offer-li <%= type %>">
+      <a class="offer-li <%= type %>">
         <div class="shadow">
         </div>
         <img src='<%= picture.url %>' alt="">
+        <button class="right">Solicitar</button>
         <p class="ellipsis"><%= user.username %></p>
-      </article>
+        <p class="ellipsis"><%= description %></p>
+      </a>
     </script>
 
     <script type="text/template" id="toolbar-template">

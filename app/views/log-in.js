@@ -12,9 +12,11 @@ var LogInView = Parse.View.extend({
     var self = this;
     var username = this.$("#login-username").val();
     var password = this.$("#login-password").val();
+    appView.loading();
     Parse.User.logIn(username, password, {
       success: function(user) {
         // self.undelegateEvents();
+        appView.notLoading();
         self.hide();
         appView.show();
       },

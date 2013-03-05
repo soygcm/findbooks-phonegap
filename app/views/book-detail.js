@@ -6,11 +6,14 @@ var BookDetailView = PopupView.extend({
 
   },
   render: function() {
+    self = this;
     this.$el.find('#book-detail').remove();
     this.$el.append(this.template(this.model.toJSON()));
     appView.createScroll('book-detail');
     this.initPopup('#book-detail');
-    this.getOfferList();
+    window.setTimeout(function(){
+      appView.bookDetailView.getOfferList();
+    }, 400);
   },
   viewAndShow: function (bookID) {
     self = this;
@@ -20,17 +23,16 @@ var BookDetailView = PopupView.extend({
         success: function(book) {
           appView.bookDetailView.model = book;
           appView.bookDetailView.render();
-          appView.bookDetailView.show();
         },
         error: function(book, error) {   }
       });
     }else{
       this.render();
-      this.show();
+      // this.show();
     }
-    
   },
   getOfferList:function () {
+    appView.loading();
     self = this;
     this.offerList = new OfferList;
     this.offerList.query = new Parse.Query(Offer).equalTo("book", this.model);
@@ -40,15 +42,14 @@ var BookDetailView = PopupView.extend({
         // collection.length;
         console.log(offers)
         offers.each(function(offer) {
-
-          // self.$("#offer-list>ul").prepend('<li data-user="'+object.get('user').id+'" data-offer-type="'+object.get('type')+'" ></li>');
-
           user = offer.get('user');
           user.fetch({
             success: function(user) {
               self.offerListCount++;
               if (self.offerListCount == offers.length) {
                 self.addOfferList(offers);
+                appView.notLoading();
+                appView.bookDetailView.show();
               }
               /*var username = user.get("username");
               var id = user.id;

@@ -10,8 +10,6 @@ var HomeView = Parse.View.extend({
     // _.bindAll(this, "logIn", "signUp");
     this.render();
     this.mainView = this.$('#home');
-    // this.getUserBooks();
-    // this.getPublicBooks();
   },
   render: function() {
     this.$el.prepend(_.template($("#home-template").html()));
@@ -30,6 +28,7 @@ var HomeView = Parse.View.extend({
     this.$("ul.grid").empty();
   },
   getBooks: function(){
+    appView.loading();
     self = this;
     if(user = Parse.User.current()){
       this.userBooks = user.relation('books');
@@ -55,6 +54,7 @@ var HomeView = Parse.View.extend({
       this.publicBooks.query = new Parse.Query(Book).notContainedIn("objectId", booksIdArray);
       this.publicBooks.fetch({
         success: function(books) {
+          appView.notLoading();
           appView.homeView.addBooks(books, 'ul#public');
         }
       });
@@ -63,6 +63,7 @@ var HomeView = Parse.View.extend({
       this.publicBooks.query = new Parse.Query(Book).limit(10);
       this.publicBooks.fetch({
         success: function(books) {
+          appView.notLoading();
           appView.homeView.addBooks(books, 'ul#public');
         }
       });

@@ -11,7 +11,22 @@ var OfferLiView = Parse.View.extend({
   render: function() {
     var modelJson = this.model.toJSON();
     modelJson.user = this.model.get('user').toJSON();
-    // console.log();
+    var description;
+    switch(modelJson.type){
+      case 'sell':
+        description = '¢'+modelJson.price;
+        break;
+      case 'rent':
+        description = '¢'+modelJson.price+'/hora';
+        break;
+      case 'lend':
+        description = '(Prestado)';
+        break;
+      case 'donate':
+        description = '(Gratuito)';
+        break;
+    }
+    modelJson.description = description;
     this.$el.html(this.template(modelJson));
     return this;
   },
