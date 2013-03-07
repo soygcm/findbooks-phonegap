@@ -96,9 +96,7 @@
             </span>
           </label>
 
-          <button type="button" id="book-photo" class="photo ">Tomale una foto a tu libro</button>
-
-          <button type="button" id="book-more-info" class=" ">Agrega mas información</button> 
+          <button type="button" id="book-photo" class="photo c1">Tomale una foto a tu libro</button>
 
           <section id="image-input-photo" class="book medium">
             <div class="shadow"></div>
@@ -212,24 +210,78 @@
     <script type="text/template" id="home-template"> 
       <section id="home" class="doble-column view show-right animate">
         <section id="highlight" class="scrollable column  left"><div>
-
+          
           <ul id="public" class="grid"></ul>
           
 
         </div></section>
 
         <section id="belongings" class="scrollable column  right"><div>
+          <div class="inner">
+            <h1>Mis Libros</h1>
+            <button class="log-out " style="">Salir </button>
+          </div>
+          <ul id="personal" class="grid">
 
-          <ul id="personal" class="grid"></ul> 
+          <li>
+      <article class="book small">
+        <div class="shadow"><p class="ellipsis">Reavivamiento</p>
+
+        </div>
+        <div class="border"><div><div></div></div></div>
+        <img src="" alt="">
+      </article>
+    </li>
+    <li>
+      <article class="book small">
+        <div class="shadow"><p class="ellipsis">Reavivamiento</p>
+
+        </div>
+        <div class="border"><div><div></div></div></div>
+        <img src="" alt="">
+      </article>
+    </li>
+    <li>
+      <article class="book small">
+        <div class="shadow"><p class="ellipsis">Reavivamiento</p>
+
+        </div>
+        <div class="border"><div><div></div></div></div>
+        <img src="" alt="">
+      </article>
+    </li>
+    <li>
+      <article class="book small">
+        <div class="shadow"><p class="ellipsis">Reavivamiento</p>
+
+        </div>
+        <div class="border"><div><div></div></div></div>
+        <img src="" alt="">
+      </article>
+    </li>
+    <li>
+      <article class="book small">
+        <div class="shadow"><p class="ellipsis">Reavivamiento</p>
+
+        </div>
+        <div class="border"><div><div></div></div></div>
+        <img src="" alt="">
+      </article>
+    </li>
+
+          </ul> 
         </div></section>
       </section>
     </script>
 
     <script type="text/template" id="book-template">
       <article class="book small">
-        <div class="shadow"></div>
+        <div class="shadow"><p class="ellipsis"><%= title %></p>
+
+        </div>
+        <div class="border"><div><div></div></div></div>
         <img src='<%= picture.url %>' alt="">
-        <p class="ellipsis"><%= title %></p>
+        <!-- -->
       </article>
     </script>
 
@@ -249,7 +301,6 @@
         <header>
           <button class="add left">Agregar</button>
           <button class="back hide left">Atras</button>
-          <button class="log-out " style="">Salir </button>
 
           <button class="search right">Buscar</button>
           <button class="find right">Encontrar</button>

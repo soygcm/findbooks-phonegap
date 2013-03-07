@@ -5,6 +5,12 @@ var AppView = Parse.View.extend({
   events:{
     "touchstart .scrollable": "refreshScroll",
     "mousedown .scrollable": "refreshScroll",
+    'touchstart button':'buttonActive',
+    'touchend button':'buttonNoActive',
+    'focus form input':'inputFocus',
+    'focus form select':'inputFocus',
+    'blur form input':'inputNoFocus',
+    'blur form select':'inputNoFocus'
   },
   scrollable : [],
   initialize: function() {
@@ -32,6 +38,19 @@ var AppView = Parse.View.extend({
       this.logInView.show();
       // this.currentView = this.logInView;
     }
+  },
+  buttonActive:function (e) {
+    console.log('tratando de definir el fake-active');
+    $(e.target).addClass("f-active");
+  },
+  buttonNoActive:function (e) {
+    $(e.target).removeClass("f-active");
+  },
+  inputFocus: function (e) {
+    $(e.target).parent().parent('label').addClass("f-focus");
+  },
+  inputNoFocus: function (e) {
+    $(e.target).parent().parent('label').removeClass("f-focus");
   },
   hide:function  () {
     this.$(".view").not('#login').hide();

@@ -19,17 +19,20 @@ var app = {
       this.bindGlobalEvents();
   },
   bindGlobalEvents: function () {
-    
     console.log(navigator.userAgent);
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
+    var ua = navigator.userAgent;
+    if (ua.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
         document.addEventListener("deviceready", this.onDeviceReady, false);
-        if (navigator.userAgent.match(/(Android)/)){
+        if (ua.match(/(Android)/)){
           this.OS = "android";
+          this.OSVersion = parseFloat(ua.slice(ua.indexOf("Android")+8)); 
+          this.OSGeneration = this.OSVersion<4.0 ? "old" : "new";
+
           document.addEventListener("backbutton", function(e) {                
             window.history.back();
           }, false);
         }
-        if (navigator.userAgent.match(/(iPhone|iPod|iPad)/)){
+        if (ua.match(/(iPhone|iPod|iPad)/)){
           this.OS = "ios";
           document.addEventListener('touchmove', function (e) {
             e.preventDefault();
@@ -56,6 +59,8 @@ var app = {
   },
   startAppView: function () {
     $("body").addClass(this.OS);
+    $("body").addClass(this.OSVersion);
+    $("body").addClass(this.OSGeneration);
     appView.render();
     appRouter = new AppRouter;
     Parse.history.start();

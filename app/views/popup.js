@@ -12,7 +12,8 @@ var PopupView = Parse.View.extend({
     if(!this.view.hasClass('show')){
       this.view.show();
       this.front.addClass("show");
-      this.front.fadeIn(100);
+      this.front.show();
+      // this.front.fadeIn(100);
       self = this;
       window.setTimeout(function(){
         self.view.addClass("show");
@@ -29,7 +30,8 @@ var PopupView = Parse.View.extend({
         thereIsPopup = $('.view.show').length;
         if (!thereIsPopup){
           front.removeClass('show');
-          front.fadeOut(100);
+          this.front.hide();
+          // front.fadeOut(100);
         }
 
       }, 410);

@@ -4,7 +4,8 @@ var HomeView = Parse.View.extend({
     'swipeRight .doble-column': "onSwipeRight",
     'swipeLeft .doble-column': "onSwipeLeft",
     'tap .column.right':'showRightColumn',
-    'tap .column.left':'showLeftColumn'
+    'tap .column.left':'showLeftColumn',
+    "click button.log-out": "logOut"
   },
   initialize: function() {
     // _.bindAll(this, "logIn", "signUp");
@@ -14,6 +15,9 @@ var HomeView = Parse.View.extend({
   render: function() {
     this.$el.prepend(_.template($("#home-template").html()));
     this.delegateEvents();
+  },
+  logOut:function  () {
+    appView.logInView.logOut();
   },
   toggleColumn: function(){
     this.mainView.toggleClass('show-right');
@@ -56,6 +60,10 @@ var HomeView = Parse.View.extend({
         success: function(books) {
           appView.notLoading();
           appView.homeView.addBooks(books, 'ul#public');
+        },
+        error:function (b, message) {
+          appView.notLoading();
+          alert(message);
         }
       });
     }else{
@@ -65,6 +73,10 @@ var HomeView = Parse.View.extend({
         success: function(books) {
           appView.notLoading();
           appView.homeView.addBooks(books, 'ul#public');
+        },
+        error:function (b, message) {
+          appView.notLoading();
+          alert(message);
         }
       });
     }

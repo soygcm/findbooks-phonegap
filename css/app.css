@@ -1,12 +1,14 @@
 * {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     outline: none; 
+    background-color: rgba(0,0,0,0.2);
 }
 .display-none{
     display: none;
 }
 
 body,html{
+    background-color: white;
     height: 100%;
     width: 100%;
     margin: 0;
@@ -14,7 +16,6 @@ body,html{
 }
 body {
     font: 18px 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background: #1A5C29;
     color: white;
     -webkit-font-smoothing: antialiased;
     -moz-font-smoothing: antialiased;
@@ -31,8 +32,7 @@ body.ios{
 button {
     margin: 0;
     padding: 0;
-    border: 0;
-    background: none;
+    border: 1px solid black;
     font-size: 100%;
     vertical-align: baseline;
     font-family: inherit;
@@ -41,9 +41,17 @@ button {
     -ms-appearance: none;
     -o-appearance: none;
     appearance: none;
-    border: 1px solid black;
-    height: 40px;
-    padding: 10px;
+    text-align: center;
+    height: 2.5em;
+    margin-bottom: 0.5em;
+    padding: 0.3em;
+    display: block;
+}
+button.c1{
+    width: 100%;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 input, select{
@@ -100,11 +108,9 @@ input, select{
 .doble-column .column{
     width: 80%;
     position: absolute;
-    background-image: url(../images/noise.png);
     height: 100%;
 }
 .doble-column .column.right{
-    background-color: #3D180D;
     float: right;
     left: 80%;
 }
@@ -117,7 +123,7 @@ input, select{
 }
 
 .scrollable{
-    overflow: auto !important;
+    overflow: hidden;
 }
 .scrollable>div{
     position: absolute;
@@ -150,11 +156,9 @@ input, select{
     position: absolute;
     left: 2.5%;
     top: 1%;
-    height: 88%;
+    height: 85%;
     width: 95%;
     margin: 0 auto;
-    border-radius: 5px;
-    box-shadow: 1px 3px 50px #000;
     overflow: auto;
     -webkit-transform-origin: 0px 0px;
 }
@@ -166,16 +170,27 @@ input, select{
 }
 .popup > .scrollable{
     height: 100%;
+    position: absolute;
+    width: 100%;
 }
-.popup.have-toolbar > div > div{
-    padding-top:44px;
+.popup .scrollable > div{
+    padding-top:50px;
 }
 .popup.have-toolbar{
-    overflow: hidden;
+    overflow: initial;
 }
 .popup h1, .popup h2{
     margin: 0;
     font-weight: normal;
+}
+.popup .toolbar{
+    display: relative;
+    /*-webkit-transition: -webkit-transform 0ms;*/
+    /*-webkit-transform-origin: 0px 0px;*/
+    /*-webkit-transform: translate3d(-2px, -1px, 0px) scale(1);*/
+    top: -1px !important;
+    left: -1px;
+    padding-right: 3px;
 }
 
 form{
@@ -185,13 +200,15 @@ form label{
     display: block;
     margin-bottom: 10px;
     height: 2em;
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid black;
     position: relative;
 }
 form span.label{
     position: absolute;
     bottom: 0px;
-    height: 2em;
+    height: 1.6em;
+    padding-top: 0.5em;
+    padding-left: 0.3em;
     text-align: right;
 }
 form span.input{
@@ -223,7 +240,7 @@ p.medium{
 }
 
 .toolbar{
-    height: 2.2em;
+    height: 50px;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -244,11 +261,11 @@ p.medium{
     z-index: -20;
 }
 .toolbar .search-input{
-    padding: 0 2.1em 0 4.1em;
+    padding: 0 50px 0 50px;
 }
 .toolbar .search-input input{
     margin: 4px 0;
-    height: 1.2em;
+    height: 40px;
     width: 100%;
     font-family: inherit;
     font-size: 1em;
@@ -256,8 +273,6 @@ p.medium{
     border: none;
     padding: 5px 0;
     letter-spacing: 0.1em;
-    border-bottom: 2px solid yellow;
-    color: yellow;
 }
 .toolbar .left{
 }
@@ -267,27 +282,27 @@ p.medium{
     font-weight: 200;
 }
 .toolbar .center h1{
-    font-size: 1.5em;
+    font-size: 24pt;
 }
 .toolbar .left h1{
-    padding: 0.5em;
-    font-size: 1em;
+    padding: 10pt;
+    font-size: 16pt;
 }
 .toolbar .hide{
     display: none;
 }
 .toolbar button {
-    width: 1.5em;
-    height: 1.5em;
-    border: 1px solid #0B1E33;
-    border-radius: 5px;
+    width: 40px;
+    height: 40px;
     top: 0;
     padding: 0;
     margin: 5px;
+    text-indent: -500px;
 }
 .toolbar button.text{
     width: auto;
     padding: 0 15px;
+    text-indent: 0;
 }
 .toolbar button.left{
     left: 0px;
@@ -298,7 +313,7 @@ p.medium{
     float: right;
 }
 .toolbar .title-app h1 {
-    padding-top: 0.1em;
+    padding-top: 0.2em;
 }
 
 .view.full{
@@ -339,7 +354,7 @@ ul.vertical li {
     list-style: none;
     height: 3em;
     padding: 5px 0;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid black;
 }
 ul .right{
     float: right;
@@ -350,10 +365,9 @@ ul button{
 
 /*Es el unico que se le permite tener un nombre tan especifico*/
 .book{
-    overflow: hidden;
+    /*overflow: hidden;  para que tenia esto?*/ 
     margin: 10px;
     position: relative;
-    -webkit-transition: -webkit-transform .4s ease-out;
 }
 .book.small{
     height: 150px;
@@ -365,17 +379,15 @@ ul button{
 }
 .book img{
     width: 100%;
-    height: 85%;
+    height: 100%;
 }
 .book p{
     display: block;
-    height: 15%;
+    padding: 0.5em;
+    font-size: 0.8em;
+    height: 1.5em;
     margin: 0;
     text-align: center;
-}
-.book.rotate {
-    -webkit-transform: rotateY(-180deg);
-    -webkit-transition: -webkit-transform .4s ease-out;
 }
 
 .ellipsis{
@@ -404,6 +416,7 @@ ul button{
 }
 .loading div.img{
     display: block;
+    height: 3px;
     margin: 0 auto;
     -webkit-animation:rotate 1.1s infinite linear;
             animation:rotate 1.1s infinite linear;
@@ -463,7 +476,7 @@ body{
 }
 
 .doble-column.show-right{
-    -webkit-transform: translate3d(-5%, 0px, 0px) scale(1);
+    -webkit-transform: translate3d(-10%, 0px, 0px) scale(1);
 }
 .doble-column .column{
     width: 55%;

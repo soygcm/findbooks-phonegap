@@ -5,9 +5,8 @@ var ToolbarView = Parse.View.extend({
     "click button.find"   : "searchQuery", 
     "click button.back"   : "back",
     "click button.add"    : "add",
-    "click .toolbar"    : "home",
-    "click button.log-out": "logOut",
-    "keypress #search-query": "searchEnter",
+    "click header"    : "home",
+    "keypress #search-query": "searchEnter"
     // "touchmove #toolbar-main": "preventDefault"
   },
   initialize: function() {
@@ -59,7 +58,7 @@ var ToolbarView = Parse.View.extend({
   },
   home:function(e){
     console.log($(e.target));
-    if($(e.target).is('header')){
+    if($(e.target).is('h1')){
 
       if(appRouter.routes[Parse.history.fragment]=='home'){
         appView.homeView.toggleColumn();
