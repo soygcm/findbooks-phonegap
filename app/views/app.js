@@ -17,26 +17,34 @@ var AppView = Parse.View.extend({
 
   },
   render: function() {
-    this.homeView = new HomeView();
-    this.addBookView = new AddBookView();
-    this.searchView = new SearchView();
-    this.bookDetailView = new BookDetailView();
-    this.toolbarView = new ToolbarView();
-    this.logInView = new LogInView();
-    this.makeScrolls();
-    this.addBookView.hide();
-    this.currentView = this.homeView;
-    this.$loading = $('div.loading');
-    this.$loading.hide();
-      
-    if (Parse.User.current()) {
-      this.show();
-      this.logInView.hide();
+    if (!this.internetAvailable()){   
+        navigator.notification.alert("No se ha encontrado una conexión a internet, la applicación necesita una conexión para poder accesar al servidor. Lo sentimos...", null, "Sin Conexión a Internet", "Ok");     
+        $('div.loading').hide();
+        this.logInView = new LogInView();
+        this.hide();
+        this.logInView.show();        
     } else {
-      console.log(this.logInView);
-      this.hide();
-      this.logInView.show();
-      // this.currentView = this.logInView;
+      this.homeView = new HomeView();
+      this.addBookView = new AddBookView();
+      this.searchView = new SearchView();
+      this.bookDetailView = new BookDetailView();
+      this.toolbarView = new ToolbarView();
+      this.logInView = new LogInView();
+      this.makeScrolls();
+      this.addBookView.hide();
+      this.currentView = this.homeView;
+      this.$loading = $('div.loading');
+      this.$loading.hide();
+      
+      if (Parse.User.current()) {
+        this.show();
+        this.logInView.hide();
+      } else {
+        console.log(this.logInView);
+        this.hide();
+        this.logInView.show();
+        // this.currentView = this.logInView;
+      }
     }
   },
   buttonActive:function (e) {
@@ -106,5 +114,12 @@ var AppView = Parse.View.extend({
   //que es esto?
   preventDefault: function (e) {
     e.preventDefault();
+  },
+  internetAvailable: function(){
+    var networkState = navigator.network.connection.type;
+    if (networkState == Connection.NONE || networkState == Connection.UNKNOWN)
+        return false;
+    else 
+        return true;
   }
 });
