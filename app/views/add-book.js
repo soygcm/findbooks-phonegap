@@ -138,11 +138,16 @@ var AddBookView = PopupView.extend({
     else {
       if($("#offer-type").val() == "sell"){
         if($("#sell-price").val().trim() == "") error+="\n - Defina un precio de venta.";
+        else if(isNaN($("#sell-price").val().trim())) error+="\n - El precio de venta debe ser un número válido";
       } else if($("#offer-type").val() == "lend"){
         if($("#lend-time").val().trim() == "") error+="\n - Defina la cantidad de tiempo.";
+        else if(isNaN($("#lend-time").val().trim())) error+="\n - La cantidad de tiempo debe ser un número válido";
       } else if($("#offer-type").val() == "rent"){
         if($("#rent-price").val().trim() == "") error+="\n - Defina el precio/hora de alquiler.";
+        else if(isNaN($("#rent-price").val().trim())) error+="\n - El precio/hora de alquiler debe ser un número válido";
+
         if($("#rent-time").val().trim() == "") error+="\n - Defina la cantidad de tiempo.";
+        else if(isNaN($("#rent-time").val().trim())) error+="\n - La cantidad de tiempo debe ser un número válido";
       } 
     }
 
