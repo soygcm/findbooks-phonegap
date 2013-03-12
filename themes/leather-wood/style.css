@@ -58,7 +58,7 @@ form select{
 .doble-column .column.left {
 	border-right: 2px solid black;
 }
-.doble-column .column, #search{
+.doble-column .column, #search, #login > div{
 	background-color: rgb(37, 44, 37);
 	background-image:	url(images/texture.png)
 }

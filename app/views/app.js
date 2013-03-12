@@ -17,13 +17,6 @@ var AppView = Parse.View.extend({
 
   },
   render: function() {
-    if (!app.internetAvailable()){   
-        navigator.notification.alert("No se ha encontrado una conexión a internet, la applicación necesita una conexión para poder accesar al servidor. Lo sentimos...", null, "Sin Conexión a Internet", "Ok");     
-        $('div.loading').hide();
-        this.logInView = new LogInView();
-        this.hide();
-        this.logInView.show();        
-    } else {
       this.homeView = new HomeView();
       this.addBookView = new AddBookView();
       this.searchView = new SearchView();
@@ -36,16 +29,20 @@ var AppView = Parse.View.extend({
       this.$loading = $('div.loading');
       this.$loading.hide();
       
-      if (Parse.User.current()) {
-        this.show();
-        this.logInView.hide();
-      } else {
-        console.log(this.logInView);
+      if (!app.internetAvailable()){   
+        navigator.notification.alert("No se ha encontrado una conexión a internet, la applicación necesita una conexión para poder accesar al servidor. Lo sentimos...", null, "Sin Conexión a Internet", "Ok");
         this.hide();
         this.logInView.show();
-        // this.currentView = this.logInView;
+      }else{
+        if (Parse.User.current()) {
+          this.show();
+          this.logInView.hide();
+        } else {
+          this.hide();
+          this.logInView.show();
+        }
       }
-    }
+    
   },
   buttonActive:function (e) {
     console.log('tratando de definir el fake-active');
@@ -62,7 +59,6 @@ var AppView = Parse.View.extend({
   },
   hide:function  () {
     this.$(".view").not('#login').hide();
-    this.homeView.clearBooks();
   },
   loading: function () {
     this.$loading.fadeIn(100);
@@ -72,6 +68,7 @@ var AppView = Parse.View.extend({
   },
   show:function  () {
     this.$(".view").not('#login').show();
+    this.homeView.clearBooks();
     this.homeView.getBooks();
   },
   updateForms: function(){
