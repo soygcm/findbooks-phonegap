@@ -1,6 +1,5 @@
 var AddBookView = PopupView.extend({
   events:{
-    // "click #add-book-done": "addNewBook",
     "click #add-book-done": "addNewBook",
     "click #book-photo" : "capturePhoto",
     "click #book-upload-image" : "uploadPhoto",
@@ -49,12 +48,38 @@ var AddBookView = PopupView.extend({
     // console.log("#"+$(e.target).find("option:selected").val());
   },
   capturePhoto: function () {
+    navigator.notification.confirm(
+      'Cargar la foto para el libro desde:',
+      this.onCaptureConfirm,
+      'Cargar Foto',
+      'Cámara,Mis Imágenes'
+    );
+    /*
     navigator.camera.getPicture(this.onPhotoDataSuccess, this.onFail,
     {
       quality: 50, 
       // destinationType: app.destinationType.DATA_URL
       destinationType: app.destinationType.FILE_URI
-    });      
+    });     */  
+  },
+  onCaptureConfirm:function(source){
+    
+    var PictureSourceType = function() {};
+    PictureSourceType.PHOTO_LIBRARY = 0;
+    PictureSourceType.CAMERA = 1;
+    PictureSourceType.SAVEDPHOTOALBUM = 2;
+
+    var imgSource = (source == 2)?PictureSourceType.PHOTO_LIBRARY:PictureSourceType.CAMERA;
+
+    var options = { 
+      quality: 50,
+      //targetHeight: 400,
+      destinationType: Camera.DestinationType.FILE_URI 
+    };
+    if (imgSource != undefined) 
+      options["sourceType"] = imgSource;
+
+    navigator.camera.getPicture(appView.addBookView.onPhotoDataSuccess, appView.addBookView.onFail, options);
   },
   onPhotoDataSuccess: function(imageData) {
     // this no existe!!!! 
@@ -62,17 +87,8 @@ var AddBookView = PopupView.extend({
     appView.addBookView.imagePhoto.attr("src", imageData);
     appView.addBookView.imageData = imageData;
   },
-  onFailLibrary: function (message){
-    alert('La libreria Fallo: ' + message);
-  },
-  onFail: function (message) {
-    alert('La camara fallo: ' + message+'. Buscar en la libreria fotografica');
-    navigator.camera.getPicture(appView.addBookView.onPhotoDataSuccess, appView.addBookView.onFailLibrary, 
-    { 
-      quality: 25, 
-      destinationType: app.destinationType.FILE_URI,
-      sourceType: app.pictureSource.SAVEDPHOTOALBUM 
-    });
+  onFail: function (message){
+    navigator.notification.alert('Detalles: ' + message, null, "Error al cargar foto", "Ok");
   },
   uploadPhoto: function () {
     var imageURI = this.imageData;
@@ -104,17 +120,36 @@ var AddBookView = PopupView.extend({
     appView.addBookView.addNewBookToParse();
   },
   fail: function (error) {
-    alert("An error has occurred: Code = " + error.code);
+    navigator.notification.alert("An error has occurred: Code = " + error.code, null, "Error", "Ok");
     $.each(error, function(index, val) {
       console.log(index+': '+val);
     });
   },
   addNewBook: function () {
-    if(this.imagePhoto.attr("src")==""){
-      alert("Tomale una Foto a tu libro antes de publicar tu oferta");
-    }else{
-      this.uploadPhoto();
+    var error = "";
+
+    if($("#book-title").val().trim() == "") error+="\n - Titulo es requerido.";
+    if($("#author-name").val().trim() == "") error+="\n - Autor/es es requerido.";
+    if($("#category-name").val().trim() == "") error+="\n - Seleccione una categoría.";
+    if(this.imagePhoto.attr("src")=="") error+="\n - Debe cargar una imagen para el libro";
+    
+    if($("#offer-type").val().trim() == "") 
+      error+="\n - Seleccione un valor del campo 'Quiero'.";
+    else {
+      if($("#offer-type").val() == "sell"){
+        if($("#sell-price").val().trim() == "") error+="\n - Defina un precio de venta.";
+      } else if($("#offer-type").val() == "lend"){
+        if($("#lend-time").val().trim() == "") error+="\n - Defina la cantidad de tiempo.";
+      } else if($("#offer-type").val() == "rent"){
+        if($("#rent-price").val().trim() == "") error+="\n - Defina el precio/hora de alquiler.";
+        if($("#rent-time").val().trim() == "") error+="\n - Defina la cantidad de tiempo.";
+      } 
     }
+
+    if(error == "")
+      this.uploadPhoto();
+    else 
+      navigator.notification.alert(error, null, "Campos Requeridos", "Ok");
     // this.addNewBookToParse();
   },
   addNewBookToParse: function(e) {
