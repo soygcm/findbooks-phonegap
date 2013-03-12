@@ -9,7 +9,7 @@ var LogInView = Parse.View.extend({
     this.render();
   },
   logIn: function(e) {
-    if (!this.internetAvailable()){   
+    if (!app.internetAvailable()){   
         navigator.notification.alert("No se ha encontrado una conexión a internet, la applicación necesita una conexión para poder accesar al servidor. Lo sentimos...", null, "Sin Conexión a Internet", "Ok");     
         return false;
     }
@@ -48,7 +48,7 @@ var LogInView = Parse.View.extend({
     this.$('#login').show();
   },
   signUp: function(e) {
-    if (!this.internetAvailable()){   
+    if (!app.internetAvailable()){   
         navigator.notification.alert("No se ha encontrado una conexión a internet, la applicación necesita una conexión para poder accesar al servidor. Lo sentimos...", null, "Sin Conexión a Internet", "Ok");     
         return false;
     }
@@ -88,12 +88,5 @@ var LogInView = Parse.View.extend({
   render: function() {
     this.$el.prepend(_.template($("#login-template").html()));
     this.delegateEvents();
-  },
-  internetAvailable: function(){
-    var networkState = navigator.network.connection.type;
-    if (networkState == Connection.NONE || networkState == Connection.UNKNOWN)
-        return false;
-    else 
-        return true;
   }
 });

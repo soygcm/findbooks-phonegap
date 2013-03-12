@@ -65,11 +65,15 @@ var app = {
     Parse.history.start();
   },
   internetAvailable: function(){
-    var networkState = navigator.network.connection.type;
-    if (networkState == Connection.NONE || networkState == Connection.UNKNOWN)
-        return false;
-    else 
-        return true;
+    if(this.isMobile){
+      var networkState = navigator.network.connection.type;
+      if (networkState == Connection.NONE || networkState == Connection.UNKNOWN)
+          return false;
+      else 
+          return true;
+    }else{
+      return true;
+    }
   }
 };
 

@@ -114,12 +114,5 @@ var AppView = Parse.View.extend({
   //que es esto?
   preventDefault: function (e) {
     e.preventDefault();
-  },
-  internetAvailable: function(){
-    var networkState = navigator.network.connection.type;
-    if (networkState == Connection.NONE || networkState == Connection.UNKNOWN)
-        return false;
-    else 
-        return true;
   }
 });
