@@ -17,7 +17,7 @@ var AppView = Parse.View.extend({
 
   },
   render: function() {
-    if (!this.internetAvailable()){   
+    if (!app.internetAvailable()){   
         navigator.notification.alert("No se ha encontrado una conexión a internet, la applicación necesita una conexión para poder accesar al servidor. Lo sentimos...", null, "Sin Conexión a Internet", "Ok");     
         $('div.loading').hide();
         this.logInView = new LogInView();
