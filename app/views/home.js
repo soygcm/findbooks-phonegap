@@ -63,7 +63,7 @@ var HomeView = Parse.View.extend({
         },
         error:function (b, message) {
           appView.notLoading();
-          alert(message);
+          navigator.notification.alert(message, null, "Error", "Ok");
         }
       });
     }else{
@@ -76,7 +76,7 @@ var HomeView = Parse.View.extend({
         },
         error:function (b, message) {
           appView.notLoading();
-          alert(message);
+          navigator.notification.alert(message, null, "Error", "Ok");
         }
       });
     }

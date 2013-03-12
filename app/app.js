@@ -42,7 +42,6 @@ var app = {
         this.isMobile = false;
         this.startAppView();
     }
-
   },
   onDeviceReady: function () {
     console.log('Device is Ready');
@@ -64,6 +63,13 @@ var app = {
     appView.render();
     appRouter = new AppRouter;
     Parse.history.start();
+  },
+  internetAvailable: function(){
+    var networkState = navigator.network.connection.type;
+    if (networkState == Connection.NONE || networkState == Connection.UNKNOWN)
+        return false;
+    else 
+        return true;
   }
 };
 
