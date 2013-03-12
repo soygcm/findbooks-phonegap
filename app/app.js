@@ -1,7 +1,5 @@
 window.scrollTo(0, 0); //No se si esta linea es necesaria
 
-var librosArray = new Array('diary','hungergames', 'importa', 'logo', 'radical', 'startup', 'twilight');
-
 Parse.$ = jQuery;
 
 var parseApplicationId = "C4zgFUST9RGWSJ5scVpyB5G4co2gcMUpNPg0QpaI";
@@ -21,6 +19,9 @@ var app = {
   bindGlobalEvents: function () {
     console.log(navigator.userAgent);
     var ua = navigator.userAgent;
+    this.OS = "";
+    this.OSVersion = ""; 
+    this.OSGeneration = "";
     if (ua.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
         document.addEventListener("deviceready", this.onDeviceReady, false);
         if (ua.match(/(Android)/)){

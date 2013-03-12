@@ -449,11 +449,18 @@ ul button{
 
 @media screen and (min-width: 640px) {
 
+body{
+    font-size: 21px;
+}
 .popup{
     left: 10%;
     top: 5%;
     height: 80%;
     width: 80%;
+}
+.book.small{
+    height: 242px;
+    width: 150px;
 }
 
 }
@@ -464,15 +471,6 @@ ul button{
     left: 20%;
     height: 80%;
     width: 60%;
-}
-
-.book.small{
-    height: 242px;
-    width: 150px;
-}
-
-body{
-    font-size: 21px;
 }
 
 .doble-column.show-right{

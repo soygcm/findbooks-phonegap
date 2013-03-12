@@ -11,9 +11,7 @@ var PopupView = Parse.View.extend({
   show: function () {
     if(!this.view.hasClass('show')){
       this.view.show();
-      this.front.addClass("show");
-      this.front.show();
-      // this.front.fadeIn(100);
+      app.OSGeneration == 'old' ? this.front.show() : this.front.fadeIn(200); 
       self = this;
       window.setTimeout(function(){
         self.view.addClass("show");
@@ -29,13 +27,9 @@ var PopupView = Parse.View.extend({
         view.hide();
         thereIsPopup = $('.view.show').length;
         if (!thereIsPopup){
-          front.removeClass('show');
-          this.front.hide();
-          // front.fadeOut(100);
+          app.OSGeneration == 'old' ? front.hide() : front.fadeOut(200);
         }
-
       }, 410);
-
     }
   },
   backToHomeOutPopup:function (e) {
