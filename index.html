@@ -7,7 +7,8 @@
     <title>FindBooks app</title>
     <link href="css/normalize.css" media="all" rel="stylesheet" type="text/css"/>
     <link href="css/app.css" media="all" rel="stylesheet" type="text/css"/>
-    <link href="css/findbooks/style.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="themes/leather-wood/style.css" media="all" rel="stylesheet" type="text/css"/>
+
     <script src="js/jquery.js"></script>
     <script src="js/quo.js"></script>
     <script src="js/underscore-1.1.6.js"></script>
@@ -208,7 +209,7 @@
 
         </div>
         <div class="border"><div><div></div></div></div>
-        <img src='<%= picture.url %>' alt="">
+        <img src='http://test.mobileease.me/parse/view.php?url=<%= picture.url %>&w=200' alt="">
         <!-- -->
       </article>
     </script>
@@ -217,7 +218,7 @@
       <a class="offer-li <%= type %>">
         <div class="shadow">
         </div>
-        <img src='<%= picture.url %>' alt="">
+        <img src='http://test.mobileease.me/parse/view.php?url=<%= picture.url %>&w=50' alt="">
         <button class="right">Solicitar</button>
         <p class="ellipsis"><%= user.username %></p>
         <p class="ellipsis"><%= description %></p>

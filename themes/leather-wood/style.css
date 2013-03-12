@@ -1,0 +1,220 @@
+@font-face{
+	font-family: Sansation;
+	src: url(fonts/Sansation_Regular.ttf) format('truetype');
+}
+@font-face {
+    font-family: Sansation;
+    src: url(fonts/Sansation_Bold.ttf) format('truetype');
+    font-weight: bold;
+}
+@font-face {
+    font-family: Sansation;
+    src: url(fonts/Sansation_Light.ttf) format('truetype');
+    font-weight: lighter;
+}
+
+body{
+	font-family: Sansation, Helvetica;
+	background-color: rgb(37, 44, 37);
+	background-image:	url(images/texture.png);
+}
+
+* {
+    background:transparent;
+}
+
+form .label{
+	color: #787464;
+}
+form label{
+	background-image: url(images/form_input.png);
+	background-size: auto 100%;
+	border:none;
+	background-repeat: repeat-x;
+}
+form label.f-focus{
+	background-image: url(images/form_input_focus.png);
+}
+form span.label, form span.input{
+	background-image: url(images/form_input_base.png);
+	background-repeat: no-repeat;
+	background-size: auto 20%;
+	background-position: bottom left;
+}
+form span.input{
+	background-position: bottom right;
+}
+
+form select{
+	background-image: url(images/select.png);
+	background-size:auto 45%;
+	background-repeat: no-repeat;
+	background-position: center right;
+}
+
+.doble-column .column.right {
+	border-left: 2px solid black;
+}
+.doble-column .column.left {
+	border-right: 2px solid black;
+}
+.doble-column .column, #search{
+	background-color: rgb(37, 44, 37);
+	background-image:	url(images/texture.png)
+}
+
+.column>div, #search>div{
+	min-height: 100%;
+	-webkit-box-shadow:inset 0 0 100px 0 rgba(0,0,0,0.5), 0 0 5px rgba(0,0,0,0.4);
+	background: url(images/fondo.jpg);
+}
+.column h1{
+	font-weight: 200;
+	text-shadow: 0px 5px 10px black;
+}
+	.android.old .column>div, .android.old #search>div{
+	-webkit-box-shadow:none;
+}
+
+.popup div button{
+	background-size: auto 100%;
+	background-image: url(images/button.png);
+	border: 1px solid rgba(51,45,20,0.3);
+	color: #2B2816;
+}
+.popup div button:active, .android.old .popup div button.f-active{
+	background-image: url(images/button_active.png);
+	padding-top: 0.5em;
+}
+
+#login input{
+	color: white;
+}
+
+.popup{
+	color: black;
+	background: #E6E3DA;
+	border:1px solid #E6E3DA;
+	-webkit-box-shadow: 1px 3px 50px black;
+	border-radius: 5px;
+}
+	.android.old .popup{
+	-webkit-box-shadow:none;
+}
+.popup .toolbar{
+	color: white;
+	border-radius:4px 4px 0 0;
+	background-color: #005827; 
+	background-image: url(images/popup_toolbar.png);
+	background-size: auto 100%;
+}
+
+.toolbar{
+	background-color: #00375b;
+	background-image: url(images/main_toolbar.png);
+	background-size: auto 100%;
+}
+.toolbar button{
+	border-radius: 10px;
+	border: 1px solid rgba(0,0,0,0.4);
+	-webkit-box-shadow: 0 0 5px rgba(0,0,0,0.4),
+				0 1px 1px rgba(100,200,255,0.2),
+				inset 0 0 8px rgba(0,0,0,0.3),
+				inset 0 1px 1px rgba(100,200,255,0.2);
+}
+	.android.old .toolbar button{
+	-webkit-box-shadow: 0 0 5px rgba(0,0,0,0.4);
+}
+.toolbar button:active, .android .toolbar button.f-active{
+	border: 1px solid rgba(0,0,0,0.4);
+	background-color: rgba(0,0,0,0.1);
+	-webkit-box-shadow: 0 0 8px rgba(255,255,255,0.4),
+				inset 0 0 8px rgba(0,0,0,0.5),
+				0 1px 1px rgba(100,200,255,0.2);
+}
+.toolbar .search-input input{
+	border-bottom: 2px solid yellow;
+    color: yellow;
+}
+
+button.add{
+	background: url(images/button_add.png) no-repeat center center;
+	background-size:auto 50%;
+}
+button.find, button.search{
+	background: url(images/button_find.png) no-repeat center center;
+	background-size:auto 50%;
+}
+button.back{
+	background: url(images/button_back.png) no-repeat center center;
+	background-size:auto 50%;
+}
+
+ul.vertical li {
+    border-top: 1px solid rgba(51,45,20,0.3);
+}
+
+.book .border{
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	-webkit-box-shadow:inset 0 0 1px 1px rgba(28,14,0,0.4);
+	border-bottom: 1px solid rgba(28,14,0,0.8);
+	margin-top: -1px;
+}
+.book .border>div{
+	height: 100%;
+	padding: 1px;
+	margin-bottom: -1px;
+}
+.book .border>div>div{
+    -webkit-box-shadow:inset 0 0 1px 1px rgba(255,250,232,0.2);
+	height:100%;
+}
+.book .shadow, .book .border{
+	position: absolute;
+}
+.book .shadow{
+	width: 120%;
+	height: 20%;
+	left: -10%;
+	bottom: -8%;
+	background: url(images/shadow3.png) no-repeat center center;
+	background-size: 100% 100%;
+	z-index: 10;
+}
+.book p{
+	text-shadow: 1px 1px 10px black;
+}
+	.android.old .book p{
+	text-shadow: none;
+}
+	.android.old .book .border>div>div{
+    -webkit-box-shadow:none;
+}
+	.android.old .book .border{
+    -webkit-box-shadow:none;
+}
+	.android.old .book .img{
+	border: 1px solid rgba(28,14,0,0.5);
+}
+
+.loading div.img{
+	background: url(images/loading@2x.png) no-repeat center center;
+	background-size: 95% auto;
+	width:50px;
+    height:60px;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) { 
+
+body, #search{
+	background: #481F0B url(images/fondo@2x.jpg);
+}
+
+.toolbar{
+    background-image:url(images/texture@2x.png), -webkit-linear-gradient(top,  #00182d 0%,#00375b 2%,#085793 13%,#053e6d 32%,#023058 97%);
+}
+
+
+}
