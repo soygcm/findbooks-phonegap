@@ -14,13 +14,32 @@
 }
 
 body{
-	font-family: Sansation, Helvetica;
+	/*font-family: Sansation, Helvetica;*/
 	background-color: rgb(37, 44, 37);
 	background-image:	url(images/texture.png);
 }
 
 * {
     background:transparent;
+}
+
+.toolbar button{
+	border-radius: 10px;
+	border: 1px solid rgba(0,0,0,0.4);
+	-webkit-box-shadow: 0 0 4px rgba(0,0,0,0.5),
+				0 1px 1px rgba(100,200,255,0.2),
+				inset 0 0 8px rgba(0,0,0,0.5),
+				inset 0 1px 1px rgba(100,200,255,0.2);
+}
+	.toolbar .android.old button{
+	-webkit-box-shadow: 0 0 5px rgba(0,0,0,0.4);
+}
+.toolbar button:active, .toolbar  .android button.f-active{
+	border: 1px solid rgba(0,0,0,0.4);
+	background-color: rgba(0,0,0,0.1);
+	-webkit-box-shadow: 0 0 8px rgba(255,255,255,0.4),
+				inset 0 0 8px rgba(0,0,0,0.5),
+				0 1px 1px rgba(100,200,255,0.2);
 }
 
 form .label{
@@ -58,21 +77,26 @@ form select{
 .doble-column .column.left {
 	border-right: 2px solid black;
 }
-.doble-column .column, #search, #login > div{
+.doble-column .column, #search-view, #login > div{
 	background-color: rgb(37, 44, 37);
 	background-image:	url(images/texture.png)
 }
 
-.column>div, #search>div{
+.column>div, #search-view>div{
 	min-height: 100%;
 	-webkit-box-shadow:inset 0 0 100px 0 rgba(0,0,0,0.5), 0 0 5px rgba(0,0,0,0.4);
 	background: url(images/fondo.jpg);
 }
 .column h1{
+	color: #542917;
 	font-weight: 200;
-	text-shadow: 0px 5px 10px black;
+	text-shadow: 0px 1px 0px rgba(255,239,174,0.5);
+	margin: 5px 0;
+	padding: 0 10px;
+	background: url(images/column_h1.png) repeat-x;
+	background-size: auto 100%;
 }
-	.android.old .column>div, .android.old #search>div{
+	.android.old .column>div, .android.old #search-view>div{
 	-webkit-box-shadow:none;
 }
 
@@ -81,10 +105,12 @@ form select{
 	background-image: url(images/button.png);
 	border: 1px solid rgba(51,45,20,0.3);
 	color: #2B2816;
+	-webkit-box-shadow:none;
 }
 .popup div button:active, .android.old .popup div button.f-active{
 	background-image: url(images/button_active.png);
 	padding-top: 0.5em;
+	-webkit-box-shadow:none;
 }
 
 #login input{
@@ -109,28 +135,17 @@ form select{
 	background-size: auto 100%;
 }
 
+.sidebar{
+	-webkit-box-shadow: 1px 3px 50px black;
+}
+
+.toolbar h1{
+	font-family: Sansation;
+}
 .toolbar{
 	background-color: #00375b;
 	background-image: url(images/main_toolbar.png);
 	background-size: auto 100%;
-}
-.toolbar button{
-	border-radius: 10px;
-	border: 1px solid rgba(0,0,0,0.4);
-	-webkit-box-shadow: 0 0 5px rgba(0,0,0,0.4),
-				0 1px 1px rgba(100,200,255,0.2),
-				inset 0 0 8px rgba(0,0,0,0.3),
-				inset 0 1px 1px rgba(100,200,255,0.2);
-}
-	.android.old .toolbar button{
-	-webkit-box-shadow: 0 0 5px rgba(0,0,0,0.4);
-}
-.toolbar button:active, .android .toolbar button.f-active{
-	border: 1px solid rgba(0,0,0,0.4);
-	background-color: rgba(0,0,0,0.1);
-	-webkit-box-shadow: 0 0 8px rgba(255,255,255,0.4),
-				inset 0 0 8px rgba(0,0,0,0.5),
-				0 1px 1px rgba(100,200,255,0.2);
 }
 .toolbar .search-input input{
 	border-bottom: 2px solid yellow;
@@ -155,6 +170,7 @@ ul.vertical li {
 }
 
 .book .border{
+	display: none;
 	height: 100%;
 	width: 100%;
 	overflow: hidden;
@@ -175,16 +191,28 @@ ul.vertical li {
 	position: absolute;
 }
 .book .shadow{
-	width: 120%;
-	height: 20%;
+	/*width: 130%;
+	height: 116%;
 	left: -10%;
-	bottom: -8%;
-	background: url(images/shadow3.png) no-repeat center center;
+	top: -2%;*/
+	
+	/*display: none;*/
+
+	width: 136%;
+	height: 118%;
+	left: -13%;
+	top: -2%;
+
+	background: url(images/book_small_shadow.png) no-repeat center center;
 	background-size: 100% 100%;
 	z-index: 10;
 }
 .book p{
+	display: none;
 	text-shadow: 1px 1px 10px black;
+}
+.book img{
+	border-radius: 2px;
 }
 	.android.old .book p{
 	text-shadow: none;
@@ -206,9 +234,18 @@ ul.vertical li {
     height:60px;
 }
 
+@media screen and (min-width: 640px) {
+
+.book .shadow{
+	background: url(images/book_shadow.png) no-repeat center center;
+	background-size: 100% 100%;
+}
+
+}
+
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) { 
 
-body, #search{
+body, #search-view{
 	background: #481F0B url(images/fondo@2x.jpg);
 }
 

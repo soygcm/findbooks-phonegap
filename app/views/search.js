@@ -7,7 +7,7 @@ var SearchView = PopupView.extend({
     this.$el.append(_.template($("#search-template").html()));
     this.delegateEvents();
     this.addFalseResults();
-    this.initPopup('#search');
+    this.initPopup('#search-view');
     this.hide();
   },
   searchQuery: function (query) {

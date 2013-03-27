@@ -24,10 +24,11 @@ var AppView = Parse.View.extend({
       this.toolbarView = new ToolbarView();
       this.logInView = new LogInView();
       this.makeScrolls();
-      this.addBookView.hide();
       this.currentView = this.homeView;
       this.$loading = $('div.loading');
       this.$loading.hide();
+
+      this.$('.front').hide();
       
       if (!app.internetAvailable()){   
         navigator.notification.alert("No se ha encontrado una conexión a internet, la applicación necesita una conexión para poder accesar al servidor. Lo sentimos...", null, "Sin Conexión a Internet", "Ok");

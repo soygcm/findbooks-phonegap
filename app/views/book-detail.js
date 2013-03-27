@@ -7,10 +7,10 @@ var BookDetailView = PopupView.extend({
   },
   render: function() {
     self = this;
-    this.$el.find('#book-detail').remove();
+    this.$el.find('#book-detail-view').remove();
     this.$el.append(this.template(this.model.toJSON()));
-    appView.createScroll('book-detail');
-    this.initPopup('#book-detail');
+    appView.createScroll('book-detail-view');
+    this.initPopup('#book-detail-view');
     window.setTimeout(function(){
       appView.bookDetailView.getOfferList();
     }, 400);
@@ -28,7 +28,7 @@ var BookDetailView = PopupView.extend({
       });
     }else{
       this.render();
-      // this.show();
+      this.show();
     }
   },
   getOfferList:function () {
@@ -49,12 +49,8 @@ var BookDetailView = PopupView.extend({
               if (self.offerListCount == offers.length) {
                 self.addOfferList(offers);
                 appView.notLoading();
-                appView.bookDetailView.show();
+                // appView.bookDetailView.show();
               }
-              /*var username = user.get("username");
-              var id = user.id;
-              self.$('#offer-list>ul>[data-user="'+id+'"]').html(username);
-              */
             }
           });
 

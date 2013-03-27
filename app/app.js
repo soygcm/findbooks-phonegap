@@ -1,5 +1,3 @@
-window.scrollTo(0, 0); //No se si esta linea es necesaria
-
 Parse.$ = jQuery;
 
 var parseApplicationId = "C4zgFUST9RGWSJ5scVpyB5G4co2gcMUpNPg0QpaI";

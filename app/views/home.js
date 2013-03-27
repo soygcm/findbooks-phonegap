@@ -55,7 +55,7 @@ var HomeView = Parse.View.extend({
         booksIdArray.push(book.id);
       });
       this.publicBooks = new BookList;
-      this.publicBooks.query = new Parse.Query(Book).notContainedIn("objectId", booksIdArray);
+      this.publicBooks.query = new Parse.Query(Book).notContainedIn("objectId", booksIdArray).limit(10);
       this.publicBooks.fetch({
         success: function(books) {
           appView.notLoading();

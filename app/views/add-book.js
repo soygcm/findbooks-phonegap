@@ -12,7 +12,7 @@ var AddBookView = PopupView.extend({
   initialize: function() {
     this.events = _.extend({},PopupView.prototype.events,this.events);
     this.render();
-    this.initPopup('#add');
+    this.initPopup('#add-view');
 
     this.inputTitle = this.$("#book-title");
     this.inputAuthor = this.$("#author-name");
