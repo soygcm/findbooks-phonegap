@@ -2,7 +2,7 @@ var PopupView = Parse.View.extend({
   el: "#all",
   events:{
     'click .front':'backToHomeOutPopup',
-    "click button#close": "backToHome",
+    "click button.close": "backToHome"
   },
   initPopup: function (popupID) {
     this.front = this.$('.front');

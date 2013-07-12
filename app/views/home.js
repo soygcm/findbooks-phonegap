@@ -35,14 +35,41 @@ var HomeView = Parse.View.extend({
     appView.loading();
     self = this;
     if(user = Parse.User.current()){
-      this.userBooks = user.relation('books');
+
+      this.offerList = new OfferList;
+      this.offerList.query = new Parse.Query(Offer).equalTo("user", user);
+      this.offerList.fetch({
+        success: function(offers) {
+          self.offerListCount = 0;
+          // collection.length;
+          console.log(offers)
+          offers.each(function(offer) {
+            book = offer.get('book');
+            book.fetch({
+              success: function(book) {
+                self.offerListCount++;
+                if (self.offerListCount == offers.length) {
+                  self.addOffers(offers, 'personal');
+                  self.getPublicBooks();
+                }
+              }
+            });
+
+          });
+        },
+        error: function(collection, error) {
+          // The collection could not be retrieved.
+        }
+      });
+
+      /*this.userBooks = user.relation('books');
       this.userBooks = this.userBooks.query().collection();
       this.userBooks.fetch({
         success: function(books) {
-          appView.homeView.addBooks(books, 'ul#personal');
+          appView.homeView.addBooks(books, 'personal');
           self.getPublicBooks();
         }
-      });
+      });*/
     }else{
       this.getPublicBooks();
     }
@@ -59,7 +86,7 @@ var HomeView = Parse.View.extend({
       this.publicBooks.fetch({
         success: function(books) {
           appView.notLoading();
-          appView.homeView.addBooks(books, 'ul#public');
+          appView.homeView.addBooks(books, 'public');
         },
         error:function (b, message) {
           appView.notLoading();
@@ -72,7 +99,7 @@ var HomeView = Parse.View.extend({
       this.publicBooks.fetch({
         success: function(books) {
           appView.notLoading();
-          appView.homeView.addBooks(books, 'ul#public');
+          appView.homeView.addBooks(books, 'public');
         },
         error:function (b, message) {
           appView.notLoading();
@@ -80,6 +107,16 @@ var HomeView = Parse.View.extend({
         }
       });
     }
+  },
+  addOffers: function (offers, select) {
+    self = this;
+    offers.each(function(offer) {
+      self.addOneBook(offer, select);
+    });
+
+    /*books.each(function(book) {
+      self.addOneBook(book, select);
+    });*/
   },
   addBooks: function (books, select) {
     self = this;
@@ -100,15 +137,15 @@ var HomeView = Parse.View.extend({
       }
     });
     if(isNew>0){
-      self.addOneBook(bookNew, 'ul#personal');
+      self.addOneBook(bookNew, 'personal');
     }
     console.log('Es nuevo el libro? '+isNew+' Es nueva la foto? '+isNewPhoto);
 
   },
   addOneBook: function (book, select){
     // console.log(book);
-    var view = new BookView({model: book});
-    this.$(select).prepend(view.render().el);
+    var bookView = new BookView({model: book});
+    this.$('ul#'+select).prepend(bookView.render(select).el);
   },
   hide: function () {
     

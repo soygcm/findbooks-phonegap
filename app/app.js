@@ -25,7 +25,7 @@ var app = {
         if (ua.match(/(Android)/)){
           this.OS = "android";
           this.OSVersion = parseFloat(ua.slice(ua.indexOf("Android")+8)); 
-          this.OSGeneration = this.OSVersion<4.0 ? "old" : "new";
+          this.OSGeneration = this.OSVersion<3.0 ? "old" : "new";
 
           document.addEventListener("backbutton", function(e) {                
             window.history.back();

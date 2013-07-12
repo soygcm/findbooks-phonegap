@@ -42,36 +42,39 @@
     </script>
 
     <!-- Vista agregar libro -->
-    <script type="text/template" id="add-template">
-      <section id="add-view" class="display-none popup view bottom animate have-toolbar">
+    <script type="text/template" id="add-edit-template">
+      <section id="<%= typeof(id)!== 'undefined' ?  id : '' %>-view" class="display-none popup view bottom animate have-toolbar">
         <section id="toolbar-add-view" class="toolbar top">
           <header>
-            <button id="close" class="close left text">Cancelar</button>
-            <button id="add-book-done" class="done right text">Listo</button>
+            <button data-id="close" class="close left text">Cancelar</button>
+            <button data-id="add-book-done" class="done right text">Listo</button>
+            <button data-id="book-delete" class="display-none delete right">Eliminar</button>
+            <button data-id="book-save" class="display-none save right text">Guardar</button>
             <div class="left">
               <h1 class="ellipsis">Agregar un libro que tengo</h1>
             </div>
           </header>
         </section>
-        <div id="add-content" class="scrollable"><div>
+
+        <div id="<%= typeof(id)!== 'undefined' ?  id : '' %>-content" class="scrollable"><div>
         <form>
           <label>
             <span class="label">Título:</span>
             <span class="input">      
-              <input type="text" name="book-title" id="book-title">
+              <input type="text" value='<%= book.title %>' name="book-title" data-id="book-title">
             </span> 
           </label>
           <label>
             <span class="label">Autor/es:</span>
             <span class="input">
-              <input type="text" name="author-name" id="author-name">
+              <input type="text" value='<%= book.author %>' name="author-name" data-id="author-name">
             </span>
           </label>
           <label>
             <span class="label">Categoría:</span>
             <span class="input">
-              <select name="category-name" id="category-name">
-                <option value=""></option>
+              <select name="category-name" data-id="category-name">
+                <option value=""><%= book.category %></option>
                 <option value="Niños">Niños</option>
                 <option value="Novela">Novela</option>
                 <option value="Biografia">Biografia</option>
@@ -80,18 +83,18 @@
             </span>
           </label>
           <button type="button" id="book-photo" class="photo c1">Seleccionar imagen del Libro</button>
-          <section id="image-input-photo" class="book medium">
+          <section data-id="image-input-photo" class="book medium">
             <div class="shadow"></div>
             <div class="loading-bar hover">
               <div class="complete"></div>
               <div class="cancel"></div>
             </div>
-            <img src='' alt="">
+            <img src="<%= typeof(book.picture)!== 'undefined' ?  'http://test.mobileease.me/parse/view.php?url='+book.picture.url+'&w=200' : '' %>" alt="">
           </section>
           <label>
             <span class="label">Quiero: </span>
             <span class="input">
-              <select id="offer-type">
+              <select class='offer-type' data-id="offer-type">
                 <option value="sell">Venderlo</option>
                 <option value="lend">Prestarlo</option>
                 <option value="rent">Alquilarlo</option>
@@ -100,29 +103,29 @@
             </span>
           </label>
 
-          <section id="sell" class="toggle-section">
+          <section data-id="sell" class="toggle-section">
             <label>
               <span class="label">Precio: ¢</span>
               <span class="input">
-                <input type="number" id="sell-price" onkeydown="return setKeyDownDecimal(event)">
+                <input type="number" value="<%= offer.price %>" data-id="sell-price" onkeydown="return setKeyDownDecimal(event)">
               </span>
             </label>
           </section>
 
-          <section id="lend" class="toggle-section">
+          <section data-id="lend" class="toggle-section">
             <p>
               ¿Cuanto tiempo deseas prestarlo?
             </p>
             <label>
               <span class="label">Cantidad de tiempo:</span>
               <span class="input">
-                <input type="number" id="lend-time" placeholder="" onkeydown="return setKeyDownInt(event)" value="1"> 
+                <input type="number" data-id="lend-time" placeholder="" onkeydown="return setKeyDownInt(event)" value="<%= typeof(offer.time)!== 'undefined' ?  offer.time : '1' %>"> 
               </span>
             </label>
             <label>
             <span class="label">Tipo de Tiempo:</span>
             <span class="input">  
-              <select name="lend-time-type" id="lend-time-type">
+              <select name="lend-time-type" data-id="lend-time-type">
                   <option value="hour">Hora/s</option>
                   <option value="day">Dia/s</option>
                   <option value="week">Semana/s</option>
@@ -131,14 +134,14 @@
           </label>
           </section>
 
-          <section id="rent" class="toggle-section">
+          <section data-id="rent" class="toggle-section">
             <p>
               ¿Cuanto deseas cobrar por una hora?
             </p>
             <label>
               <span class="label">Precio: ¢</span>
               <span class="input">
-                <input type="number" id="rent-price" onkeydown="return setKeyDownDecimal(event)">
+                <input type="number" value="<%= offer.price %>" data-id="rent-price" onkeydown="return setKeyDownDecimal(event)">
               </span>
             </label>
             <p>
@@ -147,13 +150,13 @@
             <label>
               <span class="label">Cantidad de Tiempo:</span>
               <span class="input">
-                <input type="number" id="rent-time" onkeydown="return setKeyDownInt(event)" value="1"> 
+                <input type="number" data-id="rent-time" onkeydown="return setKeyDownInt(event)" value="<%= typeof(offer.time)!== 'undefined' ?  offer.time : '1' %>"> 
               </span>
             </label>
             <label>
               <span class="label">Tipo de Tiempo:</span>
               <span class="input">
-                <select id="rent-time-type">
+                <select data-id="rent-time-type">
                   <option value="hour">Hora/s</option>
                   <option value="day">Dia/s</option>
                   <option value="week">Semana/s</option>
@@ -162,7 +165,7 @@
             </label>
           </section>
 
-          <section id="donate" class="toggle-section">
+          <section data-id="donate" class="toggle-section">
             <p>¡Felicidades! por compartir el conocimiento y la verdad, con mas personas.</p>
           </section>
 
@@ -185,7 +188,9 @@
       <section id="home" class="doble-column view show-right animate">
         <section id="highlight" class="scrollable column  left"><div>
           <h1>Libros Públicos</h1>
-          <ul id="public" class="grid"></ul>
+          <ul id="public" class="grid">
+          
+          </ul>
           
 
         </div></section>
@@ -205,10 +210,8 @@
     <script type="text/template" id="book-template">
       <article class="book small">
         <div class="shadow">
-          <p class="ellipsis"><%= title %></p>
+          <p class="ellipsis">title</p>
         </div>
-
-        <div class="border"><div><div></div></div></div>
         <img src='http://test.mobileease.me/parse/view.php?url=<%= picture.url %>&w=200' alt="">
         <!-- -->
       </article>
@@ -275,7 +278,9 @@
     <script type="text/javascript" src="app/views/popup.js"></script> 
     <script type="text/javascript" src="app/views/book.js"></script> 
     <script type="text/javascript" src="app/views/home.js"></script> 
+    <script type="text/javascript" src="app/views/add-edit.js"></script> 
     <script type="text/javascript" src="app/views/add-book.js"></script> 
+    <script type="text/javascript" src="app/views/book-edit.js"></script> 
     <script type="text/javascript" src="app/views/search.js"></script> 
     <script type="text/javascript" src="app/views/offer-li.js"></script> 
     <script type="text/javascript" src="app/views/book-detail.js"></script> 

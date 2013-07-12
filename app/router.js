@@ -6,6 +6,7 @@ var AppRouter = Parse.Router.extend({
     "" : "home",
     "add": "add",
     "book/:id":"viewBook",
+    "edit-book/:id":"editBook"
   },
   add: function () {
     appView.hideCurrentView();
@@ -40,5 +41,11 @@ var AppRouter = Parse.Router.extend({
     appView.toolbarView.isHome();
     appView.bookDetailView.viewAndShow(id);
     appView.setCurrentView(appView.bookDetailView);
+  },
+  editBook: function (id) {
+    appView.hideCurrentView();
+    appView.toolbarView.isHome();
+    appView.bookEditView.viewAndShow(id);
+    appView.currentView = appView.bookEditView;
   }
 });

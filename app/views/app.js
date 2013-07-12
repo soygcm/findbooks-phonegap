@@ -21,6 +21,7 @@ var AppView = Parse.View.extend({
       this.addBookView = new AddBookView();
       this.searchView = new SearchView();
       this.bookDetailView = new BookDetailView();
+      this.bookEditView = new BookEditView();
       this.toolbarView = new ToolbarView();
       this.logInView = new LogInView();
       this.makeScrolls();
@@ -91,6 +92,10 @@ var AppView = Parse.View.extend({
     });
   },
   createScroll: function (id) {
+    /*if (app.OS == "android"){
+      bounce = app.OSVersion<3.0? false : true;
+    }*/
+    
     this.scrollable.push({'id' : id, 'scroll' : new iScroll(id, {
       onBeforeScrollStart:function (e) {
         var nodeType = e.explicitOriginalTarget ? e.explicitOriginalTarget.nodeName.toLowerCase():(e.target ? e.target.nodeName.toLowerCase():'');
@@ -99,7 +104,7 @@ var AppView = Parse.View.extend({
         }     
       },
       hScroll: false,
-      vScrollbar: true
+      vScrollbar: false,
     })});
   },
   refreshScroll: function (e) {
@@ -107,7 +112,11 @@ var AppView = Parse.View.extend({
     scroll = this.scrollable.filter(function (scroll) {
      return scroll.id == id;
     });
+    // width = $(window).width();
+    // $('#'+id).width(width+1);
+    // console.log('refreshScroll: #'+id);
     scroll[0].scroll.refresh();
+    // $('#'+id).width(width);
   },
   //que es esto?
   preventDefault: function (e) {

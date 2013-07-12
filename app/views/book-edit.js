@@ -1,22 +1,54 @@
-var AddBookView = AddEditView.extend({
+var BookEditView = AddEditView.extend({
+  template:_.template($("#add-edit-template").html()),
+  model:{},
   events:{
-    "click [data-id=add-book-done]": "addNewBook",
+    "click [data-id=book-save]": "saveBook",
     "click #book-photo" : "capturePhoto",
     "click #book-upload-image" : "uploadPhoto"
-  },
+  }, 
   initialize: function() {
     this.events = _.extend({},AddEditView.prototype.events,this.events);
-    this.render();
-    this.initPopup('#add-view');
-
-    this.formVars();
-    this.selectOfferType();
+    // this.render();
   },
   render: function() {
-    template = _.template($("#add-edit-template").html());
-    this.$el.append(template ({id : 'add', book: '', offer: ''}));
-    // alert();
-    this.delegateEvents();
+    this.$el.find('#edit-book-view').remove();
+    this.$el.append(this.template({id : 'edit-book', offer: this.model.toJSON(), book: this.model.get('book').toJSON()}));
+    appView.createScroll('edit-book-content');
+    this.initPopup('#edit-book-view');
+    // this.consoleView();
+    this.formVars();
+    console.log(this.model);
+
+    this.inputOfferType.val(this.model.get('type'));
+
+    this.inputLendTimeType.val(this.model.get('timeType'));
+    this.inputRentTimeType.val(this.model.get('timeType'));
+
+    this.selectOfferType();
+
+    this.view.find("[data-id=add-book-done], [data-id=book-delete], [data-id=book-save]").toggle();
+    
+    // this.$el.append(_.template($("#add-template").html()));
+    // this.delegateEvents();
+  },
+  viewAndShow: function (bookID) {
+    self = this;
+    this.render();
+    this.show();
+    appView.updateForms();
+    /*if (!this.model.toJSON){
+      var query = new Parse.Query(Book);
+      query.get(bookID, {
+        success: function(book) {
+          appView.bookDetailView.model = book;
+          appView.bookDetailView.render();
+        },
+        error: function(book, error) {   }
+      });
+    }else{
+      this.render();
+      this.show();
+    }*/
   },
   capturePhoto: function () {
     navigator.notification.confirm(
@@ -96,10 +128,13 @@ var AddBookView = AddEditView.extend({
       console.log(index+': '+val);
     });
   },
-  addNewBook: function () {
+  saveBook: function () {
     error = this.formValidate();
     if(error == "")
-      this.uploadPhoto();
+
+      console.log(this.model.get('picture').url +' == '+this.imagePhoto.attr("src"));
+
+      // this.uploadPhoto();
     else
       app.isMobile ? navigator.notification.alert(error, null, "Campos Requeridos", "Ok") : console.log(error);
   },
